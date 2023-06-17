@@ -12,6 +12,8 @@ import lombok.experimental.SuperBuilder;
  * Класс, описывающий сущность факсимиле
  */
 
+@EqualsAndHashCode(callSuper = true)
+@Data
 @Getter
 @Setter
 @Entity

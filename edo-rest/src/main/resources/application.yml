@@ -1,8 +1,8 @@
 security:
-  enabled: false
+  enabled: true
 spring:
-#  profiles:
-#      include: security
+  profiles:
+    include: security
   flyway:
     host: localhost
   application:

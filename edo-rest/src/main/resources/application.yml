@@ -1,10 +1,8 @@
 security:
-  enabled: true
+  enabled: false
 spring:
-  profiles:
-    include: security
-  flyway:
-    host: localhost
+#  profiles:
+#      include: security
   application:
     name: edo-rest
 server:
@@ -12,6 +10,7 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: ${EUREKA_URI:http://${spring.flyway.host}:8761/eureka}
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
   instance:
     preferIpAddress: true
+

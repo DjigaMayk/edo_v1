@@ -5,6 +5,7 @@ import com.education.model.dto.EmployeeDto;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.apache.http.HttpHost;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -19,10 +20,14 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * @author Ритман Степан
@@ -30,6 +35,7 @@ import java.util.Objects;
  */
 @Component
 @RequiredArgsConstructor
+@Log
 public class EmployeeRestTemplateClient {
 
     @Value("${security.enabled:false}")
@@ -134,8 +140,13 @@ public class EmployeeRestTemplateClient {
      * @return
      */
     public List<EmployeeDto> findAllByLastNameLikeOrderByLastName(String fio) {
-        String path = "/byFIO/" + fio;
-        URI uri = getDefaultUriComponentBuilder(BASIC_URL + path).build().toUri();
+        String path = "/byFIO/";
+        URI uri = UriComponentsBuilder
+                .fromHttpUrl(getDefaultUriComponentBuilder(BASIC_URL+path).toUriString())
+                .queryParam("fio",URLEncoder.encode(fio,UTF_8))
+                .build()
+                .toUri();
+        log.log(Level.INFO, "Uri = {0}", uri);
         var request = new RequestEntity<>(null, HttpMethod.GET, uri);
         var response = restTemplate.exchange(request, new ParameterizedTypeReference<List<EmployeeDto>>() {
         });

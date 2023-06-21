@@ -26,6 +26,7 @@ keycloak.
 Настройки безопасности оставляем по умолчанию.
 ![img_5.png](images for readme/img_5.png)
 Нажимаем save.
+
 В поле Valid redirect URIs ставим заглушку "*" и сохраняем
 ![img_1.png](images for readme/img_111.png)
 Во вкладке Clients выбираем наш клиент и далее в Roles нажимаем кнопку Create role.

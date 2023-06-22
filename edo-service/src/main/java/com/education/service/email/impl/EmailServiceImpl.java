@@ -4,6 +4,7 @@ import com.education.model.constant.RabbitConstant;
 import com.education.model.dto.AppealDto;
 import com.education.model.dto.EmployeeDto;
 import com.education.model.dto.NotificationDto;
+import com.education.model.dto.ResolutionDto;
 import com.education.model.enumEntity.EnumNotification;
 import com.education.service.email.EmailService;
 import com.education.service.notification.NotificationService;
@@ -36,6 +37,43 @@ public class EmailServiceImpl implements EmailService {
         notificationService.save(notificationDto);
 
         log.log(Level.INFO, "Отправлен запрос в очередь по рассылке оповещений");
+    }
+
+    /**
+     * После создания резолюции направляет письмо: Подписанту, Исполнителям и Куратору
+     * о том, что была создана резолюция, к которой относится пользователь
+     *
+     * @param resolutionDto - резолюция
+     */
+    @Override
+    public void sendNotificationOnResolution(ResolutionDto resolutionDto) {
+        amqpTemplate.convertAndSend(RabbitConstant.exchange, RabbitConstant.resolutionNotificationQueue,
+                resolutionDto);
+
+        // save the resolution notification for signer to database
+        var signerNotificationDto = new NotificationDto();
+        signerNotificationDto.setEnumNotification(EnumNotification.EMAIL);
+        signerNotificationDto.setEmployee(resolutionDto.getSigner());
+        notificationService.save(signerNotificationDto);
+
+        // save the resolution notifications for executors to database
+        resolutionDto.getExecutors().forEach(
+                executor -> {
+                    var executorNotificationDto = new NotificationDto();
+                    executorNotificationDto.setEnumNotification(EnumNotification.EMAIL);
+                    executorNotificationDto.setEmployee(executor);
+                    notificationService.save(executorNotificationDto);
+                }
+        );
+
+        // save the resolution notification for curator to database
+        var curatorNotificationDto = new NotificationDto();
+        curatorNotificationDto.setEnumNotification(EnumNotification.EMAIL);
+        curatorNotificationDto.setEmployee(resolutionDto.getCurator());
+        notificationService.save(curatorNotificationDto);
+
+        log.log(Level.INFO, "Отправлен запрос в очередь по рассылке " +
+                "оповещений при создании резолюции");
     }
 
 }

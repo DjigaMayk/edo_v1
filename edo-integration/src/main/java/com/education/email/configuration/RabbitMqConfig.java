@@ -37,6 +37,19 @@ public class RabbitMqConfig {
     }
 
     @Bean
+    public Queue resolutionNotificationQueue() {
+        return new Queue(RabbitConstant.resolutionNotificationQueue, false);
+    }
+
+    @Bean
+    public Binding resolutionNotificationBinding(Queue resolutionNotificationQueue, DirectExchange exchange) {
+        return BindingBuilder
+                .bind(resolutionNotificationQueue)
+                .to(exchange)
+                .with(RabbitConstant.resolutionNotificationQueue);
+    }
+
+    @Bean
     public MessageConverter jsonMessageConverter(ObjectMapper objectMapper) {
         return new Jackson2JsonMessageConverter(objectMapper);
     }

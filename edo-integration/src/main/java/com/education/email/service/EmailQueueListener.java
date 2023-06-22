@@ -3,6 +3,7 @@ package com.education.email.service;
 import com.education.model.constant.RabbitConstant;
 import com.education.model.dto.AppealDto;
 import com.education.model.dto.EmployeeDto;
+import com.education.model.dto.ResolutionDto;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,11 @@ public class EmailQueueListener {
     public void createEmail(AppealDto appealDto) {
         sendNotificationOnAppeal(appealDto);
         log.log(Level.INFO, "Отправлено письмо");
+    }
+
+    @RabbitListener(queues = RabbitConstant.resolutionNotificationQueue)
+    public void resolutionNotificationsListener(ResolutionDto resolutionDto) {
+        log.info(resolutionDto.getCreator().getFioNominative());
     }
 
     /**
@@ -77,4 +83,5 @@ public class EmailQueueListener {
                             greeting));
         }
     }
+
 }

@@ -32,6 +32,9 @@ public interface AppealRepository extends JpaRepository<Appeal, Long> {
     @EntityGraph(attributePaths = {"creator", "signer"})
     List<Appeal> findAllByIdNotArchived(@Param("ids") Iterable<Long> ids);
 
+    @Query(value = "select a from Appeal a join a.question q where q.id = :questionId")
+    @EntityGraph(attributePaths = {"creator", "signer"})
+    Appeal findAppealByQuestionId(@Param("questionId") Long questionId);
 
     @Query(nativeQuery = true,
             value = "SELECT a.* FROM appeal a " +

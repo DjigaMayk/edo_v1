@@ -6,6 +6,8 @@ import com.education.model.dto.EmployeeDto;
 import com.education.model.dto.NotificationDto;
 import com.education.model.dto.ResolutionDto;
 import com.education.model.enumEntity.EnumNotification;
+import com.education.model.records.ResolutionDtoAndAppealRecord;
+import com.education.service.appeal.AppealService;
 import com.education.service.email.EmailService;
 import com.education.service.notification.NotificationService;
 import lombok.AllArgsConstructor;
@@ -21,6 +23,8 @@ public class EmailServiceImpl implements EmailService {
     private final AmqpTemplate amqpTemplate;
 
     private final NotificationService notificationService;
+
+    private final AppealService appealService;
 
     /**
      * Инициирует рассылку оповещений всем адресантам и подписантам и создает новую сущность Notification
@@ -47,8 +51,10 @@ public class EmailServiceImpl implements EmailService {
      */
     @Override
     public void sendNotificationOnResolution(ResolutionDto resolutionDto) {
+        var resolutionNotificationInfoRecord = new ResolutionDtoAndAppealRecord(resolutionDto,
+                appealService.findByQuestion(resolutionDto.getQuestion()));
         amqpTemplate.convertAndSend(RabbitConstant.exchange, RabbitConstant.resolutionNotificationQueue,
-                resolutionDto);
+                resolutionNotificationInfoRecord);
 
         // save the resolution notification for signer to database
         var signerNotificationDto = new NotificationDto();

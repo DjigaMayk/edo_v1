@@ -7,7 +7,9 @@ public class RabbitConstant {
     public static final String addressCreateDBQueue = "address.create.DB";
     public static final String addressCreateServiceQueue = "address.create.service";
     public static final String addressCreateEmailQueue = "email.create.service";
-    public static final String resolutionNotificationQueue = "email.createResolution.service";
     public static final String addressAppealIsRead = "appeal.read.service";
+    public static final String resolutionNotificationQueue = "email.createResolution.service";
+    public static final String requestAppealByQuestionIdQueue = "appeal.getByQuestionId.service";
+    public static final String returnAppealQueue = "appeal.return.service";
     public static final String ROUTING_KEY_SCHEDULER = "schedulerRoutingKey";
 }

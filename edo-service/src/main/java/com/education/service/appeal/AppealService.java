@@ -2,6 +2,7 @@ package com.education.service.appeal;
 
 import com.education.model.dto.AppealAbbreviatedDto;
 import com.education.model.dto.AppealDto;
+import com.education.model.dto.QuestionDto;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface AppealService {
     List<AppealDto> findAllByIdNotArchived(Iterable<Long> ids);
 
     List<AppealAbbreviatedDto> findAllByIdEmployee(Long first, Long amount);
+
+    AppealDto findByQuestion (QuestionDto questionDto);
 }

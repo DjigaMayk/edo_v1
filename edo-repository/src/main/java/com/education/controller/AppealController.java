@@ -26,8 +26,8 @@ import java.util.List;
 public class AppealController {
     final private AppealService appealService;
 
-    final private AppealMapper mapper;
-    final private AppealAbbreviatedMapper AppealAbbreviatedMapper;
+    private final AppealMapper mapper;
+    private final AppealAbbreviatedMapper AppealAbbreviatedMapper;
 
 
     @ApiOperation(value = "Сохранение сущности в БД")
@@ -138,5 +138,21 @@ public class AppealController {
         }
         log.log(Level.INFO, "Сущности найдены");
         return new ResponseEntity<>(AppealAbbreviatedMapper.toDto(appeal), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Получение сущности по вопросу")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Сущность найдена"),
+            @ApiResponse(code = 404, message = "Сущность не найдена")
+    })
+    @GetMapping(value = "/byQuestionId/{questionId}")
+    public ResponseEntity<AppealDto> findAppealByQuestion(@PathVariable Long questionId) {
+        Appeal appeal = appealService.findAppealByQuestionId(questionId);
+        if (appeal == null) {
+            log.log(Level.WARN, "Сущность не найдена");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        log.log(Level.INFO, "Сущность найдена");
+        return new ResponseEntity<>(mapper.toDto(appeal), HttpStatus.OK);
     }
 }

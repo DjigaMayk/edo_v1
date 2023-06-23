@@ -4,6 +4,7 @@ import com.education.model.constant.RabbitConstant;
 import com.education.model.dto.AppealDto;
 import com.education.model.dto.EmployeeDto;
 import com.education.model.dto.ResolutionDto;
+import com.education.model.records.ResolutionDtoAndAppealRecord;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import lombok.AllArgsConstructor;
@@ -35,9 +36,19 @@ public class EmailQueueListener {
     }
 
     @RabbitListener(queues = RabbitConstant.resolutionNotificationQueue)
-    public void resolutionNotificationsListener(ResolutionDto resolutionDto) {
-        log.info(resolutionDto.getCreator().getFioNominative());
+    public void resolutionNotificationsListener(ResolutionDtoAndAppealRecord resolutionNotificationInfoRecord) {
+        log.info("appeal id: " + resolutionNotificationInfoRecord.appeal().getId());
+        log.info("signer FIO: " + resolutionNotificationInfoRecord.resolutionDto().getSigner().getFioNominative());
     }
+
+    /**
+     * The resolution message factory method.
+     */
+//    private String createResolutionNotificationFormattedMethod (ResolutionDto resolutionDto) {
+//
+//        entityManager.find(Appeal.class, resolutionDto.getQuestion().getId(););
+//        return "null";
+//    }
 
     /**
      * Получает инстанс edo-rest случайным методом

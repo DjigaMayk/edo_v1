@@ -9,7 +9,6 @@ import java.util.UUID;
 public interface FacsimileService {
     FilePoolDto saveAsFile(MultipartFile multipartFile);
 
-    public byte[] getFileByUUID(UUID uuid);
-
     FacsimileDTO save(MultipartFile multipartFile);
+    boolean isValidate(MultipartFile multipartFile);
 }

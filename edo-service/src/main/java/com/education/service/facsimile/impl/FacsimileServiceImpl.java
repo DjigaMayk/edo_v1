@@ -1,6 +1,7 @@
 package com.education.service.facsimile.impl;
 
 import com.education.client.FileRestTemplateClient;
+import com.education.model.dto.DepartmentDto;
 import com.education.model.dto.EmployeeDto;
 import com.education.model.dto.FacsimileDTO;
 import com.education.model.dto.FilePoolDto;
@@ -18,16 +19,18 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Log
 public class FacsimileServiceImpl implements FacsimileService {
-
 
     /**
      * Клиент для отправки и получения запросов
@@ -40,7 +43,7 @@ public class FacsimileServiceImpl implements FacsimileService {
     private final EurekaClient EUREKA_CLIENT;
 
     /**
-     * путь до рест контроллера репозитория
+     * Путь до рест контроллера репозитория
      */
     private static final String BASE_URL = "/api/repository/facsimile";
 
@@ -57,27 +60,38 @@ public class FacsimileServiceImpl implements FacsimileService {
 
     /**
      * Method for saving facsimile in DB
+     *
      * @param multipartFile facsimile
      * @return facsimileDTO
      */
     @Override
-    public FacsimileDTO save(MultipartFile multipartFile) {                                                             //TODO Достать FacsimileDTO из multipart файла
+    public FacsimileDTO save(MultipartFile multipartFile) {
         String lastPathComponent = "/";
         URI uri = generateUri(this.getInstance(), lastPathComponent);
-        var request = new RequestEntity<>(multipartFile, HttpMethod.POST, uri);                                         //TODO Сделать FacsimileDTO вместо multipartFile
 
+        FacsimileDTO facsimileDTO = FacsimileDTO.builder()                                                              //Создание FacsimileDTO TODO удалить коммент
+                .employee(getCreatorFromSecurity())
+                .department(new DepartmentDto())
+                .file(saveAsFile(multipartFile))
+                .isArchived(false)
+                .build();
+
+        var request = new RequestEntity<>(facsimileDTO, HttpMethod.POST, uri);
         return TEMPLATE.exchange(request, FacsimileDTO.class).getBody();
     }
 
     /**
      * Method for saving Facsimile in file-storage
+     *
      * @param multipartFile - file for save
      * @return Facsimile as FilePoolDto
      */
     @Override
     public FilePoolDto saveAsFile(MultipartFile multipartFile) {
         try {
-            var file = fileRestTemplateClient.saveFile(multipartFile.getBytes());                                       //Сохранение в хранилище TODO удалить коммент
+            File fileDotFacsimile = setTypeFacsimile(multipartFile);                                                    //Установка типа Facsimile файлу TODO удалить коммент
+            byte[] fileSizeAtBytes = Files.readAllBytes(fileDotFacsimile.toPath());
+            var file = fileRestTemplateClient.saveFile(fileSizeAtBytes);                                                //Сохранение в хранилище TODO удалить коммент
             return filePoolService.add(                                                                                 //Создание FilePoolDTO TODO удалить коммент
                     FilePoolDto.builder()
                             .storageFileId(file)
@@ -93,17 +107,6 @@ public class FacsimileServiceImpl implements FacsimileService {
     }
 
     /**
-     * Method returning file from file-storage
-     *
-     * @param uuid - filename
-     * @return file as byte[]
-     */
-    @Override
-    public byte[] getFileByUUID(UUID uuid) {
-        return fileRestTemplateClient.getFile(uuid);
-    }
-
-    /**
      * Method returning authenticated employee as EmployeeDto
      */
     private EmployeeDto getCreatorFromSecurity() {
@@ -113,10 +116,48 @@ public class FacsimileServiceImpl implements FacsimileService {
     }
 
     /**
+     * Method for set type FACSIMILE to file
+     *
+     * @param multipartFile - facsimile
+     * @return facsimile.FACSIMILE File
+     */
+    private File setTypeFacsimile(MultipartFile multipartFile) {
+        String fileExtension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+        return new File(multipartFile.getOriginalFilename().replace(fileExtension, "FACSIMILE"));
+    }
+
+    /**
+     * Method for validate
+     *
+     * @param multipartFile - file to validate
+     * @return is file validate or not
+     */
+    public boolean isValidate(MultipartFile multipartFile) {
+
+        String fileExtension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+        if (!(fileExtension.equalsIgnoreCase("jpg")
+                || fileExtension.equalsIgnoreCase("jpeg")
+                || fileExtension.equalsIgnoreCase("png"))) {
+            return false;
+        }
+
+        try {
+            BufferedImage image = ImageIO.read(multipartFile.getInputStream());
+            if (image.getWidth() > 100 || image.getHeight() > 100) {
+                return false;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return true;
+    }
+
+    /**
      * Method for getting instance
+     *
      * @return instance
      */
-
     private InstanceInfo getInstance() {
         List<InstanceInfo> instances = EUREKA_CLIENT.getApplication(SERVICE_NAME).getInstances();
         InstanceInfo instance = instances.get((int) (Math.random() * instances.size()));

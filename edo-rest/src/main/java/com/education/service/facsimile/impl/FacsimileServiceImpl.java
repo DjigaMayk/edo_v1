@@ -19,27 +19,21 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
-//TODO
-
 @Service
 @Log4j2
 @RequiredArgsConstructor
 public class FacsimileServiceImpl implements FacsimileService {
-    private final RestTemplate TEMPLATE;
 
-    private final EurekaClient EUREKA_CLIENT;
+    private final RestTemplate TEMPLATE; //TODO Make description
 
-    private final String BASE_URL = "/api/service/facsimile";
+    private final EurekaClient EUREKA_CLIENT; //TODO Make description
 
-    private final String SERVICE_NAME = "edo-service";
+    private final String BASE_URL = "/api/service/facsimile"; //TODO Make description
 
-    private InstanceInfo getInstance() {
-        List<InstanceInfo> instances = EUREKA_CLIENT.getApplication(SERVICE_NAME).getInstances();
-        InstanceInfo instance = instances.get((int) (Math.random() * instances.size()));
-        log.info(instance.getPort());
-        return instance;
-    }
+    private final String SERVICE_NAME = "edo-service"; //TODO Make description
 
+
+    //TODO Make description
     @Override
     public FacsimileDTO saveFacsimile(MultipartFile multipartFile) {
         LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
@@ -52,6 +46,15 @@ public class FacsimileServiceImpl implements FacsimileService {
                 .toUri(), HttpMethod.POST, requestEntity, FacsimileDTO.class).getBody();
     }
 
+    //TODO Make description
+    private InstanceInfo getInstance() {
+        List<InstanceInfo> instances = EUREKA_CLIENT.getApplication(SERVICE_NAME).getInstances();
+        InstanceInfo instance = instances.get((int) (Math.random() * instances.size()));
+        log.info(instance.getPort());
+        return instance;
+    }
+
+    //TODO Make description
     private UriComponentsBuilder getDefaultUriComponentBuilder(String path) {
         InstanceInfo instanceInfo = getInstance();
         return UriComponentsBuilder

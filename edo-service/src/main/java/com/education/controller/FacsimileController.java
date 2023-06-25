@@ -6,6 +6,7 @@ import com.education.service.facsimile.FacsimileService;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,10 @@ public class FacsimileController {
     @PostMapping()
     public ResponseEntity<FacsimileDTO> saveFacsimile(@RequestPart("facsimile") MultipartFile multipartFile) {
         log.info("Request for saving Facsimile");
+        if (!(facsimileService.isValidate(multipartFile))) {
+            return new ResponseEntity(
+                    "Facsimile should be jpg or png and should less than 100x100px", HttpStatus.BAD_REQUEST);     //Валидация файла TODO удалить коммент
+        }
         FilePoolDto filePoolDto = facsimileService.saveAsFile(multipartFile);                                           //Сохранение файла в хранилище TODO удалить коммент
         return ResponseEntity.ok().body(facsimileService.save(multipartFile));                                          //Сохранения файла в бд TODO удалить коммент
     }

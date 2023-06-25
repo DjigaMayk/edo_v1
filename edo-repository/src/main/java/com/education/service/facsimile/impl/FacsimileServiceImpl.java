@@ -5,9 +5,10 @@ import com.education.repository.FacsimileRepository;
 import com.education.repository.FilePoolRepository;
 import com.education.service.facsimile.FacsimileService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.jvnet.hk2.annotations.Service;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,8 +19,7 @@ import java.io.IOException;
  * Сервис-класс для объекта Facsimile
  */
 @Service
-@Log
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FacsimileServiceImpl implements FacsimileService {
     /**
      * TODO
@@ -44,6 +44,7 @@ public class FacsimileServiceImpl implements FacsimileService {
         facsimileRepository.save(facsimileTransfered);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Facsimile findById(Long id) {
         return facsimileRepository.findById(id).orElse(null);

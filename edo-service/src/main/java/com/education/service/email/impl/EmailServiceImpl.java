@@ -51,6 +51,7 @@ public class EmailServiceImpl implements EmailService {
      */
     @Override
     public void sendNotificationOnResolution(ResolutionDto resolutionDto) {
+        log.info("sendNotificationOnResolution started");
         var resolutionNotificationInfoRecord = new ResolutionDtoAndAppealRecord(resolutionDto,
                 appealService.findByQuestion(resolutionDto.getQuestion()));
         amqpTemplate.convertAndSend(RabbitConstant.exchange, RabbitConstant.resolutionNotificationQueue,

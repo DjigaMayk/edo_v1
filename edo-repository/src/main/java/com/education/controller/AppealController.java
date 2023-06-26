@@ -153,6 +153,9 @@ public class AppealController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         log.log(Level.INFO, "Сущность найдена");
+        log.info("appeal id: " + appeal.getId());
+        log.info("appeal id: " + appeal.getAnnotation());
+        log.info("appeal id: " + appeal.getAppealStatus());
         return new ResponseEntity<>(mapper.toDto(appeal), HttpStatus.OK);
     }
 }

@@ -3,7 +3,6 @@ package com.education.email.service;
 import com.education.model.constant.RabbitConstant;
 import com.education.model.dto.AppealDto;
 import com.education.model.dto.EmployeeDto;
-import com.education.model.dto.ResolutionDto;
 import com.education.model.records.ResolutionDtoAndAppealRecord;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
@@ -37,7 +36,7 @@ public class EmailQueueListener {
 
     @RabbitListener(queues = RabbitConstant.resolutionNotificationQueue)
     public void resolutionNotificationsListener(ResolutionDtoAndAppealRecord resolutionNotificationInfoRecord) {
-        log.info("appeal id: " + resolutionNotificationInfoRecord.appeal().getId());
+        log.info("appeal id: " + resolutionNotificationInfoRecord.appealDto().getId());
         log.info("signer FIO: " + resolutionNotificationInfoRecord.resolutionDto().getSigner().getFioNominative());
     }
 

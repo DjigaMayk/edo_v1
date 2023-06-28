@@ -1,5 +1,7 @@
 package com.education.service.facsimile.impl;
 
+import com.education.model.dto.DepartmentDto;
+import com.education.model.dto.EmployeeDto;
 import com.education.model.dto.FacsimileDTO;
 import com.education.service.facsimile.FacsimileService;
 import com.netflix.appinfo.InstanceInfo;
@@ -24,20 +26,46 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FacsimileServiceImpl implements FacsimileService {
 
-    private final RestTemplate TEMPLATE; //TODO Make description
+    private final RestTemplate TEMPLATE;
 
-    private final EurekaClient EUREKA_CLIENT; //TODO Make description
+    private final EurekaClient EUREKA_CLIENT;
 
-    private final String BASE_URL = "/api/service/facsimile"; //TODO Make description
+    private final String BASE_URL = "/api/service/facsimile";
 
-    private final String SERVICE_NAME = "edo-service"; //TODO Make description
+    private final String SERVICE_NAME = "edo-service";
 
 
-    //TODO Make description
     @Override
     public FacsimileDTO saveFacsimile(MultipartFile multipartFile) {
         LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
         map.add("facsimile", multipartFile.getResource());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(map, headers);
+        return TEMPLATE.exchange(getDefaultUriComponentBuilder(BASE_URL)                    //TODO Переделать на PostForObject
+                .build()
+                .toUri(), HttpMethod.POST, requestEntity, FacsimileDTO.class).getBody();
+    }
+
+    @Override
+    public FacsimileDTO saveFacsimile(MultipartFile multipartFile, String jsonFile) {
+        LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+        map.add("facsimile", multipartFile.getResource());
+        map.add("jsonFile", jsonFile);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(map, headers);
+        return TEMPLATE.exchange(getDefaultUriComponentBuilder(BASE_URL)                    //TODO Переделать на PostForObject
+                .build()
+                .toUri(), HttpMethod.POST, requestEntity, FacsimileDTO.class).getBody();
+    }
+
+    @Override//TODO Delete
+    public FacsimileDTO saveFacsimile(MultipartFile facsimile, EmployeeDto employee, DepartmentDto department) {
+        LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+        map.add("facsimile", facsimile.getResource());
+        map.add("employee", employee);
+        map.add("department", department);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(map, headers);
@@ -46,7 +74,6 @@ public class FacsimileServiceImpl implements FacsimileService {
                 .toUri(), HttpMethod.POST, requestEntity, FacsimileDTO.class).getBody();
     }
 
-    //TODO Make description
     private InstanceInfo getInstance() {
         List<InstanceInfo> instances = EUREKA_CLIENT.getApplication(SERVICE_NAME).getInstances();
         InstanceInfo instance = instances.get((int) (Math.random() * instances.size()));
@@ -54,7 +81,6 @@ public class FacsimileServiceImpl implements FacsimileService {
         return instance;
     }
 
-    //TODO Make description
     private UriComponentsBuilder getDefaultUriComponentBuilder(String path) {
         InstanceInfo instanceInfo = getInstance();
         return UriComponentsBuilder

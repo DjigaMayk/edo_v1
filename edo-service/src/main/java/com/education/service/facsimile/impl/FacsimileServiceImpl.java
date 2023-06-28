@@ -5,10 +5,16 @@ import com.education.model.dto.DepartmentDto;
 import com.education.model.dto.EmployeeDto;
 import com.education.model.dto.FacsimileDTO;
 import com.education.model.dto.FilePoolDto;
+import com.education.service.department.DepartmentService;
+import com.education.service.employee.EmployeeRestTemplateService;
 import com.education.service.facsimile.FacsimileService;
 import com.education.service.file_pool.FilePoolService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
+import io.swagger.v3.core.util.Json;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.apache.commons.io.FilenameUtils;
@@ -56,6 +62,8 @@ public class FacsimileServiceImpl implements FacsimileService {
      */
     private final FilePoolService filePoolService;
     private final FileRestTemplateClient fileRestTemplateClient;
+    private final EmployeeRestTemplateService employeeRestTemplateService;
+    private final DepartmentService departmentService;
 
     /**
      * Method for saving facsimile in DB
@@ -63,21 +71,70 @@ public class FacsimileServiceImpl implements FacsimileService {
      * @param multipartFile facsimile
      * @return facsimileDTO
      */
+
+
     @Override
-    public FacsimileDTO save(MultipartFile multipartFile) {
+    public FacsimileDTO save(MultipartFile multipartFile, String jsonFile) {
         String lastPathComponent = "/";
         URI uri = generateUri(this.getInstance(), lastPathComponent);
 
-        FacsimileDTO facsimileDTO = FacsimileDTO.builder()
-                .employee(getCreatorFromSecurity())
-                .department(getDepartment())
-                .file(saveAsFile(multipartFile))
-                .isArchived(false)
-                .build();
+        ObjectMapper objectMapper = new ObjectMapper(); //TODO Сделать отдельным методом
+        try {
+            var file = fileRestTemplateClient.saveFile(multipartFile.getBytes());
 
-        var request = new RequestEntity<>(facsimileDTO, HttpMethod.POST, uri);
-        return TEMPLATE.exchange(request, FacsimileDTO.class).getBody();
+            JsonNode jsonNode = objectMapper.readTree(jsonFile);
+            EmployeeDto employeeDto = objectMapper.treeToValue(jsonNode.get("employee"), EmployeeDto.class);
+            DepartmentDto departmentDto = objectMapper.treeToValue(jsonNode.get("employee"), DepartmentDto.class);
+            FilePoolDto filePoolDto = objectMapper.treeToValue(jsonNode.get("employee"), FilePoolDto.class);
+
+            FacsimileDTO facsimileDTO = FacsimileDTO.builder()
+                    .employee(employeeDto)
+                    .department(departmentDto)
+                    .file(filePoolDto)
+                    .isArchived(false)
+                    .build();
+            var request = new RequestEntity<>(facsimileDTO, HttpMethod.POST, uri);
+            return TEMPLATE.exchange(request, FacsimileDTO.class).getBody();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+//    @Override
+//    public FacsimileDTO save(MultipartFile multipartFile) {
+//        String lastPathComponent = "/";
+//        URI uri = generateUri(this.getInstance(), lastPathComponent);
+//
+//        FacsimileDTO facsimileDTO = FacsimileDTO.builder()
+//                .employee(getCreatorFromSecurity())
+//                .department(getDepartment())
+//                .file(saveAsFile(multipartFile))
+//                .file(new FilePoolDto())
+//                .isArchived(false)
+//                .build();
+//
+//        var request = new RequestEntity<>(facsimileDTO, HttpMethod.POST, uri);
+//        return TEMPLATE.exchange(request, FacsimileDTO.class).getBody();
+//    }
+
+//    @Override
+//    public FacsimileDTO save(MultipartFile multipartFile, EmployeeDto employeeDto, DepartmentDto departmentDto) {
+//        String lastPathComponent = "/";
+//        URI uri = generateUri(this.getInstance(), lastPathComponent);
+//
+//        EmployeeDto employee = employeeRestTemplateService.findById(employeeDto.getId(), true);
+//        DepartmentDto department = departmentService.findById(departmentDto.getId());
+//
+//        FacsimileDTO facsimileDTO = FacsimileDTO.builder()
+//                .employee(employee)
+//                .department(department)
+//                .file(saveAsFile(multipartFile))
+//                .isArchived(false)
+//                .build();
+//
+//        var request = new RequestEntity<>(facsimileDTO, HttpMethod.POST, uri);
+//        return TEMPLATE.exchange(request, FacsimileDTO.class).getBody();
+//    }
 
     /**
      * Method for saving Facsimile in file-storage
@@ -85,44 +142,23 @@ public class FacsimileServiceImpl implements FacsimileService {
      * @param multipartFile - file for save
      * @return Facsimile as FilePoolDto
      */
-    @Override
-    public FilePoolDto saveAsFile(MultipartFile multipartFile) {
-        try {
-            var file = fileRestTemplateClient.saveFile(multipartFile.getBytes());
-
-            return filePoolService.add(
-                    FilePoolDto.builder()
-                            .storageFileId(file)
-                            .name(multipartFile.getOriginalFilename())
-                            .extension(FilenameUtils.getExtension(multipartFile.getOriginalFilename()))
-                            .size((multipartFile.getBytes()).length)
-                            .pageCount(1)
-                            .creator(getCreatorFromSecurity())
-                            .build());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * TODO do with the links in the DB
-     * Method returning authenticated employee as EmployeeDto
-     */
-    private EmployeeDto getCreatorFromSecurity() {
-        return EmployeeDto.builder()
-                .id(1L)
-                .build();
-    }
-
-    /**
-     * TODO do with the links in the DB
-     * Method returning department as DepartmentDto
-     */
-    private DepartmentDto getDepartment() {
-        return DepartmentDto.builder()
-                .id(1L)
-                .build();
-    }
+//    private FilePoolDto saveAsFile(MultipartFile multipartFile) {
+//        try {
+//            var file = fileRestTemplateClient.saveFile(multipartFile.getBytes());
+//
+//            return filePoolService.add(
+//                    FilePoolDto.builder()
+//                            .storageFileId(file)
+//                            .name(multipartFile.getOriginalFilename())
+//                            .extension(FilenameUtils.getExtension(multipartFile.getOriginalFilename()))
+//                            .size((multipartFile.getBytes()).length)
+//                            .pageCount(1)
+//                            .creator(getCreatorFromSecurity())
+//                            .build());
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     /**
      * TODO Remake it with Enum

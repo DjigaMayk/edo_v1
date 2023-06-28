@@ -10,17 +10,16 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-//TODO
 
 @Log
 @ApiOperation("Facsimile API")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/rest/facsimile")
+@RequestMapping(value = "/api/rest/facsimile")
 public class FacsimileController {
 
     private final FacsimileService facsimileService;
@@ -32,12 +31,12 @@ public class FacsimileController {
     })
     @PostMapping
     public ResponseEntity<FacsimileDTO> saveFacsimile(@RequestPart("facsimile") MultipartFile multipartFacsimile,
-                                                      @RequestPart("employee") EmployeeDto employeeDto,
-                                                      @RequestPart("department")DepartmentDto departmentDto) {
+                                                      @RequestPart("jsonFile") String jsonFile) {
         log.info("Request for saving facsimile");
         if (multipartFacsimile.isEmpty()) {
             return new ResponseEntity("please select a file!", HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.ok().body(facsimileService.saveFacsimile(multipartFacsimile));
+
+        return ResponseEntity.ok().body(facsimileService.saveFacsimile(multipartFacsimile, jsonFile));
     }
 }

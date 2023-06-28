@@ -1,7 +1,8 @@
 package com.education.controller;
 
+import com.education.model.dto.DepartmentDto;
+import com.education.model.dto.EmployeeDto;
 import com.education.model.dto.FacsimileDTO;
-import com.education.model.dto.FilePoolDto;
 import com.education.service.facsimile.FacsimileService;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
@@ -30,12 +31,14 @@ public class FacsimileController {
             @ApiResponse(code = 404, message = "Not found - The file was not found")
     })
     @PostMapping()
-    public ResponseEntity<FacsimileDTO> saveFacsimile(@RequestPart("facsimile") MultipartFile multipartFile) {
+    public ResponseEntity<FacsimileDTO> saveFacsimile(@RequestPart("facsimile") MultipartFile multipartFile,
+                                                      @RequestPart("Json") String jsonFile) {
+
         log.info("Request for saving Facsimile");
         if (!(facsimileService.isValidate(multipartFile))) {
             return new ResponseEntity(
-                    "Facsimile should be jpg or png and should less than 100x100px", HttpStatus.BAD_REQUEST);     //Валидация файла TODO удалить коммент
+                    "Facsimile should be jpg or png and should less than 100x100px", HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.ok().body(facsimileService.save(multipartFile));                                          //Сохранения файла в бд TODO удалить коммент
+        return ResponseEntity.ok().body(facsimileService.save(multipartFile, jsonFile));
     }
 }

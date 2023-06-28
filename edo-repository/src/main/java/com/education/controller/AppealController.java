@@ -149,13 +149,10 @@ public class AppealController {
     public ResponseEntity<AppealDto> findAppealByQuestion(@PathVariable Long questionId) {
         Appeal appeal = appealService.findAppealByQuestionId(questionId);
         if (appeal == null) {
-            log.log(Level.WARN, "Сущность не найдена");
+            log.info("Сущность не найдена");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        log.log(Level.INFO, "Сущность найдена");
-        log.info("appeal id: " + appeal.getId());
-        log.info("appeal id: " + appeal.getAnnotation());
-        log.info("appeal id: " + appeal.getAppealStatus());
+        log.info("Сущность найдена");
         return new ResponseEntity<>(mapper.toDto(appeal), HttpStatus.OK);
     }
 }

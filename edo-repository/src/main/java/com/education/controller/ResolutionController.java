@@ -39,16 +39,10 @@ public class ResolutionController {
         if (resolutionAfter.getId() != null) {
             //при создании резолюции меняем статус обращения на UNDER_CONSIDERATION("На рассмотрении")
             appealService.moveToUnderConsideration(resolutionAfter.getId());
-            log.log(Level.INFO, "Сущность сохранена или обновлена");
-            log.info(resolutionAfter.getId());
-            log.info(resolutionAfter.getEnumResolution());
-            log.info(resolutionAfter.getCreator().getFioNominative());
-            log.info(resolutionAfter.getCreator().getId());
-            log.info(resolutionAfter.getCurator().getFioNominative());
-            log.info(resolutionAfter.getCurator().getId());
+            log.info("Сущность сохранена или обновлена");
             return new ResponseEntity<>(mapper.toDto(resolutionAfter), HttpStatus.CREATED);
         }
-        log.log(Level.WARN, "Сущность не сохранена и не обновлена");
+        log.info("Сущность не сохранена и не обновлена");
         return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 

@@ -25,11 +25,11 @@ public interface ResolutionMapper extends Mappable<Resolution, ResolutionDto> {
 	@Mapping(target = "signer.notification", qualifiedByName = "ignoreNotificationEmployee")
 	@Mapping(target = "creator.notification", qualifiedByName = "ignoreNotificationEmployee")
 	@Mapping(target = "curator.notification", qualifiedByName = "ignoreNotificationEmployee")
-	@Mapping(target = "executors", qualifiedByName = "ignoreExecutors")
+	@Mapping(target = "executors", qualifiedByName = "ignoreNotificationInExecutorsList")
 	ResolutionDto toDto(Resolution resolution);
 
-	@Named("ignoreExecutors")
-	default List<EmployeeDto> ignoreExecutors(List<Employee> executors) {
+	@Named("ignoreNotificationInExecutorsList")
+	default List<EmployeeDto> ignoreNotificationInExecutorsList(List<Employee> executors) {
 		if (executors != null) {
 			return executors.stream()
 					.map(this::mapExecutorWithoutNotificationEmployee)

@@ -36,7 +36,6 @@ public class FacsimileController {
             return new ResponseEntity(
                     "Facsimile should be jpg or png and should less than 100x100px", HttpStatus.BAD_REQUEST);     //Валидация файла TODO удалить коммент
         }
-        FilePoolDto filePoolDto = facsimileService.saveAsFile(multipartFile);                                           //Сохранение файла в хранилище TODO удалить коммент
         return ResponseEntity.ok().body(facsimileService.save(multipartFile));                                          //Сохранения файла в бд TODO удалить коммент
     }
 }

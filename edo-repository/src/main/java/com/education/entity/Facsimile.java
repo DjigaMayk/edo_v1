@@ -8,13 +8,13 @@ import lombok.experimental.SuperBuilder;
  * @author Никита Бадеев
  * Класс, описывающий сущность факсимиле
  */
-
-@SuperBuilder
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
+@Entity
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 @Table(name = "facsimile")
 public class Facsimile extends BaseEntity {
 
@@ -42,6 +42,6 @@ public class Facsimile extends BaseEntity {
     /**
      * Архивирован ли факсимиле
      */
-    @Column(name = "isArchived")
+    @Column(name = "is_archived")
     private boolean isArchived;
 }

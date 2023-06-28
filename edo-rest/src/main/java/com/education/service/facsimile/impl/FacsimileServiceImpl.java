@@ -37,7 +37,7 @@ public class FacsimileServiceImpl implements FacsimileService {
     @Override
     public FacsimileDTO saveFacsimile(MultipartFile multipartFile) {
         LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-        map.add("file", multipartFile.getResource());
+        map.add("facsimile", multipartFile.getResource());
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<>(map, headers);

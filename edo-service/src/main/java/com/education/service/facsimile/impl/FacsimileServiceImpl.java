@@ -24,7 +24,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.Files;
 import java.util.List;
 
 @Service
@@ -69,9 +68,9 @@ public class FacsimileServiceImpl implements FacsimileService {
         String lastPathComponent = "/";
         URI uri = generateUri(this.getInstance(), lastPathComponent);
 
-        FacsimileDTO facsimileDTO = FacsimileDTO.builder()                                                              //Создание FacsimileDTO TODO удалить коммент
+        FacsimileDTO facsimileDTO = FacsimileDTO.builder()
                 .employee(getCreatorFromSecurity())
-                .department(new DepartmentDto())
+                .department(getDepartment())
                 .file(saveAsFile(multipartFile))
                 .isArchived(false)
                 .build();
@@ -89,10 +88,9 @@ public class FacsimileServiceImpl implements FacsimileService {
     @Override
     public FilePoolDto saveAsFile(MultipartFile multipartFile) {
         try {
-            File fileDotFacsimile = setTypeFacsimile(multipartFile);                                                    //Установка типа Facsimile файлу TODO удалить коммент
-            byte[] fileSizeAtBytes = Files.readAllBytes(fileDotFacsimile.toPath());
-            var file = fileRestTemplateClient.saveFile(fileSizeAtBytes);                                                //Сохранение в хранилище TODO удалить коммент
-            return filePoolService.add(                                                                                 //Создание FilePoolDTO TODO удалить коммент
+            var file = fileRestTemplateClient.saveFile(multipartFile.getBytes());
+
+            return filePoolService.add(
                     FilePoolDto.builder()
                             .storageFileId(file)
                             .name(multipartFile.getOriginalFilename())
@@ -107,6 +105,7 @@ public class FacsimileServiceImpl implements FacsimileService {
     }
 
     /**
+     * TODO do with the links in the DB
      * Method returning authenticated employee as EmployeeDto
      */
     private EmployeeDto getCreatorFromSecurity() {
@@ -116,14 +115,27 @@ public class FacsimileServiceImpl implements FacsimileService {
     }
 
     /**
-     * Method for set type FACSIMILE to file
+     * TODO do with the links in the DB
+     * Method returning department as DepartmentDto
+     */
+    private DepartmentDto getDepartment() {
+        return DepartmentDto.builder()
+                .id(1L)
+                .build();
+    }
+
+    /**
+     * TODO Remake it with Enum
+     * Method for set type FACSIMILE to file.
      *
      * @param multipartFile - facsimile
      * @return facsimile.FACSIMILE File
      */
-    private File setTypeFacsimile(MultipartFile multipartFile) {
+    private File setTypeFacsimile(MultipartFile multipartFile) throws IOException {
         String fileExtension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-        return new File(multipartFile.getOriginalFilename().replace(fileExtension, "FACSIMILE"));
+        File file = new File(multipartFile.getOriginalFilename().replace(fileExtension, "FACSIMILE"));
+        multipartFile.transferTo(file);
+        return file;
     }
 
     /**
@@ -159,6 +171,7 @@ public class FacsimileServiceImpl implements FacsimileService {
      * @return instance
      */
     private InstanceInfo getInstance() {
+
         List<InstanceInfo> instances = EUREKA_CLIENT.getApplication(SERVICE_NAME).getInstances();
         InstanceInfo instance = instances.get((int) (Math.random() * instances.size()));
         log.info(String.valueOf(instance.getPort()));

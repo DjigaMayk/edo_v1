@@ -4,7 +4,7 @@ create table if not exists facsimile
     employee_id     bigint not null references employee (id),                   --Id Работника
     department_id   bigint not null references department (id),                 --Id департамента
     file_id         bigint not null references file_pool (id),                  --id файла
-    isArchived      boolean                                                 --Признак архивности
+    is_archived      boolean                                                 --Признак архивности
 );
 
 comment on column facsimile.id is 'id факсимиле';

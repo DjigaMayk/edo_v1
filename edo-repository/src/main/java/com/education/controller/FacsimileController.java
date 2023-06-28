@@ -27,9 +27,9 @@ public class FacsimileController {
     @ApiModelProperty("mapper")
     private final FacsimileMapper facsimileMapper;
 
-    private final EmployeeMapper employeeMapper;
-    private final DepartmentMapper departmentMapper;
-    private final FilePoolMapper filePoolMapper;
+//    private final EmployeeMapper employeeMapper;
+//    private final DepartmentMapper departmentMapper;
+//    private final FilePoolMapper filePoolMapper;
 
     /**
      * Method for getting facsimile
@@ -62,9 +62,14 @@ public class FacsimileController {
      * @param facsimile Facsimile to save
      */
     @ApiOperation(value = "Сохранить факсимиле")
-    @PostMapping(path = "")
-    public ResponseEntity<FacsimileDTO> saveFacsimile(@RequestParam @ApiParam("facsimile") Facsimile facsimile) {
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successfully added")
+    })
+    @PostMapping("/")
+    public ResponseEntity<FacsimileDTO> saveFacsimile(@RequestBody Facsimile facsimile) {
         log.info("Request for saving facsimile");
+        facsimile.getFile().setId(facsimile.getFile().getId());
+
         Facsimile facsimileSaved = facsimileService.saveFacsimile(facsimile);
         if (facsimileSaved == null) {
             log.warning("Facsimile couldn't be saved");

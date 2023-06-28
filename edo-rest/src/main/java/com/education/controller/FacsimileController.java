@@ -1,5 +1,7 @@
 package com.education.controller;
 
+import com.education.model.dto.DepartmentDto;
+import com.education.model.dto.EmployeeDto;
 import com.education.model.dto.FacsimileDTO;
 import com.education.service.facsimile.FacsimileService;
 import io.swagger.annotations.ApiOperation;
@@ -29,11 +31,13 @@ public class FacsimileController {
             @ApiResponse(code = 404, message = "Facsimile not found")
     })
     @PostMapping
-    public ResponseEntity<FacsimileDTO> saveFacsimile(@RequestPart("facsimile") MultipartFile multipartFile) {
+    public ResponseEntity<FacsimileDTO> saveFacsimile(@RequestPart("facsimile") MultipartFile multipartFacsimile,
+                                                      @RequestPart("employee") EmployeeDto employeeDto,
+                                                      @RequestPart("department")DepartmentDto departmentDto) {
         log.info("Request for saving facsimile");
-        if (multipartFile.isEmpty()) {
+        if (multipartFacsimile.isEmpty()) {
             return new ResponseEntity("please select a file!", HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.ok().body(facsimileService.saveFacsimile(multipartFile));
+        return ResponseEntity.ok().body(facsimileService.saveFacsimile(multipartFacsimile));
     }
 }

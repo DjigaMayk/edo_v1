@@ -13,6 +13,7 @@ import java.util.Optional;
 /**
  * @author Никита Бадеев
  * Сервис-класс для объекта Facsimile
+ * TODO Task 98
  */
 @Service
 @RequiredArgsConstructor

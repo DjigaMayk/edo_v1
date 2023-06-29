@@ -10,12 +10,10 @@ import com.education.service.department.DepartmentService;
 import com.education.service.employee.EmployeeRestTemplateService;
 import com.education.service.facsimile.FacsimileService;
 import com.education.service.file_pool.FilePoolService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
-import io.swagger.v3.core.util.Json;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.apache.commons.io.FilenameUtils;
@@ -28,8 +26,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -69,8 +67,8 @@ public class FacsimileServiceImpl implements FacsimileService {
 
     /**
      * Method for saving facsimile
-     *
-     * @param multipartFile facsimile
+     * TODO Task 98
+     * @param jsonFile employee and others. Should be rework method
      * @return facsimileDTO
      */
     @Override
@@ -103,36 +101,6 @@ public class FacsimileServiceImpl implements FacsimileService {
         }
     }
 
-    //TODO Dont work
-    @Override
-    public FilePoolDto save(MultipartFile multipartFile) {
-        String lastPathComponent = "/";
-        URI uri = generateUri(this.getInstance(), lastPathComponent);
-
-        return saveAsFile(multipartFile);
-//        var request = new RequestEntity<>(filePoolDto, HttpMethod.POST, uri);
-//        return TEMPLATE.exchange(request, FilePoolDto.class).getBody();
-    }
-
-//    @Override
-//    public FacsimileDTO save(MultipartFile multipartFile, EmployeeDto employeeDto, DepartmentDto departmentDto) {
-//        String lastPathComponent = "/";
-//        URI uri = generateUri(this.getInstance(), lastPathComponent);
-//
-//        EmployeeDto employee = employeeRestTemplateService.findById(employeeDto.getId(), true);
-//        DepartmentDto department = departmentService.findById(departmentDto.getId());
-//
-//        FacsimileDTO facsimileDTO = FacsimileDTO.builder()
-//                .employee(employee)
-//                .department(department)
-//                .file(saveAsFile(multipartFile))
-//                .isArchived(false)
-//                .build();
-//
-//        var request = new RequestEntity<>(facsimileDTO, HttpMethod.POST, uri);
-//        return TEMPLATE.exchange(request, FacsimileDTO.class).getBody();
-//    }
-
     /**
      * Method for saving Facsimile in file-storage
      *
@@ -149,7 +117,7 @@ public class FacsimileServiceImpl implements FacsimileService {
                             .storageFileId(file)
                             .name(multipartFile.getOriginalFilename())
                             .extension(FilenameUtils.getExtension(multipartFile.getOriginalFilename()))
-                            .fileType(EnumFileType.FACSIMILE)
+                            .fileType(EnumFileType.FACSIMILE) //TODO Тип файла не идет назад
                             .size((multipartFile.getBytes()).length)
                             .pageCount(1)
                             .creator(EmployeeDto.builder().id(1L).build())//TODO
@@ -158,20 +126,6 @@ public class FacsimileServiceImpl implements FacsimileService {
             throw new RuntimeException(e);
         }
     }
-
-    /**
-     * TODO Remake it with Enum
-     * Method for set type FACSIMILE to file.
-     *
-     * @param multipartFile - facsimile
-     * @return facsimile.FACSIMILE File
-     */
-//    private File setTypeFacsimile(MultipartFile multipartFile) throws IOException {
-//        String fileExtension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-//        File file = new File(multipartFile.getOriginalFilename().replace(fileExtension, "FACSIMILE"));
-//        multipartFile.transferTo(file);
-//        return file;
-//    }
 
     /**
      * Method for validate
@@ -189,7 +143,9 @@ public class FacsimileServiceImpl implements FacsimileService {
         }
 
         try {
-            BufferedImage image = ImageIO.read(multipartFile.getInputStream());
+            InputStream inputStream = multipartFile.getInputStream();
+            BufferedImage image = ImageIO.read(inputStream);
+            //TODO В тестах не робит
             if (image.getWidth() > 100 || image.getHeight() > 100) {
                 return false;
             }

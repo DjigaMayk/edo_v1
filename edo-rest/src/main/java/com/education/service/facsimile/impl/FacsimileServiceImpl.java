@@ -1,6 +1,7 @@
 package com.education.service.facsimile.impl;
 
-import com.education.model.dto.*;
+import com.education.model.dto.FacsimileDTO;
+import com.education.model.dto.FilePoolDto;
 import com.education.service.facsimile.FacsimileService;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
@@ -17,10 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.File;
 import java.util.List;
-
-import static org.apache.commons.lang.StringUtils.EMPTY;
 
 /**
  * @author Никита Бадеев
@@ -40,6 +38,7 @@ public class FacsimileServiceImpl implements FacsimileService {
     private final String SERVICE_NAME = "edo-service";
 
 
+    //TODO Task 98
     @Override
     public FacsimileDTO saveFacsimileEntity(String jsonFile) {
         InstanceInfo instanceInfo = getInstance();

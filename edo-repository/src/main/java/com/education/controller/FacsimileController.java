@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * TODO Task 98
+ */
 @RestController
 @RequestMapping("/api/repository/facsimile")
 @AllArgsConstructor
@@ -23,10 +26,6 @@ public class FacsimileController {
 
     @ApiModelProperty("mapper")
     private final FacsimileMapper facsimileMapper;
-
-//    private final EmployeeMapper employeeMapper;
-//    private final DepartmentMapper departmentMapper;
-//    private final FilePoolMapper filePoolMapper;
 
     /**
      * Method for getting facsimile

@@ -43,7 +43,7 @@ public class FacsimileController {
      */
     @ApiOperation(value = "Сохранение Факсимиле")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Facsimile saved"),
+            @ApiResponse(code = 200, message = "Facsimile saved"),
             @ApiResponse(code = 404, message = "Facsimile not found")
     })
     @PostMapping
@@ -57,6 +57,7 @@ public class FacsimileController {
 
     /**
      * Method for saving facsimile as entity
+     * //TODO Task 98
      * @param jsonFile file with employee, department and filePool
      * @return FacsimileDto
      */

@@ -149,6 +149,7 @@ public class FacsimileServiceImpl implements FacsimileService {
                             .storageFileId(file)
                             .name(multipartFile.getOriginalFilename())
                             .extension(FilenameUtils.getExtension(multipartFile.getOriginalFilename()))
+                            .fileType(EnumFileType.FACSIMILE)
                             .size((multipartFile.getBytes()).length)
                             .pageCount(1)
                             .creator(EmployeeDto.builder().id(1L).build())//TODO

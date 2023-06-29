@@ -1,20 +1,16 @@
 package com.education.model.enumEntity;
 
 public enum EnumFileType {
-    MAIN,
-    FACSIMILE;
+    MAIN("MAIN"),
+    FACSIMILE("FACSIMILE");
 
-    private String value;
+    private final String value;
 
     EnumFileType(String value) {
         this.value = value;
     }
 
-    EnumFileType() {
-
-    }
-
     public String getValue() {
-        return this.value;
+        return value;
     }
 }

@@ -4,6 +4,7 @@ CREATE TABLE if not exists file_pool
     storage_file_id UUID      not null,             --ID хранилища файла
     file_name       text,                           --Имя хранилища файла
     extension       text,                           --Расширение файла
+    file_type       text,
     file_size       int,                            --Размер файла
     page_count      int,                            --Количество страниц файла
     upload_date     TIMESTAMPTZ,                    --Дата загрузки файла

@@ -3,6 +3,7 @@ package com.education.service.file.impl;
 import com.education.client.FileRestTemplateClient;
 import com.education.model.dto.EmployeeDto;
 import com.education.model.dto.FilePoolDto;
+import com.education.model.enumEntity.EnumFileType;
 import com.education.service.file.FileService;
 import com.education.service.file_pool.FilePoolService;
 import com.education.utils.fileConvertion.FileConversionService;
@@ -43,6 +44,7 @@ public class FileServiceImpl implements FileService {
                         .storageFileId(savedFileUUID)
                         .name(multipartFile.getOriginalFilename())
                         .extension(FilenameUtils.getExtension(multipartFile.getOriginalFilename()))
+                        .fileType(EnumFileType.MAIN)
                         .size(((byte[]) convertedFile.get("file")).length)
                         .pageCount((int) convertedFile.get("pageCount"))
                         .creator(getCreatorFromSecurity())

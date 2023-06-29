@@ -5,6 +5,7 @@ import com.education.model.dto.DepartmentDto;
 import com.education.model.dto.EmployeeDto;
 import com.education.model.dto.FacsimileDTO;
 import com.education.model.dto.FilePoolDto;
+import com.education.model.enumEntity.EnumFileType;
 import com.education.service.department.DepartmentService;
 import com.education.service.employee.EmployeeRestTemplateService;
 import com.education.service.facsimile.FacsimileService;
@@ -30,6 +31,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.util.List;
 
 @Service
@@ -66,23 +68,24 @@ public class FacsimileServiceImpl implements FacsimileService {
     private final DepartmentService departmentService;
 
     /**
-     * Method for saving facsimile in DB
+     * Method for saving facsimile
      *
      * @param multipartFile facsimile
      * @return facsimileDTO
      */
-
-
     @Override
-    public FacsimileDTO save(MultipartFile multipartFile, String jsonFile) {
+    public FacsimileDTO save(MultipartFile multipartFile, MultipartFile jsonFile) {
         String lastPathComponent = "/";
         URI uri = generateUri(this.getInstance(), lastPathComponent);
 
-        ObjectMapper objectMapper = new ObjectMapper(); //TODO Сделать отдельным методом
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
             var file = fileRestTemplateClient.saveFile(multipartFile.getBytes());
 
-            JsonNode jsonNode = objectMapper.readTree(jsonFile);
+
+            String jsonString = new String(jsonFile.getBytes(), Charset.defaultCharset());
+            JsonNode jsonNode = objectMapper.readTree(jsonString);
+
             EmployeeDto employeeDto = objectMapper.treeToValue(jsonNode.get("employee"), EmployeeDto.class);
             DepartmentDto departmentDto = objectMapper.treeToValue(jsonNode.get("employee"), DepartmentDto.class);
             FilePoolDto filePoolDto = objectMapper.treeToValue(jsonNode.get("employee"), FilePoolDto.class);
@@ -100,22 +103,16 @@ public class FacsimileServiceImpl implements FacsimileService {
         }
     }
 
-//    @Override
-//    public FacsimileDTO save(MultipartFile multipartFile) {
-//        String lastPathComponent = "/";
-//        URI uri = generateUri(this.getInstance(), lastPathComponent);
-//
-//        FacsimileDTO facsimileDTO = FacsimileDTO.builder()
-//                .employee(getCreatorFromSecurity())
-//                .department(getDepartment())
-//                .file(saveAsFile(multipartFile))
-//                .file(new FilePoolDto())
-//                .isArchived(false)
-//                .build();
-//
-//        var request = new RequestEntity<>(facsimileDTO, HttpMethod.POST, uri);
-//        return TEMPLATE.exchange(request, FacsimileDTO.class).getBody();
-//    }
+    //TODO Dont work
+    @Override
+    public FilePoolDto save(MultipartFile multipartFile) {
+        String lastPathComponent = "/";
+        URI uri = generateUri(this.getInstance(), lastPathComponent);
+
+        return saveAsFile(multipartFile);
+//        var request = new RequestEntity<>(filePoolDto, HttpMethod.POST, uri);
+//        return TEMPLATE.exchange(request, FilePoolDto.class).getBody();
+    }
 
 //    @Override
 //    public FacsimileDTO save(MultipartFile multipartFile, EmployeeDto employeeDto, DepartmentDto departmentDto) {
@@ -142,23 +139,24 @@ public class FacsimileServiceImpl implements FacsimileService {
      * @param multipartFile - file for save
      * @return Facsimile as FilePoolDto
      */
-//    private FilePoolDto saveAsFile(MultipartFile multipartFile) {
-//        try {
-//            var file = fileRestTemplateClient.saveFile(multipartFile.getBytes());
-//
-//            return filePoolService.add(
-//                    FilePoolDto.builder()
-//                            .storageFileId(file)
-//                            .name(multipartFile.getOriginalFilename())
-//                            .extension(FilenameUtils.getExtension(multipartFile.getOriginalFilename()))
-//                            .size((multipartFile.getBytes()).length)
-//                            .pageCount(1)
-//                            .creator(getCreatorFromSecurity())
-//                            .build());
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    @Override
+    public FilePoolDto saveAsFile(MultipartFile multipartFile) {
+        try {
+            var file = fileRestTemplateClient.saveFile(multipartFile.getBytes());
+
+            return filePoolService.add(
+                    FilePoolDto.builder()
+                            .storageFileId(file)
+                            .name(multipartFile.getOriginalFilename())
+                            .extension(FilenameUtils.getExtension(multipartFile.getOriginalFilename()))
+                            .size((multipartFile.getBytes()).length)
+                            .pageCount(1)
+                            .creator(EmployeeDto.builder().id(1L).build())//TODO
+                            .build());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * TODO Remake it with Enum
@@ -167,12 +165,12 @@ public class FacsimileServiceImpl implements FacsimileService {
      * @param multipartFile - facsimile
      * @return facsimile.FACSIMILE File
      */
-    private File setTypeFacsimile(MultipartFile multipartFile) throws IOException {
-        String fileExtension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-        File file = new File(multipartFile.getOriginalFilename().replace(fileExtension, "FACSIMILE"));
-        multipartFile.transferTo(file);
-        return file;
-    }
+//    private File setTypeFacsimile(MultipartFile multipartFile) throws IOException {
+//        String fileExtension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+//        File file = new File(multipartFile.getOriginalFilename().replace(fileExtension, "FACSIMILE"));
+//        multipartFile.transferTo(file);
+//        return file;
+//    }
 
     /**
      * Method for validate

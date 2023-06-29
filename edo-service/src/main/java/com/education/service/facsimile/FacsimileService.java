@@ -7,9 +7,10 @@ import com.education.model.dto.FilePoolDto;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface FacsimileService {
-//    FacsimileDTO save(MultipartFile multipartFile);
+    FilePoolDto saveAsFile(MultipartFile multipartFile);
+    FilePoolDto save(MultipartFile multipartFile);
 //    FacsimileDTO save(MultipartFile multipartFile, EmployeeDto employeeDto, DepartmentDto departmentDto);
 
-    FacsimileDTO save(MultipartFile multipartFile, String jsonFile);
+    FacsimileDTO save(MultipartFile multipartFile, MultipartFile jsonFile);
     boolean isValidate(MultipartFile multipartFile);
 }

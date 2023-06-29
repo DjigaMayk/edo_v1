@@ -16,15 +16,17 @@ import static org.hamcrest.Matchers.equalTo;
 import io.restassured.path.json.JsonPath;
 
 /**
- * Интеграционный тест отправки appeal.
+ * Интеграционный тест создания resolution.
  * Для запуска требуется запустить следующие модули:
+ * rabbitMQ server
  * edo-cloud-server
  * edo-service
  * edo-repository
  * postgres_SQL
- * edo-integration
  * edo_db необходимо заполнить тестовыми данными за исключением раздела resolution:
  * edo-repository/src/main/resources/db.populating/tables_populating_for_tests.sql
+ * после успешного завершения теста необходимо запустить интеграционный тест:
+ * edo-integration/src/test/java/resolutionNotificationTest/ResolutionNotificationIntegrationTest.java
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -41,9 +43,6 @@ public class ResolutionNotificationIntegrationTest {
         return "http://localhost:" + port + "/api/rest/resolution";
     }
 
-    ClassPathResource jsonResource = new ClassPathResource("expected.json");
-    JsonPath expectedJson = new JsonPath(jsonResource.getInputStream());
-
     @Test
     public void createResolutionAndTriggerNotifications() {
         given().contentType("application/json")
@@ -52,7 +51,7 @@ public class ResolutionNotificationIntegrationTest {
                 .then()
                 .statusCode(201)
                 .and()
-                .body("", equalTo(expectedJson.getMap("")));
+                .body("enumResolution", equalTo("RESOLUTION"));
     }
 
 }

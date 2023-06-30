@@ -68,7 +68,13 @@ public class EmailQueueListener {
         emailService.sendSimpleEmail(memberDto.getWorkEmail(), "Уведомление о создании резолюции",
                 notificationMailTemplate.formatted(memberDto.getFioNominative(), role));
     }
-
+    /**
+     * Интеграционный тест отправки уведомлений после создания resolution.
+     * Для запуска требуется успешно завершить тест на создание resolution
+     * и следующие модули должны быть уже запущены:
+     * rabbitMQ server
+     * edo-cloud-server
+     */
     /**
      * Получает инстанс edo-rest случайным методом
      */

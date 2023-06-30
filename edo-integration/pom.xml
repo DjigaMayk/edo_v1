@@ -33,12 +33,19 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.icegreen/greenmail -->
         <dependency>
-            <groupId>org.apache.james</groupId>
-            <artifactId>james-server-protocols-smtp</artifactId>
-            <version>3.8.0</version>
+            <groupId>com.icegreen</groupId>
+            <artifactId>greenmail</artifactId>
+            <version>1.6.5</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.icegreen/greenmail-junit5 -->
+        <dependency>
+            <groupId>com.icegreen</groupId>
+            <artifactId>greenmail-junit5</artifactId>
+            <version>1.6.5</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
-
-
 </project>

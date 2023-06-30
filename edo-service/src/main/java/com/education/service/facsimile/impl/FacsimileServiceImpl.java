@@ -29,7 +29,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.nio.charset.Charset;
 import java.util.List;
 
 @Service
@@ -74,24 +73,25 @@ public class FacsimileServiceImpl implements FacsimileService {
      */
     @Override
     public FacsimileDTO save(String jsonFile) {
+
         String lastPathComponent = "/";
         URI uri = generateUri(this.getInstance(), lastPathComponent);
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            String jsonString = new String(jsonFile.getBytes(), Charset.defaultCharset());
-            JsonNode jsonNode = objectMapper.readTree(jsonString);
+            JsonNode jsonNode = objectMapper.readTree(jsonFile);
 
-            //TODO Сделать сущности через findById для создания Facsimile
-
-            EmployeeDto employeeDto = objectMapper.treeToValue(jsonNode.get("employee"), EmployeeDto.class);
-            DepartmentDto departmentDto = objectMapper.treeToValue(jsonNode.get("employee"), DepartmentDto.class);
-            FilePoolDto filePoolDto = objectMapper.treeToValue(jsonNode.get("employee"), FilePoolDto.class);
+            EmployeeDto employee = employeeRestTemplateService.findById(
+                    objectMapper.treeToValue(jsonNode.get("employee"), EmployeeDto.class).getId(), false);
+            FilePoolDto filePool = filePoolService.findById(
+                    objectMapper.treeToValue(jsonNode.get("file_pool"), DepartmentDto.class).getId());
+            DepartmentDto department = departmentService.findById(
+                    objectMapper.treeToValue(jsonNode.get("department"), FilePoolDto.class).getId());
 
             FacsimileDTO facsimileDTO = FacsimileDTO.builder()
-                    .employee(employeeDto)
-                    .department(departmentDto)
-                    .file(filePoolDto)
+                    .employee(employee)
+                    .department(department)
+                    .file(filePool)
                     .isArchived(false)
                     .build();
             var request = new RequestEntity<>(facsimileDTO, HttpMethod.POST, uri);
@@ -157,6 +157,7 @@ public class FacsimileServiceImpl implements FacsimileService {
 
     /**
      * Method for getting instance
+     * TODO часто кидает null
      *
      * @return instance
      */

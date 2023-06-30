@@ -3,34 +3,41 @@ package facsimileTest;
 import com.education.EdoRestApplication;
 import com.education.controller.FacsimileController;
 import jakarta.ws.rs.core.MediaType;
+import org.apache.commons.io.IOUtils;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.internal.util.io.IOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Тест для сохранения файла facsimile
- * Для запуска требуется запустить следующие модули:
+ * Для запуска требуется запустить Minio и следующие модули:
  * edo-cloud-server
  * edo-service
- * edo-repository TODO
- * edo-file-storage TODO
- * А также запустить Minio TODO
+ * edo-repository
+ * edo-file-storage
  */
 
 @RunWith(SpringRunner.class)
@@ -55,19 +62,31 @@ public class FacsimileControllerTest {
 
     @Test
     public void testSaveMatchingFile() throws Exception {
+        String imagePath = "src\\test\\java\\facsimileTest\\imagesForFacsimileTest\\MatchFile.jpg";
 
-        BufferedImage bufferedImage = new BufferedImage(100, 100, BufferedImage.TYPE_INT_BGR);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(bufferedImage, "png", baos);
-
-        byte[] image = baos.toByteArray();
-
-        MultipartFile multipartFile = new MockMultipartFile("image.png", image);
+        File file = new File(imagePath);
+        FileInputStream inputStream = new FileInputStream(file);
+        MockMultipartFile multipartFile = new MockMultipartFile("facsimile", "MatchFile.jpg",
+                "image/jpeg", IOUtils.toByteArray(inputStream));
 
         mockMvc.perform(MockMvcRequestBuilders.multipart(getRootUrl())
-                .file("facsimile", multipartFile.getBytes())
+                .file(multipartFile)
                 .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Facsimile saved"));
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testSaveUnmatchingFile() throws Exception {
+        String imagePath = "src\\test\\java\\facsimileTest\\imagesForFacsimileTest\\UnmatchedFile.jpg";
+
+        File file = new File(imagePath);
+        FileInputStream inputStream = new FileInputStream(file);
+        MockMultipartFile multipartFile = new MockMultipartFile("facsimile", "MatchFile.jpg",
+                "image/jpeg", IOUtils.toByteArray(inputStream));
+
+        mockMvc.perform(MockMvcRequestBuilders.multipart(getRootUrl())
+                .file(multipartFile)
+                .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isBadRequest());
     }
 }

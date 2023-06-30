@@ -32,13 +32,10 @@ public class FacsimileController {
     public ResponseEntity<FilePoolDto> saveFacsimile(@RequestPart("facsimile") MultipartFile multipartFile) {
 
         log.info("Request for saving Facsimile");
-        log.info(multipartFile.getOriginalFilename() + "||" + multipartFile.getName()); //TODO Delete
         if (!(facsimileService.isValidate(multipartFile))) {
             return new ResponseEntity(
                     "Facsimile should be jpg or png and should less than 100x100px", HttpStatus.BAD_REQUEST);
         }
-        FilePoolDto filePoolDto = facsimileService.saveAsFile(multipartFile); //TODO Не отдает File Type
-        System.out.println(filePoolDto.getFileType());
-        return ResponseEntity.ok().body(filePoolDto);
+        return ResponseEntity.ok().body(facsimileService.saveAsFile(multipartFile));
     }
 }

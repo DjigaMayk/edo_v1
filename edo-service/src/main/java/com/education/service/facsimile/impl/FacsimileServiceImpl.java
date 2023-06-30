@@ -68,21 +68,21 @@ public class FacsimileServiceImpl implements FacsimileService {
     /**
      * Method for saving facsimile
      * TODO Task 98
+     *
      * @param jsonFile employee and others. Should be rework method
      * @return facsimileDTO
      */
     @Override
-    public FacsimileDTO save(MultipartFile multipartFile, MultipartFile jsonFile) {
+    public FacsimileDTO save(String jsonFile) {
         String lastPathComponent = "/";
         URI uri = generateUri(this.getInstance(), lastPathComponent);
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            var file = fileRestTemplateClient.saveFile(multipartFile.getBytes());
-
-
             String jsonString = new String(jsonFile.getBytes(), Charset.defaultCharset());
             JsonNode jsonNode = objectMapper.readTree(jsonString);
+
+            //TODO Сделать сущности через findById для создания Facsimile
 
             EmployeeDto employeeDto = objectMapper.treeToValue(jsonNode.get("employee"), EmployeeDto.class);
             DepartmentDto departmentDto = objectMapper.treeToValue(jsonNode.get("employee"), DepartmentDto.class);
@@ -120,7 +120,7 @@ public class FacsimileServiceImpl implements FacsimileService {
                             .fileType(EnumFileType.FACSIMILE) //TODO Тип файла не идет назад
                             .size((multipartFile.getBytes()).length)
                             .pageCount(1)
-                            .creator(EmployeeDto.builder().id(1L).build())//TODO
+                            .creator(EmployeeDto.builder().id(1L).build())//TODO Переделать на нормального Employee
                             .build());
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -145,7 +145,6 @@ public class FacsimileServiceImpl implements FacsimileService {
         try {
             InputStream inputStream = multipartFile.getInputStream();
             BufferedImage image = ImageIO.read(inputStream);
-            //TODO В тестах не робит
             if (image.getWidth() > 100 || image.getHeight() > 100) {
                 return false;
             }

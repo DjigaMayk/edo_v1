@@ -6,6 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface FacsimileService {
     FilePoolDto saveAsFile(MultipartFile multipartFile);
-    FacsimileDTO save(MultipartFile multipartFile, MultipartFile jsonFile);
+    FacsimileDTO save(String jsonFile);
     boolean isValidate(MultipartFile multipartFile);
 }

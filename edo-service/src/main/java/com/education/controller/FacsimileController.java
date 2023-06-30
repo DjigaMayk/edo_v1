@@ -1,5 +1,6 @@
 package com.education.controller;
 
+import com.education.model.dto.FacsimileDTO;
 import com.education.model.dto.FilePoolDto;
 import com.education.service.facsimile.FacsimileService;
 import io.swagger.annotations.*;
@@ -7,10 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -37,5 +35,12 @@ public class FacsimileController {
                     "Facsimile should be jpg or png and should less than 100x100px", HttpStatus.BAD_REQUEST);
         }
         return ResponseEntity.ok().body(facsimileService.saveAsFile(multipartFile));
+    }
+
+    @ApiOperation("Сохранить сущность факсимиле")
+    @PostMapping("/")
+    public ResponseEntity<FacsimileDTO> saveFacsimileEntity(@RequestBody String jsonFile) {
+        log.info("Request for saving facsimile entity");
+        return ResponseEntity.ok().body(facsimileService.save(jsonFile));
     }
 }

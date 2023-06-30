@@ -36,7 +36,7 @@ public class Facsimile extends BaseEntity {
      * Связь с файлом
      */
     @OneToOne
-    @PrimaryKeyJoinColumn(name = "file_id", referencedColumnName = "id")
+    @JoinColumn(name = "file_id", referencedColumnName = "id")
     private FilePool file;
 
     /**

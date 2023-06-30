@@ -62,7 +62,7 @@ public class FacsimileController {
      * @return FacsimileDto
      */
     @ApiOperation(value = "Сохранение сущности")
-    @PostMapping("/json/")
+    @PostMapping("/json")
     public ResponseEntity<FacsimileDTO> createFacsimile(@RequestBody String jsonFile) {
         log.info("Request for saving facsimile entity");
         return ResponseEntity.ok().body(facsimileService.saveFacsimileEntity(jsonFile));

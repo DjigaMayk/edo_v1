@@ -64,7 +64,6 @@ public class FacsimileController {
     @PostMapping("/")
     public ResponseEntity<FacsimileDTO> saveFacsimile(@RequestBody Facsimile facsimile) {
         log.info("Request for saving facsimile");
-        facsimile.getFile().setId(facsimile.getFile().getId());
 
         Facsimile facsimileSaved = facsimileService.saveFacsimile(facsimile);
         if (facsimileSaved == null) {

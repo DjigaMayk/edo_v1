@@ -70,8 +70,8 @@ public class FacsimileControllerTest {
                 "image/jpeg", IOUtils.toByteArray(inputStream));
 
         mockMvc.perform(MockMvcRequestBuilders.multipart(getRootUrl())
-                .file(multipartFile)
-                .contentType(MediaType.MULTIPART_FORM_DATA))
+                        .file(multipartFile)
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk());
     }
 
@@ -85,8 +85,8 @@ public class FacsimileControllerTest {
                 "image/jpeg", IOUtils.toByteArray(inputStream));
 
         mockMvc.perform(MockMvcRequestBuilders.multipart(getRootUrl())
-                .file(multipartFile)
-                .contentType(MediaType.MULTIPART_FORM_DATA))
+                        .file(multipartFile)
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isBadRequest());
     }
 }

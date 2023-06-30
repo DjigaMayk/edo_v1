@@ -15,6 +15,7 @@ comment on column file_pool.id is 'ID';
 comment on column file_pool.storage_file_id is 'ID хранилища файла';
 comment on column file_pool.file_name is 'Имя хранилища файла';
 comment on column file_pool.extension is 'Расширение файла';
+comment on column file_pool.file_type is 'Тип файла';
 comment on column file_pool.file_size is 'Размер файла';
 comment on column file_pool.page_count is 'Количество страниц файла';
 comment on column file_pool.upload_date is 'Дата загрузки файла';

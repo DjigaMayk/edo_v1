@@ -111,13 +111,11 @@ public class FacsimileServiceImpl implements FacsimileService {
     public FilePoolDto saveAsFile(MultipartFile multipartFile) {
         try {
             var file = fileRestTemplateClient.saveFile(multipartFile.getBytes());
-
-            return filePoolService.add(
-                    FilePoolDto.builder()
+            return filePoolService.add(FilePoolDto.builder()
                             .storageFileId(file)
                             .name(multipartFile.getOriginalFilename())
                             .extension(FilenameUtils.getExtension(multipartFile.getOriginalFilename()))
-                            .fileType(EnumFileType.FACSIMILE) //TODO Тип файла не идет назад
+                            .fileType(EnumFileType.FACSIMILE)
                             .size((multipartFile.getBytes()).length)
                             .pageCount(1)
                             .creator(EmployeeDto.builder().id(1L).build())//TODO Переделать на нормального Employee

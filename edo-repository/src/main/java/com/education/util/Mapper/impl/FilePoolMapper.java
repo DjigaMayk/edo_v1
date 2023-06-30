@@ -8,4 +8,5 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface FilePoolMapper extends Mappable<FilePool, FilePoolDto> {
+    FilePoolDto toDto(FilePool filePool);
 }

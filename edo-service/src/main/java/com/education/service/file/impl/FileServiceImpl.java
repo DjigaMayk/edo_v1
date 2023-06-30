@@ -48,8 +48,7 @@ public class FileServiceImpl implements FileService {
                         .size(((byte[]) convertedFile.get("file")).length)
                         .pageCount((int) convertedFile.get("pageCount"))
                         .creator(getCreatorFromSecurity())
-                        .build()
-        );
+                        .build());
     }
 
     /**

@@ -9,17 +9,17 @@ spring:
     password: guest
     username: guest
   mail:
-    host: localhost
-    port: 3025
+    host: app.debugmail.io
+    port: 9025
     username: bc3c2e87-85c2-461a-b311-5b80f84f0d75
     password: a0f3bb95-db89-47bf-b6ed-8c9ad227b107
     test-connection: true # Проверка подключения при старте приложения
     properties:
       mail:
         smtp:
-          auth: false
+          auth: true
           starttls:
-            enable: false
+            enable: true
 server:
   port: 0
 eureka:

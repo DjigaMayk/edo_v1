@@ -33,19 +33,22 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.icegreen/greenmail -->
         <dependency>
             <groupId>com.icegreen</groupId>
             <artifactId>greenmail</artifactId>
-            <version>1.6.5</version>
+            <version>2.0.0</version>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.icegreen/greenmail-junit5 -->
         <dependency>
-            <groupId>com.icegreen</groupId>
-            <artifactId>greenmail-junit5</artifactId>
-            <version>1.6.5</version>
-            <scope>test</scope>
+            <groupId>jakarta.mail</groupId>
+            <artifactId>jakarta.mail-api</artifactId>
+            <version>2.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.angus</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 </project>

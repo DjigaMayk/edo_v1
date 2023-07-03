@@ -45,6 +45,12 @@ public class FacsimileServiceImpl implements FacsimileService {
         facsimileRepository.moveToArchive(id);
     }
 
+    @Transactional
+    @Override
+    public void moveFromArchive(Long id) {
+        facsimileRepository.moveFromArchive(id);
+    }
+
     /**
      * Method for getting Facsimile from DB by id
      * @param id - Entity's id

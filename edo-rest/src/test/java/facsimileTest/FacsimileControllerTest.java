@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.io.File;
 import java.io.FileInputStream;
 
+import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -49,7 +50,7 @@ public class FacsimileControllerTest {
 
     @Test
     public void testSaveMatchingFile() throws Exception {
-        String imagePath = "src\\test\\java\\facsimileTest\\imagesForFacsimileTest\\MatchFile.jpg";
+        String imagePath = "src\\test\\resources\\imagesForFacsimileTest\\MatchFile.jpg";
 
         File file = new File(imagePath);
         FileInputStream inputStream = new FileInputStream(file);
@@ -79,5 +80,29 @@ public class FacsimileControllerTest {
             System.err.println(ex.getMessage());
             assertEquals("400 : \"Facsimile should be jpg or png and should less than 100x100px\"", ex.getCause().getMessage());
         }
+    }
+
+    @Test
+    public void testSaveFacsimileEntity() {
+        given().contentType("application/json")
+                .body(TestJsonStrings.STRING_FOR_ENTITY)
+                .when().post(getRootUrl() + "/json")
+                .then().statusCode(200);
+    }
+
+    @Test
+    public void testArchiveFacsimile() {
+        given().contentType("application/json")
+                .body(TestJsonStrings.STRING_FOR_ARCHIVE)
+                .when().delete(getRootUrl() + "/archive")
+                .then().statusCode(200);
+    }
+
+    @Test
+    public void testUnarchiveFacsimile() {
+        given().contentType("application/json")
+                .body(TestJsonStrings.STRING_FOR_UNARCHIVE)
+                .when().delete(getRootUrl() + "/archive")
+                .then().statusCode(200);
     }
 }

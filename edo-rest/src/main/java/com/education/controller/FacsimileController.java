@@ -1,7 +1,5 @@
 package com.education.controller;
 
-import com.education.model.dto.DepartmentDto;
-import com.education.model.dto.EmployeeDto;
 import com.education.model.dto.FacsimileDTO;
 import com.education.model.dto.FilePoolDto;
 import com.education.service.facsimile.FacsimileService;
@@ -11,13 +9,9 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.nio.charset.Charset;
 
 /**
  * @author Никита Бадеев
@@ -31,10 +25,6 @@ import java.nio.charset.Charset;
 public class FacsimileController {
 
     private final FacsimileService facsimileService;
-
-    //TODO Сделать 2 метода.
-    // Один для сохранения как файла, отдает FilePoolDto.
-    // Второй сохраняет Facsimile как сущность. Получает Json с employee, department и filepool
 
     /**
      * Method for saving Facsimile image as file in file-storage
@@ -57,7 +47,6 @@ public class FacsimileController {
 
     /**
      * Method for saving facsimile as entity
-     * //TODO Task 98
      * @param jsonFile file with employee, department and filePool
      * @return FacsimileDto
      */
@@ -66,5 +55,12 @@ public class FacsimileController {
     public ResponseEntity<FacsimileDTO> createFacsimile(@RequestBody String jsonFile) {
         log.info("Request for saving facsimile entity");
         return ResponseEntity.ok().body(facsimileService.saveFacsimileEntity(jsonFile));
+    }
+
+    @ApiOperation(value = "Архивация факсимиле")
+    @DeleteMapping("/archive")
+    public ResponseEntity<FacsimileDTO> archiveFacsimile(@RequestBody String jsonFile) {
+        log.info("Request to archive facsimile");
+        return ResponseEntity.ok().body(facsimileService.archiveFacsimile(jsonFile));
     }
 }

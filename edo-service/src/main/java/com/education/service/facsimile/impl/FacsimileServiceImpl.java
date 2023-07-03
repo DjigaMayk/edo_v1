@@ -10,6 +10,7 @@ import com.education.service.department.DepartmentService;
 import com.education.service.employee.EmployeeRestTemplateService;
 import com.education.service.facsimile.FacsimileService;
 import com.education.service.file_pool.FilePoolService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.appinfo.InstanceInfo;
@@ -64,9 +65,10 @@ public class FacsimileServiceImpl implements FacsimileService {
     private final EmployeeRestTemplateService employeeRestTemplateService;
     private final DepartmentService departmentService;
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     /**
      * Method for saving facsimile
-     * TODO Task 98
      *
      * @param jsonFile employee and others. Should be rework method
      * @return facsimileDTO
@@ -77,7 +79,6 @@ public class FacsimileServiceImpl implements FacsimileService {
         String lastPathComponent = "/";
         URI uri = generateUri(this.getInstance(), lastPathComponent);
 
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
             JsonNode jsonNode = objectMapper.readTree(jsonFile);
 
@@ -97,6 +98,27 @@ public class FacsimileServiceImpl implements FacsimileService {
             var request = new RequestEntity<>(facsimileDTO, HttpMethod.POST, uri);
             return TEMPLATE.exchange(request, FacsimileDTO.class).getBody();
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public FacsimileDTO archiveFacsimile(String jsonFile) {
+        String lastPathComponent = "/archive";
+        URI uri = generateUri(this.getInstance(), lastPathComponent);
+
+        try {
+            JsonNode jsonNode = objectMapper.readTree(jsonFile);
+
+            FacsimileDTO facsimileFromJson = objectMapper.treeToValue(jsonNode.get("facsimile"), FacsimileDTO.class);
+            FacsimileDTO facsimileDTO = getById(facsimileFromJson.getId());
+            facsimileDTO.setArchived(facsimileFromJson.isArchived());
+
+            filePoolService.moveToArchive(facsimileDTO.getFile().getId());
+
+            var request = new RequestEntity<>(facsimileDTO, HttpMethod.DELETE, uri);
+            return TEMPLATE.exchange(request, FacsimileDTO.class).getBody();
+        } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
@@ -123,6 +145,20 @@ public class FacsimileServiceImpl implements FacsimileService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Method for getting facsimile by id
+     * @param id Long
+     *
+     * @return FacsimileDto
+     */
+    @Override
+    public FacsimileDTO getById(Long id) {
+        String lastPathName = "/" + id;
+        URI uri = generateUri(this.getInstance(), lastPathName);
+        RequestEntity<Object> request = new RequestEntity<>(null, HttpMethod.GET, uri);
+        return TEMPLATE.exchange(request, FacsimileDTO.class).getBody();
     }
 
     /**

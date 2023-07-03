@@ -43,4 +43,11 @@ public class FacsimileController {
         log.info("Request for saving facsimile entity");
         return ResponseEntity.ok().body(facsimileService.save(jsonFile));
     }
+
+    @ApiOperation("Архивировать факсимиле")
+    @DeleteMapping("/archive")
+    public ResponseEntity<FacsimileDTO> archiveFacsimile(@RequestBody String jsonFile) {
+        log.info("Request to archive facsimile");
+        return ResponseEntity.ok().body(facsimileService.archiveFacsimile(jsonFile));
+    }
 }

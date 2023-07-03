@@ -75,4 +75,12 @@ public class FacsimileController {
         }
     }
 
+    @ApiOperation(value = "Архивация факсимиле")
+    @DeleteMapping("/archive")
+    public ResponseEntity<FacsimileDTO> archiveFacsimile(@RequestBody Facsimile facsimile) {
+        log.info("Request to archive facsimile");
+
+        facsimileService.moveToArchive(facsimile.getId());
+        return new ResponseEntity<>(facsimileMapper.toDto(facsimile), HttpStatus.OK);
+    }
 }

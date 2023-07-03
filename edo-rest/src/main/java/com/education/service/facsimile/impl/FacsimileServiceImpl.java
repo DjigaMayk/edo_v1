@@ -38,7 +38,6 @@ public class FacsimileServiceImpl implements FacsimileService {
     private final String SERVICE_NAME = "edo-service";
 
 
-    //TODO Task 98
     @Override
     public FacsimileDTO saveFacsimileEntity(String jsonFile) {
         HttpHeaders headers = new HttpHeaders();
@@ -46,6 +45,15 @@ public class FacsimileServiceImpl implements FacsimileService {
         HttpEntity<String> request = new HttpEntity<>(jsonFile, headers);
         return TEMPLATE.exchange(getDefaultUriComponentBuilder(BASE_URL + "/").build()
                 .toUri(), HttpMethod.POST, request, FacsimileDTO.class).getBody();
+    }
+
+    @Override
+    public FacsimileDTO archiveFacsimile(String jsonFile) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<>(jsonFile, headers);
+        return TEMPLATE.exchange(getDefaultUriComponentBuilder(BASE_URL + "/archive").build()
+                .toUri(), HttpMethod.DELETE, request, FacsimileDTO.class).getBody();
     }
 
     @Override
@@ -67,13 +75,13 @@ public class FacsimileServiceImpl implements FacsimileService {
         return instance;
     }
 
-    private String getURIByInstance(InstanceInfo instanceInfo, String pathVariable) {
-        return UriComponentsBuilder.fromPath(BASE_URL + pathVariable)
-                .scheme(HttpHost.DEFAULT_SCHEME_NAME)
-                .host(instanceInfo.getHostName())
-                .port(instanceInfo.getPort())
-                .build().toString();
-    }
+//    private String getURIByInstance(InstanceInfo instanceInfo, String pathVariable) {
+//        return UriComponentsBuilder.fromPath(BASE_URL + pathVariable)
+//                .scheme(HttpHost.DEFAULT_SCHEME_NAME)
+//                .host(instanceInfo.getHostName())
+//                .port(instanceInfo.getPort())
+//                .build().toString();
+//    }
 
     private UriComponentsBuilder getDefaultUriComponentBuilder(String path) {
         InstanceInfo instanceInfo = getInstance();

@@ -51,12 +51,16 @@ public class EmailServiceImpl implements EmailService {
      */
     @Override
     public void sendNotificationOnResolution(ResolutionDto resolutionDto) {
+
         log.info("sendNotificationOnResolution started");
+
         var resolutionNotificationInfoRecord = new ResolutionDtoAndAppealRecord(resolutionDto,
                 appealService.findByQuestion(resolutionDto.getQuestion()));
         amqpTemplate.convertAndSend(RabbitConstant.exchange, RabbitConstant.resolutionNotificationQueue,
                 resolutionNotificationInfoRecord);
 
+        log.info("Отправлен запрос в очередь по рассылке " +
+                "оповещений при создании резолюции");
         // save the resolution notification for signer to database
         var signerNotificationDto = new NotificationDto();
         signerNotificationDto.setEnumNotification(EnumNotification.EMAIL);
@@ -79,8 +83,5 @@ public class EmailServiceImpl implements EmailService {
         curatorNotificationDto.setEmployee(resolutionDto.getCurator());
         notificationService.save(curatorNotificationDto);
 
-        log.log(Level.INFO, "Отправлен запрос в очередь по рассылке " +
-                "оповещений при создании резолюции");
     }
-
 }

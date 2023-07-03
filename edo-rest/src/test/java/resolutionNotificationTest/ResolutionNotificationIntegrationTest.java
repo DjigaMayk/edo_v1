@@ -7,7 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -33,7 +32,7 @@ public class ResolutionNotificationIntegrationTest {
     @LocalServerPort
     private int port;
 
-    public ResolutionNotificationIntegrationTest() throws IOException {
+    public ResolutionNotificationIntegrationTest() {
     }
 
     private String getRootUrl() {

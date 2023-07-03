@@ -79,8 +79,9 @@ public class FacsimileController {
     @DeleteMapping("/archive")
     public ResponseEntity<FacsimileDTO> archiveFacsimile(@RequestBody Facsimile facsimile) {
         log.info("Request to archive facsimile");
-
         facsimileService.moveToArchive(facsimile.getId());
-        return new ResponseEntity<>(facsimileMapper.toDto(facsimile), HttpStatus.OK);
+        FacsimileDTO facsimileDTO = facsimileMapper.toDto(facsimile);
+        facsimileDTO.setArchived(facsimile.isArchived());
+        return new ResponseEntity<>(facsimileDTO, HttpStatus.OK);
     }
 }

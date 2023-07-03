@@ -113,7 +113,6 @@ public class FacsimileServiceImpl implements FacsimileService {
             FacsimileDTO facsimileFromJson = objectMapper.treeToValue(jsonNode.get("facsimile"), FacsimileDTO.class);
             FacsimileDTO facsimileDTO = getById(facsimileFromJson.getId());
             facsimileDTO.setArchived(facsimileFromJson.isArchived());
-
             filePoolService.moveToArchive(facsimileDTO.getFile().getId());
 
             var request = new RequestEntity<>(facsimileDTO, HttpMethod.DELETE, uri);

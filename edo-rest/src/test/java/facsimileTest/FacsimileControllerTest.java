@@ -50,9 +50,8 @@ public class FacsimileControllerTest {
 
     @Test
     public void testSaveMatchingFile() throws Exception {
-        String imagePath = "src\\test\\resources\\imagesForFacsimileTest\\MatchFile.jpg";
 
-        File file = new File(imagePath);
+        File file = new File(TestJsonStrings.IMAGE_CHECKED);
         FileInputStream inputStream = new FileInputStream(file);
         MockMultipartFile multipartFile = new MockMultipartFile("facsimile", "MatchFile.jpg",
                 "image/jpeg", IOUtils.toByteArray(inputStream));
@@ -65,9 +64,8 @@ public class FacsimileControllerTest {
 
     @Test
     public void testSaveUnmatchingFile() {
-        String imagePath = "src\\test\\resources\\imagesForFacsimileTest\\UnmatchedFile.jpg";
         try {
-            File file = new File(imagePath);
+            File file = new File(TestJsonStrings.IMAGE_UNCHECKED);
             FileInputStream inputStream = new FileInputStream(file);
             MockMultipartFile multipartFile = new MockMultipartFile("facsimile", "MatchFile.jpg",
                     "image/jpeg", IOUtils.toByteArray(inputStream));

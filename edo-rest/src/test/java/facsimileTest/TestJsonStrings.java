@@ -1,6 +1,8 @@
 package facsimileTest;
 
 public final class TestJsonStrings {
+    public static final String IMAGE_CHECKED = "src\\test\\resources\\imagesForFacsimileTest\\MatchFile.jpg";
+    public static final String IMAGE_UNCHECKED = "src\\test\\resources\\imagesForFacsimileTest\\UnmatchedFile.jpg";
     public static final String STRING_FOR_ENTITY = """
             {
               "employee" : {

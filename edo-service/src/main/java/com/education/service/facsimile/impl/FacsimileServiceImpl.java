@@ -62,8 +62,6 @@ public class FacsimileServiceImpl implements FacsimileService {
      */
     private final FilePoolService filePoolService;
     private final FileRestTemplateClient fileRestTemplateClient;
-    private final EmployeeRestTemplateService employeeRestTemplateService;
-    private final DepartmentService departmentService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 

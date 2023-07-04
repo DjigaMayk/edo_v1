@@ -26,6 +26,13 @@ public class AppealServiceImpl implements AppealService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
+    public Appeal save(Appeal appeal) {
+        appeal.setCreationDate(ZonedDateTime.now(ZoneId.of("Europe/Moscow")));
+        return appealRepository.saveAndFlush(appeal);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
     public void moveToArchive(Long id) {
         appealRepository.moveToArchive(id);
     }

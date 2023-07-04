@@ -37,10 +37,20 @@ public class AppealController {
     })
     @PostMapping
     public ResponseEntity<AppealDto> saveAppeal(@RequestBody AppealDto appealDto) {
-
         AppealDto appealAfter = mapper.toDto(appealService.save(mapper.toEntity(appealDto)));
         log.info("Создано ОБРАЩЕНИЕ с id {}", appealAfter.getId());
         return new ResponseEntity<>(appealAfter, HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "Обновление даты архивации")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Сущность изменена"),
+    })
+    @PutMapping("/editAppeal")
+    public ResponseEntity<AppealDto> editAppeal(@RequestBody AppealDto appealDto) {
+        AppealDto appealAfter = mapper.toDto(appealService.save(mapper.toEntity(appealDto)));
+        log.info("Отредактировано ОБРАЩЕНИЕ с id {}", appealAfter.getId());
+        return new ResponseEntity<>(mapper.toDto(appealService.findById(id)), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Обновление даты архивации")

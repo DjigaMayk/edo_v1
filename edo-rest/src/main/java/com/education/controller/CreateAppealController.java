@@ -32,12 +32,22 @@ public class CreateAppealController {
         return new ResponseEntity<>(appealAfter, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Редактирование обращения")
+    @PostMapping
+    public ResponseEntity<AppealDto> editAppeal(@RequestBody AppealDto appeal) {
+        AppealDto appealAfter = service.editAppeal(appeal);
+        if (appealAfter == null) {
+            log.warn("Сущность не существует");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(appealAfter, HttpStatus.OK);
+    }
+
     @ApiOperation(value = "Получение сущностей Appeal для Employee creator (?first=1&amount=1)")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Сущность найдена"),
             @ApiResponse(code = 404, message = "Сущность не найдена")
     })
-
     @GetMapping(value = "/appealsByEmployee/")
     public ResponseEntity<List<AppealAbbreviatedDto>> findByIdEmployee(@RequestParam("first") Long first,
                                                                        @RequestParam("amount") Long amount) {

@@ -54,6 +54,13 @@ public class CreatingAppealServiceImpl implements CreatingAppealService {
         return response;
     }
 
+    @Override
+    public AppealDto editAppeal(AppealDto appealDto) {
+        InstanceInfo instanceInfo = getInstance();
+        appealDto.setAppealStatus(STATUS_FOR_NEW_APPEAL);
+        return TEMPLATE.postForObject(getURIByInstance(instanceInfo,
+                "/editAppeal"), appealDto, AppealDto.class);
+    }
 
     @Override
     public List<AppealAbbreviatedDto> findAllByIdEmployee(Long first, Long amount) {

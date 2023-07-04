@@ -38,22 +38,22 @@ import java.util.List;
 public class FacsimileServiceImpl implements FacsimileService {
 
     /**
-     * Клиент для отправки и получения запросов
+     * Client for sending and receiving requests
      */
     private final RestTemplate TEMPLATE;
 
     /**
-     * Клиент для получения instance
+     * Client for getting instance
      */
     private final EurekaClient EUREKA_CLIENT;
 
     /**
-     * Путь до рест контроллера репозитория
+     * Path to the repository rest-controller
      */
     private static final String BASE_URL = "/api/repository/facsimile";
 
     /**
-     * Название микросервиса, к которому мы пытаемся получить доступ
+     * Name of the microservice we are trying to access
      */
     private final String SERVICE_NAME = "edo-repository";
 
@@ -68,9 +68,33 @@ public class FacsimileServiceImpl implements FacsimileService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
-     * Method for saving facsimile
+     * Method for saving Facsimile in file-storage
      *
-     * @param jsonFile employee and others. Should be rework method
+     * @param multipartFile - file for save
+     * @return Facsimile as FilePoolDto
+     */
+    @Override
+    public FilePoolDto saveAsFile(MultipartFile multipartFile) {
+        try {
+            var file = fileRestTemplateClient.saveFile(multipartFile.getBytes());
+            return filePoolService.add(FilePoolDto.builder()
+                    .storageFileId(file)
+                    .name(multipartFile.getOriginalFilename())
+                    .extension(FilenameUtils.getExtension(multipartFile.getOriginalFilename()))
+                    .fileType(EnumFileType.FACSIMILE)
+                    .size((multipartFile.getBytes()).length)
+                    .pageCount(1)
+                    .creator(EmployeeDto.builder().id(1L).build())//TODO Переделать на нормального Employee
+                    .build());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Method for saving facsimile as Entity in DB
+     *
+     * @param jsonFile employee and others
      * @return facsimileDTO
      */
     @Override
@@ -82,12 +106,9 @@ public class FacsimileServiceImpl implements FacsimileService {
         try {
             JsonNode jsonNode = objectMapper.readTree(jsonFile);
 
-            EmployeeDto employee = employeeRestTemplateService.findById(
-                    objectMapper.treeToValue(jsonNode.get("employee"), EmployeeDto.class).getId(), false);
-            FilePoolDto filePool = filePoolService.findById(
-                    objectMapper.treeToValue(jsonNode.get("file_pool"), DepartmentDto.class).getId());
-            DepartmentDto department = departmentService.findById(
-                    objectMapper.treeToValue(jsonNode.get("department"), FilePoolDto.class).getId());
+            EmployeeDto employee = objectMapper.treeToValue(jsonNode.get("employee"), EmployeeDto.class);
+            DepartmentDto department = objectMapper.treeToValue(jsonNode.get("department"), DepartmentDto.class);
+            FilePoolDto filePool = objectMapper.treeToValue(jsonNode.get("file_pool"), FilePoolDto.class);
 
             FacsimileDTO facsimileDTO = FacsimileDTO.builder()
                     .employee(employee)
@@ -102,6 +123,12 @@ public class FacsimileServiceImpl implements FacsimileService {
         }
     }
 
+    /**
+     * Method for archiving/unarchivig facsimile
+     *
+     * @param jsonFile data with id Facsimile and boolean isArchived
+     * @return FacsimileDto
+     */
     @Override
     public FacsimileDTO archiveFacsimile(String jsonFile) {
         String lastPathComponent = "/archive";
@@ -118,30 +145,6 @@ public class FacsimileServiceImpl implements FacsimileService {
             var request = new RequestEntity<>(facsimileDTO, HttpMethod.DELETE, uri);
             return TEMPLATE.exchange(request, FacsimileDTO.class).getBody();
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Method for saving Facsimile in file-storage
-     *
-     * @param multipartFile - file for save
-     * @return Facsimile as FilePoolDto
-     */
-    @Override
-    public FilePoolDto saveAsFile(MultipartFile multipartFile) {
-        try {
-            var file = fileRestTemplateClient.saveFile(multipartFile.getBytes());
-            return filePoolService.add(FilePoolDto.builder()
-                            .storageFileId(file)
-                            .name(multipartFile.getOriginalFilename())
-                            .extension(FilenameUtils.getExtension(multipartFile.getOriginalFilename()))
-                            .fileType(EnumFileType.FACSIMILE)
-                            .size((multipartFile.getBytes()).length)
-                            .pageCount(1)
-                            .creator(EmployeeDto.builder().id(1L).build())//TODO Переделать на нормального Employee
-                            .build());
-        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -190,7 +193,6 @@ public class FacsimileServiceImpl implements FacsimileService {
 
     /**
      * Method for getting instance
-     * TODO часто кидает null
      *
      * @return instance
      */

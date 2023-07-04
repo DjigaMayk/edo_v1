@@ -12,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * TODO Task 98
+ * @author Никита Бадеев
+ *
+ * Repository RestController for facsimile
  */
 @RestController
 @RequestMapping("/api/repository/facsimile")
@@ -78,13 +80,8 @@ public class FacsimileController {
     @ApiOperation(value = "Архивация факсимиле")
     @DeleteMapping("/archive")
     public ResponseEntity<FacsimileDTO> archiveFacsimile(@RequestBody Facsimile facsimile) {
-        if (!facsimile.isArchived()) {
-            log.info("Request to unarchive facsimile");
-            facsimileService.moveFromArchive(facsimile.getId());
-        } else {
-            log.info("Request to archive facsimile");
-            facsimileService.moveToArchive(facsimile.getId());
-        }
+        log.info("Request to archive/unarchive facsimile by id - " + facsimile.getId());
+        facsimileService.moveInArchive(facsimile.getId(), facsimile.isArchived());
         FacsimileDTO facsimileDTO = facsimileMapper.toDto(facsimile);
         facsimileDTO.setArchived(facsimile.isArchived());
         return new ResponseEntity<>(facsimileDTO, HttpStatus.OK);

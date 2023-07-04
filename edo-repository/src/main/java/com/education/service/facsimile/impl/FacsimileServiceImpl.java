@@ -35,20 +35,16 @@ public class FacsimileServiceImpl implements FacsimileService {
         return facsimileRepository.saveAndFlush(facsimile);
     }
 
+
     /**
-     * Method for archiving facsimile
+     * Method for archiving/unarchiving facsimile
      * @param id Long
+     * @param isArchived boolean
      */
     @Transactional
     @Override
-    public void moveToArchive(Long id) {
-        facsimileRepository.moveToArchive(id);
-    }
-
-    @Transactional
-    @Override
-    public void moveFromArchive(Long id) {
-        facsimileRepository.moveFromArchive(id);
+    public void moveInArchive(Long id, boolean isArchived) {
+        facsimileRepository.moveInArchive(id, isArchived);
     }
 
     /**

@@ -6,8 +6,7 @@ import com.education.entity.Facsimile;
 import java.util.Optional;
 
 public interface FacsimileService {
-    void moveToArchive(Long id);
-    void moveFromArchive(Long id);
     Optional<Facsimile> findById(Long id);
     Facsimile saveFacsimile(Facsimile facsimile);
+    void moveInArchive(Long id, boolean isArchived);
 }

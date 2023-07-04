@@ -11,6 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * @author Никита Бадеев
+ *
+ * Service Rest controller for Facsimile
+ */
 @RestController
 @RequestMapping("/api/service/facsimile")
 @AllArgsConstructor
@@ -21,6 +26,12 @@ public class FacsimileController {
     @ApiModelProperty("Сервис для контроллера")
     private FacsimileService facsimileService;
 
+    /**
+     * Method for saving Facsimile in file-storage
+     *
+     * @param multipartFile - file for save
+     * @return Facsimile as FilePoolDto
+     */
     @ApiOperation("Сохранить факсимиле")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "File successfully added."),
@@ -37,6 +48,12 @@ public class FacsimileController {
         return ResponseEntity.ok().body(facsimileService.saveAsFile(multipartFile));
     }
 
+    /**
+     * Method for saving facsimile as Entity in DB
+     *
+     * @param jsonFile employee and others
+     * @return facsimileDTO
+     */
     @ApiOperation("Сохранить сущность факсимиле")
     @PostMapping("/")
     public ResponseEntity<FacsimileDTO> saveFacsimileEntity(@RequestBody String jsonFile) {
@@ -44,6 +61,12 @@ public class FacsimileController {
         return ResponseEntity.ok().body(facsimileService.save(jsonFile));
     }
 
+    /**
+     * Method for archiving/unarchivig facsimile
+     *
+     * @param jsonFile data with id Facsimile and boolean isArchived
+     * @return FacsimileDto
+     */
     @ApiOperation("Архивировать факсимиле")
     @DeleteMapping("/archive")
     public ResponseEntity<FacsimileDTO> archiveFacsimile(@RequestBody String jsonFile) {

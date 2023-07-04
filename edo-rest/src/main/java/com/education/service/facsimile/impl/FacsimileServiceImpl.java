@@ -37,25 +37,12 @@ public class FacsimileServiceImpl implements FacsimileService {
 
     private final String SERVICE_NAME = "edo-service";
 
-
-    @Override
-    public FacsimileDTO saveFacsimileEntity(String jsonFile) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> request = new HttpEntity<>(jsonFile, headers);
-        return TEMPLATE.exchange(getDefaultUriComponentBuilder(BASE_URL + "/").build()
-                .toUri(), HttpMethod.POST, request, FacsimileDTO.class).getBody();
-    }
-
-    @Override
-    public FacsimileDTO archiveFacsimile(String jsonFile) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> request = new HttpEntity<>(jsonFile, headers);
-        return TEMPLATE.exchange(getDefaultUriComponentBuilder(BASE_URL + "/archive").build()
-                .toUri(), HttpMethod.DELETE, request, FacsimileDTO.class).getBody();
-    }
-
+    /**
+     * Method for saving Facsimile in file-storage
+     *
+     * @param multipartFile - file for save
+     * @return Facsimile as FilePoolDto
+     */
     @Override
     public FilePoolDto saveFacsimile(MultipartFile multipartFile) {
         LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
@@ -68,6 +55,41 @@ public class FacsimileServiceImpl implements FacsimileService {
                 .toUri(), HttpMethod.POST, requestEntity, FilePoolDto.class).getBody();
     }
 
+    /**
+     * Method for saving facsimile as Entity in DB
+     *
+     * @param jsonFile employee and others
+     * @return facsimileDTO
+     */
+    @Override
+    public FacsimileDTO saveFacsimileEntity(String jsonFile) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<>(jsonFile, headers);
+        return TEMPLATE.exchange(getDefaultUriComponentBuilder(BASE_URL + "/").build()
+                .toUri(), HttpMethod.POST, request, FacsimileDTO.class).getBody();
+    }
+
+    /**
+     * Method for archiving/unarchivig facsimile
+     *
+     * @param jsonFile data with id Facsimile and boolean isArchived
+     * @return FacsimileDto
+     */
+    @Override
+    public FacsimileDTO archiveFacsimile(String jsonFile) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = new HttpEntity<>(jsonFile, headers);
+        return TEMPLATE.exchange(getDefaultUriComponentBuilder(BASE_URL + "/archive").build()
+                .toUri(), HttpMethod.DELETE, request, FacsimileDTO.class).getBody();
+    }
+
+    /**
+     * Method for getting instance
+     *
+     * @return instance
+     */
     private InstanceInfo getInstance() {
         List<InstanceInfo> instances = EUREKA_CLIENT.getApplication(SERVICE_NAME).getInstances();
         InstanceInfo instance = instances.get((int) (Math.random() * instances.size()));
@@ -75,6 +97,11 @@ public class FacsimileServiceImpl implements FacsimileService {
         return instance;
     }
 
+    /**
+     * Methid for getting Uri
+     * @param path Path to resource
+     * @return Uri
+     */
     private UriComponentsBuilder getDefaultUriComponentBuilder(String path) {
         InstanceInfo instanceInfo = getInstance();
         return UriComponentsBuilder

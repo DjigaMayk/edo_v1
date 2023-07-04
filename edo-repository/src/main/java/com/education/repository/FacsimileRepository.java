@@ -10,10 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FacsimileRepository extends JpaRepository<Facsimile, Long> {
     @Modifying
-    @Query(value = "UPDATE facsimile SET is_archived = true WHERE id = :id", nativeQuery = true)
-    void moveToArchive(@Param("id") Long id);
-
-    @Modifying
-    @Query(value = "UPDATE facsimile SET is_archived = false WHERE id = :id", nativeQuery = true)
-    void moveFromArchive(@Param("id") Long id);
+    @Query(value = "UPDATE facsimile SET is_archived = :isArchived WHERE id = :id", nativeQuery = true)
+    void moveInArchive(@Param("id") Long id,@Param("isArchived") boolean isArchived);
 }

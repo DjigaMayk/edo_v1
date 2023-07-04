@@ -15,7 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author Никита Бадеев
- * RestController для сохранения факсимиле
+ *
+ * Rest RestController для сохранения факсимиле
  */
 @Log
 @ApiOperation("Facsimile API")
@@ -28,6 +29,7 @@ public class FacsimileController {
 
     /**
      * Method for saving Facsimile image as file in file-storage
+     *
      * @param multipartFacsimile facsimile image
      * @return FilePoolDto
      */
@@ -47,6 +49,7 @@ public class FacsimileController {
 
     /**
      * Method for saving facsimile as entity
+     *
      * @param jsonFile file with employee, department and filePool
      * @return FacsimileDto
      */
@@ -57,6 +60,12 @@ public class FacsimileController {
         return ResponseEntity.ok().body(facsimileService.saveFacsimileEntity(jsonFile));
     }
 
+    /**
+     * Method for archiving/unarchivig facsimile
+     *
+     * @param jsonFile data with id Facsimile and boolean isArchived
+     * @return FacsimileDto
+     */
     @ApiOperation(value = "Архивация факсимиле")
     @DeleteMapping("/archive")
     public ResponseEntity<FacsimileDTO> archiveFacsimile(@RequestBody String jsonFile) {

@@ -33,7 +33,7 @@ public class CreateAppealController {
     }
 
     @ApiOperation(value = "Редактирование обращения")
-    @PostMapping
+    @PutMapping(value = "/edit/")
     public ResponseEntity<AppealDto> editAppeal(@RequestBody AppealDto appeal) {
         AppealDto appealAfter = service.editAppeal(appeal);
         if (appealAfter == null) {

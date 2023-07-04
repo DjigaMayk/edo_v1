@@ -26,9 +26,11 @@ public class AppealServiceImpl implements AppealService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Appeal save(Appeal appeal) {
-        appeal.setCreationDate(ZonedDateTime.now(ZoneId.of("Europe/Moscow")));
-        return appealRepository.saveAndFlush(appeal);
+    public Appeal update(Appeal appeal) {
+        if (appealRepository.existsById(appeal.getId())) {
+            return appealRepository.saveAndFlush(appeal);
+        }
+        return null;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -37,13 +39,11 @@ public class AppealServiceImpl implements AppealService {
         appealRepository.moveToArchive(id);
     }
 
-
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     @Override
     public Appeal findById(Long id) {
         return appealRepository.findById(id).get();
     }
-
 
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     @Override

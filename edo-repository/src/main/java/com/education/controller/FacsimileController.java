@@ -3,6 +3,7 @@ package com.education.controller;
 import com.education.entity.Facsimile;
 import com.education.model.dto.FacsimileDTO;
 import com.education.service.facsimile.FacsimileService;
+import com.education.service.filepool.FilePoolService;
 import com.education.util.Mapper.impl.FacsimileMapper;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ public class FacsimileController {
 
     @ApiModelProperty("service")
     private final FacsimileService facsimileService;
-
+    private final FilePoolService filePoolService;
     @ApiModelProperty("mapper")
     private final FacsimileMapper facsimileMapper;
 
@@ -81,7 +82,9 @@ public class FacsimileController {
     @DeleteMapping("/archive")
     public ResponseEntity<FacsimileDTO> archiveFacsimile(@RequestBody Facsimile facsimile) {
         log.info("Request to archive/unarchive facsimile by id - " + facsimile.getId());
+
         facsimileService.moveInArchive(facsimile.getId(), facsimile.isArchived());
+        filePoolService.moveToArchive(facsimile.getFile().getId(), facsimile.isArchived());
         FacsimileDTO facsimileDTO = facsimileMapper.toDto(facsimile);
         facsimileDTO.setArchived(facsimile.isArchived());
         return new ResponseEntity<>(facsimileDTO, HttpStatus.OK);

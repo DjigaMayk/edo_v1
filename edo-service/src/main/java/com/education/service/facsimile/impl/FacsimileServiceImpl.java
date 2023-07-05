@@ -6,8 +6,6 @@ import com.education.model.dto.EmployeeDto;
 import com.education.model.dto.FacsimileDTO;
 import com.education.model.dto.FilePoolDto;
 import com.education.model.enumEntity.EnumFileType;
-import com.education.service.department.DepartmentService;
-import com.education.service.employee.EmployeeRestTemplateService;
 import com.education.service.facsimile.FacsimileService;
 import com.education.service.file_pool.FilePoolService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,6 +30,11 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 
+/**
+ * @author Никита Бадеев
+ *
+ * Class-service for Facsimile
+ */
 @Service
 @RequiredArgsConstructor
 @Log
@@ -107,7 +110,6 @@ public class FacsimileServiceImpl implements FacsimileService {
             EmployeeDto employee = objectMapper.treeToValue(jsonNode.get("employee"), EmployeeDto.class);
             DepartmentDto department = objectMapper.treeToValue(jsonNode.get("department"), DepartmentDto.class);
             FilePoolDto filePool = objectMapper.treeToValue(jsonNode.get("file_pool"), FilePoolDto.class);
-
             FacsimileDTO facsimileDTO = FacsimileDTO.builder()
                     .employee(employee)
                     .department(department)
@@ -138,8 +140,7 @@ public class FacsimileServiceImpl implements FacsimileService {
             FacsimileDTO facsimileFromJson = objectMapper.treeToValue(jsonNode.get("facsimile"), FacsimileDTO.class);
             FacsimileDTO facsimileDTO = getById(facsimileFromJson.getId());
             facsimileDTO.setArchived(facsimileFromJson.isArchived());
-            filePoolService.moveToArchive(facsimileDTO.getFile().getId());
-
+//            filePoolService.moveToArchive(facsimileDTO.getFile().getId());
             var request = new RequestEntity<>(facsimileDTO, HttpMethod.DELETE, uri);
             return TEMPLATE.exchange(request, FacsimileDTO.class).getBody();
         } catch (JsonProcessingException e) {
@@ -149,8 +150,8 @@ public class FacsimileServiceImpl implements FacsimileService {
 
     /**
      * Method for getting facsimile by id
-     * @param id Long
      *
+     * @param id Long
      * @return FacsimileDto
      */
     @Override

@@ -2,6 +2,7 @@ package com.education.service.facsimile.impl;
 
 import com.education.entity.Facsimile;
 import com.education.repository.FacsimileRepository;
+import com.education.repository.FilePoolRepository;
 import com.education.service.facsimile.FacsimileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,20 +13,23 @@ import java.util.Optional;
 
 /**
  * @author Никита Бадеев
- * Сервис-класс для объекта Facsimile
- * TODO Task 98
+ *
+ * Class-service for Facsimile
  */
 @Service
 @RequiredArgsConstructor
 public class FacsimileServiceImpl implements FacsimileService {
 
     /**
-     * Объект класса-репозитория для сущности Facsimile
+     * Class-repository object for Facsimile
      */
     private final FacsimileRepository facsimileRepository;
 
+    private final FilePoolRepository filePoolRepository;
+
     /**
      * Method for saving facsimile in DB
+     *
      * @param facsimile saving facsimile
      * @return saved facsimile
      */
@@ -38,6 +42,7 @@ public class FacsimileServiceImpl implements FacsimileService {
 
     /**
      * Method for archiving/unarchiving facsimile
+     *
      * @param id Long
      * @param isArchived boolean
      */
@@ -49,6 +54,7 @@ public class FacsimileServiceImpl implements FacsimileService {
 
     /**
      * Method for getting Facsimile from DB by id
+     *
      * @param id - Entity's id
      * @return Facsimile
      */

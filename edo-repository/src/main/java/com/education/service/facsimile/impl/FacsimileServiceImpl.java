@@ -2,7 +2,6 @@ package com.education.service.facsimile.impl;
 
 import com.education.entity.Facsimile;
 import com.education.repository.FacsimileRepository;
-import com.education.repository.FilePoolRepository;
 import com.education.service.facsimile.FacsimileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,8 +23,6 @@ public class FacsimileServiceImpl implements FacsimileService {
      * Class-repository object for Facsimile
      */
     private final FacsimileRepository facsimileRepository;
-
-    private final FilePoolRepository filePoolRepository;
 
     /**
      * Method for saving facsimile in DB

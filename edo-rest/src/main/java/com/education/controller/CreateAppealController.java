@@ -24,7 +24,6 @@ public class CreateAppealController {
 
     private final CreatingAppealService service;
 
-
     @ApiOperation(value = "Сохранение обращения")
     @PostMapping
     public ResponseEntity<AppealDto> createNewAppeal(@RequestBody AppealDto appeal) {
@@ -33,7 +32,7 @@ public class CreateAppealController {
     }
 
     @ApiOperation(value = "Редактирование обращения")
-    @PutMapping(value = "/edit/")
+    @PutMapping(value = "/edit")
     public ResponseEntity<AppealDto> editAppeal(@RequestBody AppealDto appeal) {
         AppealDto appealAfter = service.editAppeal(appeal);
         if (appealAfter == null) {

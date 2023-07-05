@@ -8,8 +8,6 @@ import java.util.List;
 public interface AppealService {
     Appeal save(Appeal appeal);
 
-    Appeal update(Appeal appeal);
-
     void moveToArchive(Long id);
 
     Appeal findById(Long id);

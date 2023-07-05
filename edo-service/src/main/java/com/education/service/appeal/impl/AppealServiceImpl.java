@@ -15,10 +15,12 @@ import com.education.service.region.RegionService;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -33,6 +35,7 @@ import static org.springframework.util.StringUtils.hasLength;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AppealServiceImpl implements AppealService {
 
     private final QuestionService questionService;
@@ -111,13 +114,16 @@ public class AppealServiceImpl implements AppealService {
     public AppealDto findById(Long id) {
         InstanceInfo instanceInfo = getInstance();
         var uri = getURIByInstance(instanceInfo, String.format("/byId/%s", id.toString()));
-        AppealDto response = TEMPLATE.getForObject(uri, AppealDto.class);
-
-        if (response != null && response.getAppealStatus().equals(EnumAppealStatus.NEW)) {
-            amqpTemplate.convertAndSend(RabbitConstant.exchange, RabbitConstant.addressAppealIsRead,
-                    new AppealReadRecord(id, new Date()));
+        try {
+            AppealDto response = TEMPLATE.getForObject(uri, AppealDto.class);
+            if (response != null && response.getAppealStatus().equals(EnumAppealStatus.NEW)) {
+                amqpTemplate.convertAndSend(RabbitConstant.exchange, RabbitConstant.addressAppealIsRead,
+                        new AppealReadRecord(id, new Date()));
+            }
+            return response;
+        } catch (HttpClientErrorException.NotFound e) {
+            return null;
         }
-        return response;
     }
 
     @Override

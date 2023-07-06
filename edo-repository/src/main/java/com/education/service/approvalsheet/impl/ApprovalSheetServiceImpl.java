@@ -22,7 +22,7 @@ import java.util.Optional;
 public class ApprovalSheetServiceImpl implements ApprovalSheetService {
 
     private final ApprovalSheetRepository approvalSheetRepository;
-    private ApprovalSheetMapper mapper;
+    private final ApprovalSheetMapper mapper;
 
     /**
      * Метод для сохранения листа согласования.

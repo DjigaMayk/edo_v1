@@ -62,7 +62,7 @@ public class CreatingAppealServiceImpl implements CreatingAppealService {
     public AppealDto editAppeal(AppealDto appealDto) {
         AppealDto ifAppealExists = findById(appealDto.getId());
         if (ifAppealExists != null) {
-            createAppeal(appealDto);
+            return createAppeal(appealDto);
         }
         return null;
     }

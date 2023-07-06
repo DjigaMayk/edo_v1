@@ -119,7 +119,10 @@ public class NomenclatureServiceImpl implements NomenclatureService {
         if (temp == null) {
             temp = TEMPLATE;
         }
-        String currentValue = nomenclatureDto.getCurrentValue().toString();
+
+
+        String currentValue = String.valueOf(nomenclatureDto.getCurrentValue() != null ?
+                nomenclatureDto.getCurrentValue() : 0L);
         nomenclatureDto.setCurrentValue(Long.parseLong(currentValue) + 1);
         client.save(nomenclatureDto);
         String year = String.format("%02d", Calendar.getInstance().get(Calendar.YEAR) % 100);

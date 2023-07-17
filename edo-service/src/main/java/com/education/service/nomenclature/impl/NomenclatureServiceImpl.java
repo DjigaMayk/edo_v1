@@ -23,7 +23,7 @@ import java.util.List;
 public class NomenclatureServiceImpl implements NomenclatureService {
 
     /**
-     * Шаблон для номенклатуры
+     * Шаблон номера обращения
      */
     private static final String TEMPLATE = "%ЧИС%ГОД-%ЗНАЧ/2";
 

@@ -23,6 +23,11 @@ import java.util.List;
 public class NomenclatureServiceImpl implements NomenclatureService {
 
     /**
+     * Шаблон для номенклатуры
+     */
+    private static final String TEMPLATE = "%ЧИС%ГОД-%ЗНАЧ/2";
+
+    /**
      * Клиент для связи с модулем edo-repository
      */
     private final NomenclatureRestTemplateClient client;
@@ -114,18 +119,17 @@ public class NomenclatureServiceImpl implements NomenclatureService {
      */
     @Override
     public String getNumberFromTemplate(NomenclatureDto nomenclatureDto) {
-        final String TEMPLATE = "%ЧИС%ГОД-%ЗНАЧ/2";
-        var temp = nomenclatureDto.getTemplate();
-        if (temp == null) {
-            temp = TEMPLATE;
+        var template = findById(nomenclatureDto.getId());
+        var numberFromTemplate = template.getTemplate();
+        if (numberFromTemplate == null) {
+            numberFromTemplate = TEMPLATE;
         }
-        String currentValue = nomenclatureDto.getCurrentValue().toString();
-        nomenclatureDto.setCurrentValue(Long.parseLong(currentValue) + 1);
-        client.save(nomenclatureDto);
-        String year = String.format("%02d", Calendar.getInstance().get(Calendar.YEAR) % 100);
-        String day = String.format("%02d", Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-
-        return temp
+        String currentValue = template.getCurrentValue().toString();
+        template.setCurrentValue(Long.parseLong(currentValue) + 1);
+        client.save(template);
+        String year = String.format("%02d", template.getCreationDate().getYear()%100);
+        String day = String.format("%02d", template.getCreationDate().getDayOfMonth());
+        return numberFromTemplate
 //  убирает больше двух знаков "%" подряд, оставляя один
                 .replaceAll("%{2,}", "%")
 //  заменяет число дня

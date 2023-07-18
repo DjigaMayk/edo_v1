@@ -116,7 +116,8 @@ public final class TestJsonStrings {
                 "question": [],
                 "appealStatus": null,
                 "sendingMethod": "BY_EMAIL",
-                "answeringMethod": "BY_EMAIL"
+                "answeringMethod": "BY_EMAIL",
+                "region": null
             }""";
     public static final String MULTIPLE_APPEALS = """
             [""

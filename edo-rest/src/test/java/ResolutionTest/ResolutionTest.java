@@ -9,6 +9,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import static io.restassured.RestAssured.given;
 
+
+/**
+ * Интеграционный тест сохранения резолюций.
+ * Для запуска требуется запустить следующие модули:
+ * edo-cloud-server
+ * edo-service
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = EdoRestApplication.class)

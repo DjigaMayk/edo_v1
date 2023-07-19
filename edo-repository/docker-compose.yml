@@ -23,8 +23,3 @@ services:
     environment:
       SPRING_FLYWAY_HOST: host.docker.internal
       SPRING_RABBITMQ_HOST: host.docker.internal
-
-
-
-
-

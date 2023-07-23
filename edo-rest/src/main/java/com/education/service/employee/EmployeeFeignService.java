@@ -4,6 +4,8 @@ import com.education.model.dto.EmployeeDto;
 
 import java.util.List;
 
-public interface EmployeeService {
+public interface EmployeeFeignService {
+
     List<EmployeeDto> findAllByLastNameLikeOrderByLastName(String fio);
+
 }

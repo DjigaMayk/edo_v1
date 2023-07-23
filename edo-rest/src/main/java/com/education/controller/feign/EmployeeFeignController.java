@@ -1,7 +1,7 @@
-package com.education.controller;
+package com.education.controller.feign;
 
+import com.education.client.feign.EmployeeFeignClient;
 import com.education.model.dto.EmployeeDto;
-import com.education.service.employee.EmployeeService;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -25,8 +25,9 @@ import java.util.logging.Level;
 @RequestMapping("api/rest/employee")
 @Log
 @Log4j2
-public class EmployeeController {
-    private final EmployeeService service;
+public class EmployeeFeignController {
+
+    private final EmployeeFeignClient employeeFeignClient;
 
     @ApiOperation(value = "Поиск пользователя по ФИО")
     @ApiResponses(value = {
@@ -35,7 +36,7 @@ public class EmployeeController {
     @GetMapping("/byFIO/")
     public ResponseEntity<List<EmployeeDto>> userSearch(@RequestParam("fio") String fio) {
         log.log(Level.INFO, "Получен запрос на поиск сущностей {0}", fio);
-        List<EmployeeDto> dtos = service.findAllByLastNameLikeOrderByLastName(fio);
+        List<EmployeeDto> dtos = employeeFeignClient.findAllByLastNameLikeOrderByLastName(fio);
         log.log(!dtos.isEmpty()
                         ? Level.INFO
                         : Level.WARNING

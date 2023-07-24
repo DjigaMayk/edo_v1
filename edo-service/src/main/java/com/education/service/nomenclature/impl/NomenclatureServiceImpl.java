@@ -124,8 +124,8 @@ public class NomenclatureServiceImpl implements NomenclatureService {
         if (numberFromTemplate == null) {
             numberFromTemplate = TEMPLATE;
         }
-        String currentValue = template.getCurrentValue().toString();
-        template.setCurrentValue(Long.parseLong(currentValue) + 1);
+        Long currentValue = template.getCurrentValue();
+        template.setCurrentValue(currentValue + 1);
         client.save(template);
         String year = String.format("%02d", template.getCreationDate().getYear()%100);
         String day = String.format("%02d", template.getCreationDate().getDayOfMonth());
@@ -137,7 +137,7 @@ public class NomenclatureServiceImpl implements NomenclatureService {
 //  заменяет год
                 .replaceAll("%год|%ГОД", year)
 //  заменяет значение
-                .replaceAll("%знач|%ЗНАЧ|%значение|%ЗНАЧЕНИЕ", StringUtils.isEmpty(currentValue) ? "" : currentValue)
+                .replaceAll("%знач|%ЗНАЧ|%значение|%ЗНАЧЕНИЕ", StringUtils.isEmpty((currentValue).toString()) ? "" : String.valueOf(currentValue))
 //  убирает проценты с флагом
                 .replaceAll("%[\\W][^(а-яА-Я)]", "")
 //  убирает больше двух знаков "-" подряд, оставляя один

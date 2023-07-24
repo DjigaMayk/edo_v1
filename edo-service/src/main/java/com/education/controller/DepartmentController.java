@@ -1,7 +1,7 @@
 package com.education.controller;
 
 import com.education.model.dto.DepartmentDto;
-import com.education.service.department.DepartmentService;
+import com.education.service.department.feign.DepartmentFeignService;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
@@ -17,8 +17,9 @@ import java.util.List;
 @Log
 @ApiModel("Контроллер эдо-сервиса для сущности Department")
 public class DepartmentController {
-    @ApiModelProperty("сервис для контроллера")
-    private DepartmentService service;
+
+    private final DepartmentFeignService departmentFeignService;
+
 
     @ApiOperation(value = "Получить department по id", notes = "Returns an department as per the id")
     @ApiResponses(value = {
@@ -27,7 +28,7 @@ public class DepartmentController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<DepartmentDto> getDepartmentById(@PathVariable Long id) {
-        DepartmentDto dto = service.findById(id);
+        DepartmentDto dto = departmentFeignService.findById(id);
         if (dto == null) {
             log.warning("Did not receive department-dto");
         }
@@ -41,7 +42,7 @@ public class DepartmentController {
     })
     @GetMapping("/notArchived/{id}")
     public ResponseEntity<DepartmentDto> getDepartmentByIdNotArchived(@PathVariable Long id) {
-        DepartmentDto dto = service.findByIdNotArchived(id);
+        DepartmentDto dto = departmentFeignService.findByIdNotArchived(id);
         if (dto == null) {
             log.warning("Did not receive department-dto NotArchived");
         }
@@ -55,7 +56,7 @@ public class DepartmentController {
     })
     @GetMapping("/findAll")
     public ResponseEntity<List<DepartmentDto>> getDepartmentList(@RequestBody List<Long> idList) {
-        var list = service.findAllById(idList);
+        var list = departmentFeignService.findAllById(idList);
         if (list == null) {
             log.warning("Did not receive department-dto list");
         }
@@ -69,7 +70,7 @@ public class DepartmentController {
     })
     @GetMapping("/findAll/notArchived")
     public ResponseEntity<List<DepartmentDto>> getDepartmentListNotArchived(@RequestBody List<Long> idList) {
-        var list = service.findAllByIdNotArchived(idList);
+        var list = departmentFeignService.findAllByIdNotArchived(idList);
         if (list == null) {
             log.warning("отправил list DepartmentDto.class NotArchived");
         }
@@ -83,7 +84,7 @@ public class DepartmentController {
     })
     @PostMapping("/")
     public ResponseEntity<DepartmentDto> save(@RequestBody @ApiParam("Address") DepartmentDto address) {
-        var dto = service.save(address);
+        var dto = departmentFeignService.save(address);
         if (dto.getClass() == DepartmentDto.class) {
             log.info("Saved DepartmentDto.class");
             return new ResponseEntity<>(dto, HttpStatus.CREATED);
@@ -99,8 +100,8 @@ public class DepartmentController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<DepartmentDto> delete(@PathVariable Long id) {
-        service.moveToArchive(id);
+        departmentFeignService.moveToArchive(id);
         log.info("Move entity department with id: %s to archive");
-        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+        return new ResponseEntity<>(departmentFeignService.findById(id), HttpStatus.OK);
     }
 }

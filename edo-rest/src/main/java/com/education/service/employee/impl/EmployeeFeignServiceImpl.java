@@ -10,18 +10,33 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@Log4j2
 @RequiredArgsConstructor
 public class EmployeeFeignServiceImpl implements EmployeeFeignService {
 
     private final EmployeeFeignClient employeeFeignClient;
 
+    @Override
+    public EmployeeDto findById(Long id, boolean notArchivedOnly) {
+        return employeeFeignClient.getEmployeeById(id, notArchivedOnly);
+    }
+
+    @Override
+    public List<EmployeeDto> findAllById(List<Long> ids, boolean notArchivedOnly) {
+        return employeeFeignClient.getAllEmployeeById(ids, notArchivedOnly);
+    }
+
+    @Override
+    public EmployeeDto save(EmployeeDto emp) {
+        return employeeFeignClient.saveEmployee(emp);
+    }
+
+    @Override
+    public void moveToArchive(Long id) {
+        employeeFeignClient.moveEmployeeToArchive(id);
+    }
 
     @Override
     public List<EmployeeDto> findAllByLastNameLikeOrderByLastName(String fio) {
-        if (fio.length() < 3) {
-            return null;
-        }
-        return employeeFeignClient.findAllByLastNameLikeOrderByLastName(fio);
+        return fio.length() < 3 ? null : employeeFeignClient.findAllByLastNameLikeOrderByLastName(fio);
     }
 }

@@ -15,6 +15,6 @@ public interface EmployeeFeignService {
 
     void moveToArchive(Long id);
 
-    public List<EmployeeDto> findAllByLastNameLikeOrderByLastName(String fio);
+    List<EmployeeDto> findAllByLastNameLikeOrderByLastName(String fio);
 
 }

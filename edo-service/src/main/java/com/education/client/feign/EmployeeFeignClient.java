@@ -10,25 +10,25 @@ import java.util.List;
  * Интерфейс EmployeeFeignClient предоставляет методы для отправки запросов в edo-repository
  * через FeignClient.
  */
-@FeignClient(name = "edo-repository", qualifiers = "employeeFeignClient")
+@FeignClient(name = "edo-repository", path = "/api/repository", qualifiers = "employeeFeignClient")
 public interface EmployeeFeignClient {
 
-    @GetMapping("/api/repository/employee")
+    @GetMapping("/employee")
     List<EmployeeDto> getAllEmployeeById(@RequestParam("ids") List<Long> ids,
                                          @RequestParam(name = "notArchivedOnly")
                                          boolean notArchivedOnly);
 
-    @PostMapping("/api/repository/employee")
+    @PostMapping("/employee")
     EmployeeDto saveEmployee(@RequestBody EmployeeDto employeeDto);
 
-    @GetMapping("/api/repository/employee/{id}")
+    @GetMapping("/employee/{id}")
     EmployeeDto getEmployeeById(@PathVariable("id") Long id,
                                 @RequestParam(name = "notArchivedOnly")
                                 boolean notArchivedOnly);
 
-    @DeleteMapping("/api/repository/employee/{id}")
+    @DeleteMapping("/employee/{id}")
     void moveToArchiveEmployeeById(@PathVariable("id") Long id);
 
-    @GetMapping("/api/repository/employee/byFIO/")
+    @GetMapping("/employee/byFIO/")
     List<EmployeeDto> findAllByLastNameLikeOrderByLastName(@RequestParam("fio") String fio);
 }

@@ -1,4 +1,4 @@
-package com.education.controller.feign;
+package com.education.controller;
 
 import com.education.client.feign.EmployeeFeignClient;
 import com.education.model.dto.EmployeeDto;
@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,15 +19,11 @@ import java.util.logging.Level;
 @RestController
 @RequestMapping("api/service/employee")
 @Log
+@AllArgsConstructor
 @ApiModel("Контроллер сервиса для сущности Employee")
-public class EmployeeFeignController {
+public class EmployeeController {
 
     private final EmployeeFeignClient employeeFeignClient;
-
-    @Autowired
-    public EmployeeFeignController(EmployeeFeignClient employeeFeignClient) {
-        this.employeeFeignClient = employeeFeignClient;
-    }
 
     @ApiOperation("Получить сущность Employee по id")
     @ApiResponses(value = {

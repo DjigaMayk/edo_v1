@@ -87,7 +87,7 @@ public class Appeal extends BaseEntity {
     /**
      * Авторы обращения
      */
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "appeal_author",
             joinColumns = @JoinColumn(name = "appeal_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"))
@@ -104,7 +104,7 @@ public class Appeal extends BaseEntity {
     /**
      * Вопросы, связанные с обращением
      */
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "appeal_question",
             joinColumns = @JoinColumn(name = "appeal_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "question_id", referencedColumnName = "id"))

@@ -12,6 +12,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.Level;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +33,9 @@ public class CreateAppealController {
         return new ResponseEntity<>(appealAfter, HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Получение сущностей Appeal для Employee creator (?first=1&amount=1)")
+    @ApiOperation(value = "Получение сущностей Appeal для Employee creator " +
+            "(?first=1(указываем первую необходимую сущность)" +
+            "amount=3(указываем количество необходимых сущностей)")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Сущность найдена"),
             @ApiResponse(code = 404, message = "Сущность не найдена")
@@ -42,7 +45,7 @@ public class CreateAppealController {
     public ResponseEntity<List<AppealAbbreviatedDto>> findByIdEmployee(@RequestParam("first") Long first,
                                                                        @RequestParam("amount") Long amount) {
         List<AppealAbbreviatedDto> appeal = service.findAllByIdEmployee(first, amount);
-        if (appeal == null && appeal.isEmpty()) {
+        if (CollectionUtils.isEmpty(appeal)) {
             log.log(Level.WARN, "Сущности не найдены");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

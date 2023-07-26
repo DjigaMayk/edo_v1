@@ -76,7 +76,7 @@ public class AppealController {
 
     }
 
-    @ApiOperation(value = "Получение сущностей по списку id (/1, 2, 3)")
+    @ApiOperation(value = "Получение списка сущностей по id (/1, 2, 3)")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Сущности найдены"),
             @ApiResponse(code = 404, message = "Сущности не найдены")
@@ -108,7 +108,7 @@ public class AppealController {
         return new ResponseEntity<>(appealDto, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Получение сущностей без даты архивации по списку id (/1, 2) ")
+    @ApiOperation(value = "Получение списка сущностей без даты архивации по id (/1, 2) ")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Сущности найдены"),
             @ApiResponse(code = 404, message = "Сущности не найдены")

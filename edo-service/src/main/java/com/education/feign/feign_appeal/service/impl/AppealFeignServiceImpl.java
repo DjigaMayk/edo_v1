@@ -114,8 +114,9 @@ public class AppealFeignServiceImpl implements AppealService {
         } else {
             for (var question : questions) {
                 if (!hasLength(question.getSummary())) {
-                    addIssue.accept(String.format("question id: %d  field summary is empty or NULL",
-                            question.getId()));
+                    if (question.getId() != null) {
+                        addIssue.accept(String.format("question id: %d  field summary is empty or NULL", question.getId()));
+                    }
                 } else if (question.getSummary().length() > 200) {
 
                     addIssue.accept(String.format("question id: %d field Summary has more then 200 characters",

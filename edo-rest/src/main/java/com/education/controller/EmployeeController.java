@@ -11,6 +11,7 @@ import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -91,11 +92,11 @@ public class EmployeeController {
     public ResponseEntity<List<EmployeeDto>> userSearch(@RequestParam(value = "fio", required = false) String fio) {
         log.log(Level.INFO, "Получен запрос на поиск сущностей {0}", fio);
         List<EmployeeDto> listDTO = employeeFeignClient.findAllByLastNameLikeOrderByLastName(fio);
-        log.log(!listDTO.isEmpty()
+        log.log(!CollectionUtils.isEmpty(listDTO)
                         ? Level.INFO
                         : Level.WARNING
                 , "Результат поиска сущностей: {0}", listDTO);
         return new ResponseEntity<>(listDTO
-                , !listDTO.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+                , !CollectionUtils.isEmpty(listDTO) ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 }

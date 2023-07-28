@@ -13,14 +13,19 @@ import java.util.List;
 public interface ResolutionFeignService {
     @PostMapping
     ResolutionDto save(ResolutionDto resolution);
+
     @PutMapping("/toArchive/{id}")
     void moveToArchive(@PathVariable("id") Long id);
+
     @GetMapping("/byId/{id}")
     ResolutionDto findById(@PathVariable("id") Long id);
+
     @GetMapping("/allById/{ids}")
     List<ResolutionDto> findAllById(@PathVariable("ids") Iterable<Long> ids);
+
     @GetMapping(value = "/notArchived/{id}")
     ResolutionDto findByIdNotArchived(@PathVariable("id") Long id);
+
     @GetMapping(value = "/allNotArchived/{ids}")
     List<ResolutionDto> findAllByIdNotArchived(@PathVariable("ids") Iterable<Long> ids);
 }

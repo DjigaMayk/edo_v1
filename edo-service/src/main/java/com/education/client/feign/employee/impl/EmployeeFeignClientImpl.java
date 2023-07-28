@@ -1,6 +1,6 @@
-package com.education.client.feign.impl;
+package com.education.client.feign.employee.impl;
 
-import com.education.client.feign.EmployeeFeignClient;
+import com.education.client.feign.employee.EmployeeFeignClient;
 import com.education.model.dto.EmployeeDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Класс EmployeeFeignClientImpl является реализацией интерфейса EmployeeFeignClient,
- * он содержит реализацию методов для отправки запросов в edo-service через FeignClient.
+ * он содержит реализацию методов для отправки запросов в edo-repository через FeignClient.
  * <p>
  * Класс использует аннотацию @Component, которая позволяет Spring автоматически обнаруживать
  * наши пользовательские bean-компоненты.
@@ -29,6 +29,7 @@ public class EmployeeFeignClientImpl implements EmployeeFeignClient {
      */
     public EmployeeFeignClientImpl(@Value("${security.enabled:false}") Boolean isSecurityEnabled,
                                    EmployeeFeignClient employeeFeignClient) {
+        this.isSecurityEnabled = isSecurityEnabled;
         this.employeeFeignClient = employeeFeignClient;
     }
 
@@ -50,12 +51,12 @@ public class EmployeeFeignClientImpl implements EmployeeFeignClient {
     /**
      * Метод saveEmployee сохраняет сущность сотрудника (Employee) в таблицу.
      *
-     * @param employee Сущность сотрудника для сохранения.
+     * @param employeeDto Сущность сотрудника для сохранения.
      * @return Объект класса EmployeeDto, соответствующий сохраненной сущности.
      */
     @Override
-    public EmployeeDto saveEmployee(EmployeeDto employee) {
-        return employeeFeignClient.saveEmployee(employee);
+    public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
+        return employeeFeignClient.saveEmployee(employeeDto);
     }
 
     /**
@@ -75,13 +76,13 @@ public class EmployeeFeignClientImpl implements EmployeeFeignClient {
     }
 
     /**
-     * Метод moveEmployeeToArchive перемещает сущность из таблицы employee в архив.
+     * Метод moveToArchiveEmployeeById перемещает сущность из таблицы employee в архив.
      *
      * @param id id сущности.
      */
     @Override
-    public void moveEmployeeToArchive(Long id) {
-        employeeFeignClient.moveEmployeeToArchive(id);
+    public void moveToArchiveEmployeeById(Long id) {
+        employeeFeignClient.moveToArchiveEmployeeById(id);
     }
 
     /**

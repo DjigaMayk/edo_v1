@@ -13,6 +13,7 @@ import java.util.List;
 @FeignClient(name = "edo-repository", path = "/api/repository", qualifiers = "nomenclatureFeignClient")
 public interface NomenclatureFeignClient {
 
+
     @PostMapping("/nomenclature/")
     NomenclatureDto saveNomenclature(@RequestBody NomenclatureDto nomenclature);
 

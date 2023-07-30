@@ -29,7 +29,7 @@ public class FacsimileOverlayServiceImpl implements FacsimileOverlayService {
 
             PDDocument facsimile = PDDocument.load(new File("FACSIMILE.pdf"));
             PDDocument originalDoc = PDDocument.load(bis);
-            Overlay overlayObj = new Overlay();
+            OverlayClone overlayObj = new OverlayClone();
 //            PDPage page = originalDoc.getPage(0);
 
 

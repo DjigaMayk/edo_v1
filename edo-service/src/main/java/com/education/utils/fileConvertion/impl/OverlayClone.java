@@ -9,8 +9,9 @@ public class OverlayClone extends org.apache.pdfbox.multipdf.Overlay {
     @Override
     protected AffineTransform calculateAffineTransform(PDPage page, PDRectangle overlayMediaBox) {
         AffineTransform at = new AffineTransform();
-        PDRectangle pageMediaBox = page.getMediaBox();
-        at.translate(0, pageMediaBox.getHeight() - overlayMediaBox.getHeight());
+//        PDRectangle pageMediaBox = page.getMediaBox();
+        at.translate(200, overlayMediaBox.getWidth() + 100);
+        at.quadrantRotate(3, 0, 0);
         return at;
     }
 }

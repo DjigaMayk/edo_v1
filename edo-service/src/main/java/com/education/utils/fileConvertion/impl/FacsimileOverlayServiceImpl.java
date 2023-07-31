@@ -27,23 +27,14 @@ public class FacsimileOverlayServiceImpl implements FacsimileOverlayService {
                 new ByteArrayInputStream(bytes));
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 
-            PDDocument facsimile = PDDocument.load(new File("FACSIMILE.pdf"));
+            PDDocument facsimile = PDDocument.load(new File("FACSIMILE_2.pdf"));
             PDDocument originalDoc = PDDocument.load(bis);
             OverlayClone overlayObj = new OverlayClone();
-//            PDPage page = originalDoc.getPage(0);
-
-
-//            PDImageXObject pdImage = PDImageXObject.createFromFile("FACSIMILE_3.png", originalDoc);
-//            PDPageContentStream contentStream = new PDPageContentStream(originalDoc, page);
-//            contentStream.drawImage(pdImage, 70, 140);
-//            contentStream.close();
-//            originalDoc.save(baos);
-//            originalDoc.close();
 
             overlayObj.setOverlayPosition(Overlay.Position.FOREGROUND);
             overlayObj.setInputPDF(originalDoc);
             overlayObj.setAllPagesOverlayPDF(facsimile);
-            Map<Integer, String> ovmap = new HashMap<>(); // empty map is a dummy
+            Map<Integer, String> ovmap = new HashMap<>();
             overlayObj.overlay(ovmap);
             originalDoc.save(baos);
 

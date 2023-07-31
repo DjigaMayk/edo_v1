@@ -15,7 +15,7 @@ public interface AppealFeignClient {
     @PostMapping
     AppealDto createAppeal(AppealDto appealDto);
     @GetMapping(value = "/appealsByEmployee/")
-    List<AppealAbbreviatedDto> findAllByIdEmployee(@RequestParam("first") Long first,
+    List<AppealAbbreviatedDto> findAllByIdEmployee(@RequestParam("startIndex") Long startIndex,
                                                    @RequestParam("amount") Long amount);
     @GetMapping(value = "/byId/{id}")
     AppealDto findById(@PathVariable("id") Long id);

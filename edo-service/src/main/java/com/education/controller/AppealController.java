@@ -15,6 +15,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.Level;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -81,10 +82,10 @@ public class AppealController {
             @ApiResponse(code = 200, message = "Сущности найдены"),
             @ApiResponse(code = 404, message = "Сущности не найдены")
     })
-    @GetMapping(value = "/allById/{ids}")
-    public ResponseEntity<List<AppealDto>> findAllByIdAppeal(@ApiParam("ids") @PathVariable List<Long> ids) {
-        List<AppealDto> appealDto = appealService.findAllById(ids);
-        if (appealDto == null && appealDto.isEmpty()) {
+    @GetMapping(value = "/allById/{idListAppeal}")
+    public ResponseEntity<List<AppealDto>> findAllByIdAppeal(@ApiParam("idListAppeal") @PathVariable List<Long> idListAppeal) {
+        List<AppealDto> appealDto = appealService.findAllById(idListAppeal);
+        if (CollectionUtils.isEmpty(appealDto)) {
             log.log(Level.WARN, "Сущности не найдены");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -117,7 +118,7 @@ public class AppealController {
     @GetMapping(value = "/allNotArchived/{ids}")
     public ResponseEntity<List<AppealDto>> findAllByIdNotArchivedAppeal(@ApiParam("ids") @PathVariable List<Long> ids) {
         List<AppealDto> appealDto = appealService.findAllByIdNotArchived(ids);
-        if (appealDto == null && appealDto.isEmpty()) {
+        if (CollectionUtils.isEmpty(appealDto)) {
             log.log(Level.WARN, "Сущности не найдены");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -125,17 +126,17 @@ public class AppealController {
         return new ResponseEntity<>(appealDto, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Получение сущностей Appeal для Employee creator (?first=1&amount=1)")
+    @ApiOperation(value = "Получение сущностей Appeal для Employee creator (?startIndex=1&amount=1)")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Сущность найдена"),
             @ApiResponse(code = 404, message = "Сущность не найдена")
     })
 
     @GetMapping(value = "/appealsByEmployee/")
-    public ResponseEntity<List<AppealAbbreviatedDto>> findByIdEmployee(@RequestParam("first") Long first,
+    public ResponseEntity<List<AppealAbbreviatedDto>> findByIdEmployee(@RequestParam("startIndex") Long startIndex,
                                                                        @RequestParam("amount") Long amount) {
-        List<AppealAbbreviatedDto> appeal = appealService.findAllByIdEmployee(first, amount);
-        if (appeal == null && appeal.isEmpty()) {
+        List<AppealAbbreviatedDto> appeal = appealService.findAllByIdEmployee(startIndex, amount);
+        if (CollectionUtils.isEmpty(appeal)) {
             log.log(Level.WARN, "Сущности не найдены");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

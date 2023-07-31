@@ -29,5 +29,5 @@ public interface AppealFeignService {
     List<AppealDto> findAllByIdNotArchived(@PathVariable("ids") Iterable<Long> ids);
 
     @GetMapping(value = "/appealsByEmployee/")
-    List<AppealAbbreviatedDto> findAllByIdEmployee(@RequestParam("first") Long first, @RequestParam("amount") Long amount);
+    List<AppealAbbreviatedDto> findAllByIdEmployee(@RequestParam("startIndex") Long startIndex, @RequestParam("amount") Long amount);
 }

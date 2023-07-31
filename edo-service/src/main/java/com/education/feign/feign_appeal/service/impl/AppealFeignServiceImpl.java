@@ -97,8 +97,8 @@ public class AppealFeignServiceImpl implements AppealService {
     }
 
     @Override
-    public List<AppealAbbreviatedDto> findAllByIdEmployee(Long first, Long amount) {
-        return appealFeignService.findAllByIdEmployee(first, amount);
+    public List<AppealAbbreviatedDto> findAllByIdEmployee(Long startIndex, Long amount) {
+        return appealFeignService.findAllByIdEmployee(startIndex, amount);
     }
 
     private String validateAppealDto(AppealDto appealDto) {

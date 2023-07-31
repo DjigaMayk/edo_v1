@@ -9,7 +9,7 @@ import java.util.List;
 public interface CreatingAppealFeignService {
     AppealDto createAppeal(AppealDto appealDto);
 
-    List<AppealAbbreviatedDto> findAllByIdEmployee(Long first, Long amount);
+    List<AppealAbbreviatedDto> findAllByIdEmployee(Long startIndex, Long amount);
 
     AppealDto findById(Long id);
 }

@@ -17,17 +17,16 @@ import java.util.List;
 public class CreatingAppealFeignServiceImpl implements CreatingAppealFeignService {
 
     private final AppealFeignClient appealFeignClient;
-    private final EnumAppealStatus STATUS_FOR_NEW_APPEAL = EnumAppealStatus.NEW;
 
     @Override
     public AppealDto createAppeal(AppealDto appealDto) {
-        appealDto.setAppealStatus(STATUS_FOR_NEW_APPEAL);
+        appealDto.setAppealStatus(EnumAppealStatus.NEW);
         return appealFeignClient.createAppeal(appealDto);
     }
 
     @Override
-    public List<AppealAbbreviatedDto> findAllByIdEmployee(Long first, Long amount) {
-        return appealFeignClient.findAllByIdEmployee(first, amount);
+    public List<AppealAbbreviatedDto> findAllByIdEmployee(Long startIndex, Long amount) {
+        return appealFeignClient.findAllByIdEmployee(startIndex, amount);
     }
 
     @Override

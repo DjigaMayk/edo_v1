@@ -6,6 +6,7 @@ import com.education.model.dto.EmployeeDto;
 import com.education.model.dto.NotificationDto;
 import com.education.model.enumEntity.EnumNotification;
 import com.education.service.email.EmailService;
+import com.education.service.notification.Feign.NotificationFeignClient;
 import com.education.service.notification.NotificationService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class EmailServiceImpl implements EmailService {
     private final AmqpTemplate amqpTemplate;
 
-    private final NotificationService notificationService;
+    private final NotificationFeignClient feignClient;
 
     /**
      * Инициирует рассылку оповещений всем адресантам и подписантам и создает новую сущность Notification
@@ -33,7 +34,7 @@ public class EmailServiceImpl implements EmailService {
         var notificationDto = new NotificationDto();
         notificationDto.setEnumNotification(EnumNotification.EMAIL);
         notificationDto.setEmployee(EmployeeDto.builder().id(1L).build());
-        notificationService.save(notificationDto);
+        feignClient.save(notificationDto);
 
         log.log(Level.INFO, "Отправлен запрос в очередь по рассылке оповещений");
     }

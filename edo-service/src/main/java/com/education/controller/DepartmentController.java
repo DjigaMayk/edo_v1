@@ -54,7 +54,7 @@ public class DepartmentController {
             @ApiResponse(code = 200, message = "Successfully retrieved"),
             @ApiResponse(code = 404, message = "Not found - The addresses was not found")
     })
-    @GetMapping("/findAll")
+    @PostMapping("/findAll")
     public ResponseEntity<List<DepartmentDto>> getDepartmentList(@RequestBody List<Long> idList) {
         var list = departmentFeignService.findAllById(idList);
         if (list == null) {
@@ -68,7 +68,7 @@ public class DepartmentController {
             @ApiResponse(code = 200, message = "Successfully retrieved"),
             @ApiResponse(code = 404, message = "Not found - The addresses was not found")
     })
-    @GetMapping("/findAll/notArchived")
+    @PostMapping("/findAll/notArchived")
     public ResponseEntity<List<DepartmentDto>> getDepartmentListNotArchived(@RequestBody List<Long> idList) {
         var list = departmentFeignService.findAllByIdNotArchived(idList);
         if (list == null) {

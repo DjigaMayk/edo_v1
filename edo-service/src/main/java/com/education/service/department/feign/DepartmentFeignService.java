@@ -51,4 +51,6 @@ public interface DepartmentFeignService {
     @PostMapping("/api/repository/department/findAll/notArchived")
     List<DepartmentDto> findAllByIdNotArchived(@RequestBody List<Long> ids);
 
+    @DeleteMapping("/api/repository/department/{id}")
+    void delete(@PathVariable("id") Long id);
 }

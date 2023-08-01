@@ -23,6 +23,11 @@ import java.util.List;
 public class NomenclatureServiceImpl implements NomenclatureService {
 
     /**
+     * Шаблон номера обращения
+     */
+    private static final String TEMPLATE = "%ЧИС%ГОД-%ЗНАЧ/2";
+
+    /**
      * Клиент для связи с модулем edo-repository
      */
     private final NomenclatureRestTemplateClient client;
@@ -114,18 +119,17 @@ public class NomenclatureServiceImpl implements NomenclatureService {
      */
     @Override
     public String getNumberFromTemplate(NomenclatureDto nomenclatureDto) {
-        final String TEMPLATE = "%ЧИС%ГОД-%ЗНАЧ/2";
-        var temp = nomenclatureDto.getTemplate();
-        if (temp == null) {
-            temp = TEMPLATE;
+        var template = findById(nomenclatureDto.getId());
+        var numberFromTemplate = template.getTemplate();
+        if (numberFromTemplate == null) {
+            numberFromTemplate = TEMPLATE;
         }
-        String currentValue = nomenclatureDto.getCurrentValue().toString();
-        nomenclatureDto.setCurrentValue(Long.parseLong(currentValue) + 1);
-        client.save(nomenclatureDto);
-        String year = String.format("%02d", Calendar.getInstance().get(Calendar.YEAR) % 100);
-        String day = String.format("%02d", Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-
-        return temp
+        Long currentValue = template.getCurrentValue();
+        template.setCurrentValue(currentValue + 1);
+        client.save(template);
+        String year = String.format("%02d", template.getCreationDate().getYear()%100);
+        String day = String.format("%02d", template.getCreationDate().getDayOfMonth());
+        return numberFromTemplate
 //  убирает больше двух знаков "%" подряд, оставляя один
                 .replaceAll("%{2,}", "%")
 //  заменяет число дня
@@ -133,7 +137,7 @@ public class NomenclatureServiceImpl implements NomenclatureService {
 //  заменяет год
                 .replaceAll("%год|%ГОД", year)
 //  заменяет значение
-                .replaceAll("%знач|%ЗНАЧ|%значение|%ЗНАЧЕНИЕ", StringUtils.isEmpty(currentValue) ? "" : currentValue)
+                .replaceAll("%знач|%ЗНАЧ|%значение|%ЗНАЧЕНИЕ", StringUtils.isEmpty((currentValue).toString()) ? "" : String.valueOf(currentValue))
 //  убирает проценты с флагом
                 .replaceAll("%[\\W][^(а-яА-Я)]", "")
 //  убирает больше двух знаков "-" подряд, оставляя один

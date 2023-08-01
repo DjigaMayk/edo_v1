@@ -16,3 +16,4 @@ public interface NotificationMapper extends Mappable<Notification, NotificationD
     @Mapping(target = "employees.notification", ignore = true)
     Notification toEntity(NotificationDto notificationDto);
 }
+

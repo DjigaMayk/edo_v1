@@ -19,7 +19,7 @@ spring:
   application:
     name: edo-repository
 server:
-  port: 0
+  port: 
 eureka:
   client:
     serviceUrl:

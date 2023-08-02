@@ -1,4 +1,4 @@
-package com.education.service.appeal;
+package com.education.feign.feign_appeal.service;
 
 import com.education.model.dto.AppealAbbreviatedDto;
 import com.education.model.dto.AppealDto;

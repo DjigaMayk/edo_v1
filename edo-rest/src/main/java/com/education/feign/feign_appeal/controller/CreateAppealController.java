@@ -1,8 +1,8 @@
-package com.education.controller;
+package com.education.feign.feign_appeal.controller;
 
+import com.education.feign.feign_appeal.service.AppealFeignClient;
 import com.education.model.dto.AppealAbbreviatedDto;
 import com.education.model.dto.AppealDto;
-import com.education.service.Appeal.CreatingAppealService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -23,13 +23,13 @@ import java.util.List;
 @RequestMapping("api/rest/appeal")
 public class CreateAppealController {
 
-    private final CreatingAppealService service;
+    private final AppealFeignClient appealFeignClient;
 
 
     @ApiOperation(value = "Сохранение обращения")
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<AppealDto> createNewAppeal(@RequestBody AppealDto appeal) {
-        AppealDto appealAfter = service.createAppeal(appeal);
+        AppealDto appealAfter = appealFeignClient.createAppeal(appeal);
         return new ResponseEntity<>(appealAfter, HttpStatus.CREATED);
     }
 
@@ -42,7 +42,7 @@ public class CreateAppealController {
     @GetMapping(value = "/appealsByEmployee/")
     public ResponseEntity<List<AppealAbbreviatedDto>> findByIdEmployee(@RequestParam("startIndex") Long startIndex,
                                                                        @RequestParam("amount") Long amount) {
-        List<AppealAbbreviatedDto> appeal = service.findAllByIdEmployee(startIndex, amount);
+        List<AppealAbbreviatedDto> appeal = appealFeignClient.findAllByIdEmployee(startIndex, amount);
         if (CollectionUtils.isEmpty(appeal)) {
             log.log(Level.WARN, "Сущности не найдены");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -56,9 +56,9 @@ public class CreateAppealController {
             @ApiResponse(code = 200, message = "Сущность найдена"),
             @ApiResponse(code = 404, message = "Сущность не найдена")
     })
-    @GetMapping(value = "/appealById/{id}")
+    @GetMapping("/appealById/{id}")
     public ResponseEntity<AppealDto> findById(@ApiParam("id") @PathVariable Long id) {
-        AppealDto appeal = service.findById(id);
+        AppealDto appeal = appealFeignClient.findById(id);
         if (appeal == null) {
             log.log(Level.WARN, "Сущности не найдены");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

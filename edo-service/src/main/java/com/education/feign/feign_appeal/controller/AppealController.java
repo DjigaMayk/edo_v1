@@ -1,10 +1,10 @@
-package com.education.controller;
+package com.education.feign.feign_appeal.controller;
 
+import com.education.feign.feign_appeal.service.AppealFeignService;
 import com.education.model.dto.AppealAbbreviatedDto;
 import com.education.model.dto.AppealDto;
 import com.education.model.util.exceptions.AppealNotValidException;
 import com.education.model.enumEntity.EnumAppealStatus;
-import com.education.service.appeal.AppealService;
 import com.education.service.email.EmailService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -27,7 +27,7 @@ import java.util.List;
 @RequestMapping("api/service/appeal")
 public class AppealController {
 
-    final private AppealService appealService;
+    final private AppealFeignService appealFeignService;
     final private EmailService emailService;
 
     @ApiOperation(value = "Сохранение сущности в БД")
@@ -37,7 +37,7 @@ public class AppealController {
     })
     @PostMapping
     public ResponseEntity<AppealDto> saveAppeal(@ApiParam("appealDto") @RequestBody AppealDto appealDto) {
-        AppealDto appealAfter = appealService.save(appealDto);
+        AppealDto appealAfter = appealFeignService.save(appealDto);
         if (appealAfter.getId() != null) {
             if (EnumAppealStatus.NEW.equals(appealAfter.getAppealStatus())) {
                 emailService.sendNotificationOnAppeal(appealAfter);
@@ -55,9 +55,9 @@ public class AppealController {
     })
     @PutMapping("/toArchive/{id}")
     public ResponseEntity<AppealDto> moveToArchiveAppeal(@ApiParam("id") @PathVariable Long id) {
-        appealService.moveToArchive(id);
+        appealFeignService.moveToArchive(id);
         log.log(Level.INFO, "Дата архивации обновлена");
-        return new ResponseEntity<>(appealService.findById(id), HttpStatus.OK);
+        return new ResponseEntity<>(appealFeignService.findById(id), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Получение сущности по id")
@@ -67,7 +67,7 @@ public class AppealController {
     })
     @GetMapping(value = "/byId/{id}")
     public ResponseEntity<AppealDto> findByIdAppeal(@ApiParam("id") @PathVariable Long id) {
-        AppealDto appeal = appealService.findById(id);
+        AppealDto appeal = appealFeignService.findById(id);
         if (appeal == null) {
             log.log(Level.WARN, "Сущность не найдена");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -84,7 +84,7 @@ public class AppealController {
     })
     @GetMapping(value = "/allById/{idListAppeal}")
     public ResponseEntity<List<AppealDto>> findAllByIdAppeal(@ApiParam("idListAppeal") @PathVariable List<Long> idListAppeal) {
-        List<AppealDto> appealDto = appealService.findAllById(idListAppeal);
+        List<AppealDto> appealDto = appealFeignService.findAllById(idListAppeal);
         if (CollectionUtils.isEmpty(appealDto)) {
             log.log(Level.WARN, "Сущности не найдены");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -100,7 +100,7 @@ public class AppealController {
     })
     @GetMapping(value = "/notArchived/{id}")
     public ResponseEntity<AppealDto> findByIdNotArchivedAppeal(@ApiParam("id") @PathVariable Long id) {
-        AppealDto appealDto = appealService.findByIdNotArchived(id);
+        AppealDto appealDto = appealFeignService.findByIdNotArchived(id);
         if (appealDto == null) {
             log.log(Level.WARN, "Сущность не найдена");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -115,9 +115,9 @@ public class AppealController {
             @ApiResponse(code = 404, message = "Сущности не найдены")
     })
 
-    @GetMapping(value = "/allNotArchived/{ids}")
-    public ResponseEntity<List<AppealDto>> findAllByIdNotArchivedAppeal(@ApiParam("ids") @PathVariable List<Long> ids) {
-        List<AppealDto> appealDto = appealService.findAllByIdNotArchived(ids);
+    @GetMapping(value = "/allNotArchived/{idListNotArchivedAppeal}")
+    public ResponseEntity<List<AppealDto>> findAllByIdNotArchivedAppeal(@ApiParam("idListNotArchivedAppeal") @PathVariable List<Long> idListNotArchivedAppeal) {
+        List<AppealDto> appealDto = appealFeignService.findAllByIdNotArchived(idListNotArchivedAppeal);
         if (CollectionUtils.isEmpty(appealDto)) {
             log.log(Level.WARN, "Сущности не найдены");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -135,7 +135,7 @@ public class AppealController {
     @GetMapping(value = "/appealsByEmployee/")
     public ResponseEntity<List<AppealAbbreviatedDto>> findByIdEmployee(@RequestParam("startIndex") Long startIndex,
                                                                        @RequestParam("amount") Long amount) {
-        List<AppealAbbreviatedDto> appeal = appealService.findAllByIdEmployee(startIndex, amount);
+        List<AppealAbbreviatedDto> appeal = appealFeignService.findAllByIdEmployee(startIndex, amount);
         if (CollectionUtils.isEmpty(appeal)) {
             log.log(Level.WARN, "Сущности не найдены");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -149,5 +149,4 @@ public class AppealController {
 
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
-
 }

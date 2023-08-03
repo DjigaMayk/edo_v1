@@ -4,16 +4,20 @@ import com.education.model.dto.FilePoolDto;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.apache.http.HttpHost;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
+
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.UUID;
 
 
 /**
@@ -49,6 +53,22 @@ public class FileRestTemplateClient {
         return restTemplate.exchange(getDefaultUriComponentBuilder(BASIC_URL)
                 .build()
                 .toUri(), HttpMethod.POST, requestEntity, FilePoolDto.class).getBody();
+    }
+
+    /**
+     * Метод, получающий файл из edo-service и сохраняющий его на локальный диск
+     *
+     * @param uuid файл, который мы отправляем.
+     */
+    public void loadFile(UUID uuid) {
+        ResponseEntity<byte []> response = restTemplate.getForEntity(getDefaultUriComponentBuilder(BASIC_URL + "/" + uuid)
+                .build()
+                .toUri(), byte[].class);
+        try {
+            Files.write(Paths.get("MYPDF.pdf"), response.getBody());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

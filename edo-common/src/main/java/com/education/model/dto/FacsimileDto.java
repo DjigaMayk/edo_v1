@@ -14,7 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FacsimileDTO {
+public class FacsimileDto {
 
     @ApiModelProperty("Id Факсимиле")
     private Long id;

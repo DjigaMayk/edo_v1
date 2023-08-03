@@ -1,7 +1,6 @@
 package com.education.repository;
 
 import com.education.entity.FilePool;
-import com.education.entity.Nomenclature;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

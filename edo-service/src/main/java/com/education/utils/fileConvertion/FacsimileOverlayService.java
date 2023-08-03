@@ -1,6 +1,8 @@
 package com.education.utils.fileConvertion;
 
 
+import java.util.Map;
+
 public interface FacsimileOverlayService {
-    byte[] overlay(byte[] bytes);
+    Map<String, Object> overlay(Map<String, Object> map, byte[] bytes);
 }

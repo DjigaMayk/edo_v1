@@ -1,15 +1,11 @@
 package com.education.utils.fileConvertion.impl;
 
 import com.education.utils.fileConvertion.FacsimileOverlayService;
+import com.education.utils.fileConvertion.OverlayClone;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.apache.pdfbox.multipdf.Overlay;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -20,14 +16,17 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class FacsimileOverlayServiceImpl implements FacsimileOverlayService {
+
     @Override
-    public byte[] overlay(byte[] bytes) {
+    public Map<String, Object> overlay(Map<String, Object> map, byte[] bytes) {
 
         try (BufferedInputStream bis = new BufferedInputStream(
+                new ByteArrayInputStream((byte[]) map.get("file")));
+             BufferedInputStream bis2 = new BufferedInputStream(
                 new ByteArrayInputStream(bytes));
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 
-            PDDocument facsimile = PDDocument.load(new File("FACSIMILE_2.pdf"));
+            PDDocument facsimile = PDDocument.load(bis2);
             PDDocument originalDoc = PDDocument.load(bis);
             OverlayClone overlayObj = new OverlayClone();
 
@@ -36,12 +35,13 @@ public class FacsimileOverlayServiceImpl implements FacsimileOverlayService {
             overlayObj.setAllPagesOverlayPDF(facsimile);
             Map<Integer, String> ovmap = new HashMap<>();
             overlayObj.overlay(ovmap);
+
             originalDoc.save(baos);
 
             facsimile.close();
             originalDoc.close();
 
-            return baos.toByteArray();
+            return Map.of("pageCount", map.get("pageCount"), "file", baos.toByteArray());
         } catch (Throwable e) {
             e.printStackTrace();
         }

@@ -4,7 +4,6 @@ import com.education.model.dto.FilePoolDto;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import org.apache.http.HttpHost;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;

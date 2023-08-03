@@ -12,7 +12,6 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.Map;
 import java.util.UUID;
 
@@ -31,16 +30,21 @@ public class FileServiceImpl implements FileService {
 
     /**
      * Метод сохраняет полученный файл в файловое хранилище,
-     * предварительно сконвертировав его в pdf,
+     * предварительно сконвертировав его в pdf и накладывает facsimile,
      * создает и возвращает FilePoolDto.
+     * Проверить функционал можно следующим образом:
+     * - отправить POST-запрос через Postman на http://127.0.0.1:8080/api/rest/file, приложив загружаемый file во вкладке Body.
+     *      В ответ получаем JSON с необходимым UUID документа, который загрузили.
+     * - отправить GET-запрос на http://127.0.0.1:8080/api/rest/file/{UUID документа}
+     * - проверить в корневой папке наличие файла MYPDF.pdf
      */
     @Override
     public FilePoolDto saveFile(MultipartFile multipartFile) {
 
-        // Тестовое решение с наложением конкретного факсимиле и вытягиванием его напрямую из Minio
+        // Тестовое решение с наложением конкретного факсимиле и вытягиванием его напрямую из Minio.
+        // В будущем нужно реализовать вытягивание id факсимиле из БД на основе нужного employee
         String superSecretId = "9e92673a-d008-4f3b-9823-1bcd569e374f";
 
-        // конвертация в pdf и наложение facsimile
         Map<String, Object> convertedFile = fileConversionService.convertFile(multipartFile);
         Map<String, Object> overlayedFile = facsimileOverlayService.overlay(convertedFile, getFileByUUID(UUID.fromString(superSecretId)));
 

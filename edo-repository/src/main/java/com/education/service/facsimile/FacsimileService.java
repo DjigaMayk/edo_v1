@@ -6,4 +6,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface FacsimileService {
     Facsimile findById(Long id);
+    Facsimile findFacsimileByEmployeeId(Long id);
 }

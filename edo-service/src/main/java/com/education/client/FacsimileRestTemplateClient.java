@@ -54,6 +54,25 @@ public class FacsimileRestTemplateClient {
     }
 
     /**
+     * Метод, возвращающий FacsimileDto по заданному employee_id
+     *
+     * @param id id сущности employee
+     * @return объект класса FacsimileDto, соответствующий сущности с указанным id_employee.
+     * В случае, если объект с заданным id не найден, метод возвращает null.
+     */
+    public FacsimileDto getFacsimileByEmployeeId(Long id) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            var entity = RequestEntity.get(getDefaultUriComponentBuilder(BASIC_URL + "/by-employee" + "/{id}")
+                    .buildAndExpand(id)
+                    .toUri()).headers(headers).build();
+            return restTemplate.exchange(entity, FacsimileDto.class).getBody();
+        } catch (HttpClientErrorException.NotFound e) {
+            return null;
+        }
+    }
+
+    /**
      * Метод, возвращающий случайный экземпляр сервиса edo-repository
      *
      * @return Случайный экземпляр сервиса edo-repository

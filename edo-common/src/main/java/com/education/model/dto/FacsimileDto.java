@@ -29,5 +29,5 @@ public class FacsimileDto {
     private FilePoolDto file;
 
     @ApiModelProperty("Архивирован ли факсимиле")
-    boolean isArchived;
+    private boolean isArchived;
 }

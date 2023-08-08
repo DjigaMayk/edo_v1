@@ -19,7 +19,7 @@ public class FacsimileOverlayServiceImpl implements FacsimileOverlayService {
 
     @Override
     public Map<String, Object> overlay(Map<String, Object> map, byte[] bytes) {
-
+// TODO убрать Map и возвращать просто byte[]
         try (BufferedInputStream bis = new BufferedInputStream(
                 new ByteArrayInputStream((byte[]) map.get("file")));
              BufferedInputStream bis2 = new BufferedInputStream(
@@ -38,7 +38,7 @@ public class FacsimileOverlayServiceImpl implements FacsimileOverlayService {
 
             originalDoc.save(baos);
 
-            facsimile.close();
+            facsimile.close(); // засунуть сразу в блок try, чтобы закрывались автоматом
             originalDoc.close();
 
             return Map.of("pageCount", map.get("pageCount"), "file", baos.toByteArray());

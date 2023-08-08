@@ -1,7 +1,9 @@
 package com.education.service.file.impl;
 
+import com.education.client.FacsimileRestTemplateClient;
 import com.education.client.FileRestTemplateClient;
 import com.education.model.dto.EmployeeDto;
+import com.education.model.dto.FacsimileDto;
 import com.education.model.dto.FilePoolDto;
 import com.education.service.file.FileService;
 import com.education.service.file_pool.FilePoolService;
@@ -27,10 +29,10 @@ public class FileServiceImpl implements FileService {
     private final FileConversionService fileConversionService;
     private final FacsimileOverlayService facsimileOverlayService;
     private final FileRestTemplateClient fileRestTemplateClient;
-
+    private final FacsimileRestTemplateClient facsimileRestTemplateClient;
     /**
      * Метод сохраняет полученный файл в файловое хранилище,
-     * предварительно сконвертировав его в pdf и накладывает facsimile,
+     * предварительно сконвертировав его в pdf и наложив facsimile,
      * создает и возвращает FilePoolDto.
      * Проверить функционал можно следующим образом:
      * - отправить POST-запрос через Postman на http://127.0.0.1:8080/api/rest/file, приложив загружаемый file во вкладке Body.
@@ -41,12 +43,16 @@ public class FileServiceImpl implements FileService {
     @Override
     public FilePoolDto saveFile(MultipartFile multipartFile) {
 
-        // Тестовое решение с наложением конкретного факсимиле и вытягиванием его напрямую из Minio.
-        // В будущем нужно реализовать вытягивание id факсимиле из БД на основе нужного employee
-        String superSecretId = "9e92673a-d008-4f3b-9823-1bcd569e374f";
+        // В будущем нужно реализовать вытягивание id факсимиле из БД на основе авторизованного employee
+
+        FacsimileDto facsimile = facsimileRestTemplateClient.getFacsimileByEmployeeId(1L);
+        log.info("Получили необходимый факсимиле");
 
         Map<String, Object> convertedFile = fileConversionService.convertFile(multipartFile);
-        Map<String, Object> overlayedFile = facsimileOverlayService.overlay(convertedFile, getFileByUUID(UUID.fromString(superSecretId)));
+
+        Map<String, Object> overlayedFile = facsimileOverlayService.overlay(convertedFile, getFileByUUID(facsimile.getFile().getStorageFileId()));
+        log.info("Наложение факсимиле завершено");
+
 
         var savedFileUUID = fileRestTemplateClient.saveFile((byte[]) overlayedFile.get("file"));
 

@@ -44,4 +44,20 @@ public class FacsimileController {
         return new ResponseEntity<>(facsimileDto
                 , facsimileDto != null ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
+    @ApiOperation("Получить сущность Facsimile по employee_id")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Facsimile was successfully found"),
+            @ApiResponse(code = 404, message = "Facsimile was not found")})
+    @GetMapping("/by-employee/{id}")
+    public ResponseEntity<FacsimileDto> getFacsimileByEmployeeId(
+            @PathVariable("id") Long id) {
+        log.log(Level.INFO, "Получен запрос на поиск сущности с employee_id = {0}", id);
+        FacsimileDto facsimileDto = mapper
+                .toDto(facsimileService.findFacsimileByEmployeeId(id));
+        log.log(facsimileDto != null
+                        ? Level.INFO
+                        : Level.WARNING
+                , "Результат поиска: {0}", facsimileDto);
+        return new ResponseEntity<>(facsimileDto
+                , facsimileDto != null ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+    }
 }

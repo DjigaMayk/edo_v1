@@ -32,37 +32,36 @@ public class FileServiceImpl implements FileService {
     private final FacsimileRestTemplateClient facsimileRestTemplateClient;
     /**
      * Метод сохраняет полученный файл в файловое хранилище,
-     * предварительно сконвертировав его в pdf и наложив facsimile,
-     * создает и возвращает FilePoolDto.
+     * предварительно сконвертировав его в pdf и наложив facsimile.
+     * Создает и возвращает FilePoolDto.
      * Проверить функционал можно следующим образом:
-     * - отправить POST-запрос через Postman на http://127.0.0.1:8080/api/rest/file, приложив загружаемый file во вкладке Body.
-     *      В ответ получаем JSON с необходимым UUID документа, который загрузили.
+     * - отправить POST-запрос через Postman на http://127.0.0.1:8080/api/rest/file, приложив факсимиле(в формате .pdf) во вкладке Body.
+     *      В ответ полчаем JSON с необходимым ID факсимиле, по которому его можно найти в таблице БД File_pool
+     * - добавить в таблицу БД Facsimile строчку с file_id равным ID факсимиле и employee_id равным 1
+     * - отправить POST-запрос через Postman на http://127.0.0.1:8080/api/rest/file, приложив загружаемый документ(в формате pdf/png/jpeg/doc/docx) во вкладке Body.
+     *      В ответ получаем JSON с необходимым UUID документа, который был сконвертирован в pdf, подписан загруженным ранее факисимиле и сохранен в Minio.
      * - отправить GET-запрос на http://127.0.0.1:8080/api/rest/file/{UUID документа}
      * - проверить в корневой папке наличие файла MYPDF.pdf
      */
     @Override
     public FilePoolDto saveFile(MultipartFile multipartFile) {
 
-        // В будущем нужно реализовать вытягивание id факсимиле из БД на основе авторизованного employee
-
+        // Ищем факсимиле, принадлежащее employee с id = 1
         FacsimileDto facsimile = facsimileRestTemplateClient.getFacsimileByEmployeeId(1L);
-        log.info("Получили необходимый факсимиле");
 
         Map<String, Object> convertedFile = fileConversionService.convertFile(multipartFile);
-
-        Map<String, Object> overlayedFile = facsimileOverlayService.overlay(convertedFile, getFileByUUID(facsimile.getFile().getStorageFileId()));
+        log.info("Конвертация файла в .pdf завершена");
+        byte [] overlayedFile = facsimileOverlayService.overlay(convertedFile, getFileByUUID(facsimile.getFile().getStorageFileId()));
         log.info("Наложение факсимиле завершено");
-
-
-        var savedFileUUID = fileRestTemplateClient.saveFile((byte[]) overlayedFile.get("file"));
+        var savedFileUUID = fileRestTemplateClient.saveFile(overlayedFile);
 
         return filePoolService.add(
                 FilePoolDto.builder()
                         .storageFileId(savedFileUUID)
                         .name(multipartFile.getOriginalFilename())
                         .extension(FilenameUtils.getExtension(multipartFile.getOriginalFilename()))
-                        .size(((byte[]) overlayedFile.get("file")).length)
-                        .pageCount((int) overlayedFile.get("pageCount"))
+                        .size((overlayedFile.length))
+                        .pageCount((int)convertedFile.get("pageCount"))
                         .creator(getCreatorFromSecurity())
                         .build()
         );

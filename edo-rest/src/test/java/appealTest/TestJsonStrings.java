@@ -3,122 +3,256 @@ package appealTest;
 public final class TestJsonStrings {
     public static final String SINGLE_APPEAL = """
             {
-                "id": null,
-                "creationDate": null,
-                "archivedDate": null,
-                "number": "123",
-                "annotation": "Some annotation",
-                "signer": [{
-                    "id": null,
-                    "firstName": "Дмитрий",
-                    "lastName": "Рейн",
-                    "middleName": "Константинович",
-                    "address": "Address",
-                    "photoUrl": null,
-                    "fioDative": "Рейну Дмитрию Константиновичу",
-                    "fioNominative": "Дмитрий Константинович Рейн",
-                    "fioGenitive": "Рейна Дмитрия Константиновича",
-                    "externalId": "1ef2eeb4-c861-4b48-b682-e9eb08c0f163",
-                    "phone": "+79776020338",
-                    "workPhone": "+79786039037",
-                    "workEmail": "room083@gmail.com",
-                    "birthDate": "2023-04-25T11:26:04.3683958+03:00",
-                    "username": "reyn_d",
-                    "creationDate": null,
-                    "archivedDate": null,
-                    "notification": null
-                }],
-                "creator": {
-                    "id": null,
-                    "firstName": "Дмитрий",
-                    "lastName": "Рейн",
-                    "middleName": "Константинович",
-                    "address": "Address",
-                    "photoUrl": null,
-                    "fioDative": "Рейну Дмитрию Константиновичу",
-                    "fioNominative": "Дмитрий Константинович Рейн",
-                    "fioGenitive": "Рейна Дмитрия Константиновича",
-                    "externalId": "1ef2eeb4-c861-4b48-b682-e9eb08c0f163",
-                    "phone": "+79776020338",
-                    "workPhone": "+79786039037",
-                    "workEmail": "room083@gmail.com",
-                    "birthDate": "2023-04-25T11:26:04.3683958+03:00",
-                    "username": "reyn_d",
-                    "creationDate": null,
-                    "archivedDate": null,
-                    "notification": null
-                },
-                "addressee": [{
-                    "id": null,
-                    "firstName": "Дмитрий",
-                    "lastName": "Рейн",
-                    "middleName": "Константинович",
-                    "address": "Address",
-                    "photoUrl": null,
-                    "fioDative": "Рейну Дмитрию Константиновичу",
-                    "fioNominative": "Дмитрий Константинович Рейн",
-                    "fioGenitive": "Рейна Дмитрия Константиновича",
-                    "externalId": "1ef2eeb4-c861-4b48-b682-e9eb08c0f163",
-                    "phone": "+79776020338",
-                    "workPhone": "+79786039037",
-                    "workEmail": "room083@gmail.com",
-                    "birthDate": "2023-04-25T11:26:04.3683958+03:00",
-                    "username": "reyn_d",
-                    "creationDate": null,
-                    "archivedDate": null,
-                    "notification": null
-                }],
-                "nomenclature": null,
-                "authors": [{
-                    "id": null,
-                    "firstName": "Дмитрий",
-                    "lastName": "Рейн",
-                    "middleName": "Константинович",
-                    "address": "Address",
-                    "snils": "88012234682",
-                    "mobilePhone": "+79776020338",
-                    "email": "room083@gmail.com",
-                    "employment": "UNEMPLOYED",
-                    "fioDative": "Рейну Дмитрию Константиновичу",
-                    "fioGenitive": "Рейна Дмитрия Константиновича",
-                    "fioNominative": "Дмитрий Константинович Рейн"
-                }],
-                "file": [{
-                    "id": null,
-                    "storageFileId": "1b7588a7-ae19-4142-97a3-cbe0e085e173",
-                    "name": "some_name",
-                    "extension": "txt",
-                    "size": 12334,
-                    "pageCount": 12,
-                    "uploadDate": "2023-04-25T11:26:04.3694004+03:00",
-                    "archivedDate": null,
-                    "creator": {
-                        "id": null,
-                        "firstName": "Дмитрий",
-                        "lastName": "Рейн",
-                        "middleName": "Константинович",
-                        "address": "Address",
-                        "photoUrl": null,
-                        "fioDative": "Рейну Дмитрию Константиновичу",
-                        "fioNominative": "Дмитрий Константинович Рейн",
-                        "fioGenitive": "Рейна Дмитрия Константиновича",
-                        "externalId": "1ef2eeb4-c861-4b48-b682-e9eb08c0f163",
-                        "phone": "+79776020338",
-                        "workPhone": "+79786039037",
-                        "workEmail": "room083@gmail.com",
-                        "birthDate": "2023-04-25T11:26:04.3683958+03:00",
-                        "username": "reyn_d",
-                        "creationDate": null,
-                        "archivedDate": null,
-                        "notification": null
-                    }
-                }],
-                "question": [],
-                "appealStatus": null,
-                "sendingMethod": "BY_EMAIL",
-                "answeringMethod": "BY_EMAIL",
-                "region": null
-            }""";
+               "id": null,
+               "number": "123",
+               "annotation": "some annotation",
+               "signer": [
+                 {
+                   "id": 1
+                 }
+               ],
+               "creator": {
+                 "id": 2
+               },
+               "addressee": [
+                 {
+                   "id": 3
+                 }
+               ],
+               "nomenclature": {
+                 "id": 3,
+                 "creationDate": "2023-07-06T07:52:10.593Z",
+                 "archivedDate": "2023-07-06T07:52:10.593Z",
+                 "template": "%ЧИС%ГОД-%ЗНАЧ/2",
+                 "currentValue": 0,
+                 "index": "666"
+               },
+               "authors": [
+                 {
+                     "id": 4,
+                     "firstName": "Дмитрий",
+                     "lastName": "Рейн",
+                     "middleName": "Константинович",
+                     "address": "Address",
+                     "snils": "88012234682",
+                     "mobilePhone": "79776020338",
+                     "email": "room083@gmail.com",
+                     "employment": "UNEMPLOYED",
+                     "fioDative": "Рейну Дмитрию Константиновичу",
+                     "fioGenitive": "Рейна Дмитрия Константиновича",
+                     "fioNominative": "Дмитрий Константинович Рейн"
+                 }
+               ],
+               "file": [
+                 {
+                   "id": 1,
+                   "storageFileId": "0fd52378-819e-47f3-bd58-293edd25ed0a",
+                   "name": "cat",
+                   "extension": "jpg",
+                   "size": 1,
+                   "pageCount": 1,
+                   "uploadDate": "2023-04-25T11:26:04.3694004+03:00",
+                   "archivedDate": null,
+                   "creator": {
+                     "id": 1
+                   }
+                 }
+               ],
+               "question": [{
+                   "id": 1,
+                   "summary": "осы вынесли окно",
+                   "theme": {
+                     "id": 6,
+                     "code": "1.3",
+                     "parentThemeDto": {
+                             "id":1
+                             }
+                     }
+               }],
+               "appealStatus": null,
+               "sendingMethod": "BY_EMAIL",
+               "answeringMethod": "BY_EMAIL",
+               "region": {
+                 "id": 1,
+                 "externalId": "174",
+                 "regionName": "Челябинск",
+                 "archivedDate": "2023-07-06T07:56:00.763Z",
+                 "quantity": "5",
+                 "federalDistrict": {
+                   "id": 1
+                 },
+                 "numberOfPrimaryBranches": "3",
+                 "numberOfLocalBranches": "3"
+               }
+             }""";
+    public static final String CHANGED_SINGLE_APPEAL = """
+            {
+               "id": 1,
+               "number": "321",
+               "annotation": "some new annotation",
+               "signer": [
+                 {
+                   "id": 1
+                 }
+               ],
+               "creator": {
+                 "id": 2
+               },
+               "addressee": [
+                 {
+                   "id": 3
+                 }
+               ],
+               "nomenclature": {
+                 "id": 3,
+                 "creationDate": "2023-07-06T07:52:10.593Z",
+                 "archivedDate": "2023-07-06T07:52:10.593Z",
+                 "template": "%ЧИС%ГОД-%ЗНАЧ/2",
+                 "currentValue": 0,
+                 "index": "666"
+               },
+               "authors": [
+                 {
+                     "id": 4,
+                     "firstName": "Дмитрий",
+                     "lastName": "Рейн",
+                     "middleName": "Константинович",
+                     "address": "Address",
+                     "snils": "88012234682",
+                     "mobilePhone": "79776020338",
+                     "email": "room083@gmail.com",
+                     "employment": "UNEMPLOYED",
+                     "fioDative": "Рейну Дмитрию Константиновичу",
+                     "fioGenitive": "Рейна Дмитрия Константиновича",
+                     "fioNominative": "Дмитрий Константинович Рейн"
+                 }
+               ],
+               "file": [
+                 {
+                   "id": 1,
+                   "storageFileId": "0fd52378-819e-47f3-bd58-293edd25ed0a",
+                   "name": "cat",
+                   "extension": "jpg",
+                   "size": 1,
+                   "pageCount": 1,
+                   "uploadDate": "2023-04-25T11:26:04.3694004+03:00",
+                   "archivedDate": null,
+                   "creator": {
+                     "id": 1
+                   }
+                 }
+               ],
+               "question": [{
+                   "id": 1,
+                   "summary": "осы вынесли окно",
+                   "theme": {
+                     "id": 6,
+                     "code": "1.3",
+                     "parentThemeDto": {
+                             "id":1
+                             }
+                     }
+               }],
+               "appealStatus": null,
+               "sendingMethod": "BY_EMAIL",
+               "answeringMethod": "BY_EMAIL",
+               "region": {
+                 "id": 1,
+                 "externalId": "174",
+                 "regionName": "Челябинск",
+                 "archivedDate": "2023-07-06T07:56:00.763Z",
+                 "quantity": "5",
+                 "federalDistrict": {
+                   "id": 1
+                 },
+                 "numberOfPrimaryBranches": "3",
+                 "numberOfLocalBranches": "3"
+               }
+             }""";
+    public static final String SINGLE_APPEAL_WITH_NOT_EXISTS_ID = """
+            {
+               "id": 30981237718392089,
+               "number": "321",
+               "annotation": "some new annotation",
+               "signer": [
+                 {
+                   "id": 1
+                 }
+               ],
+               "creator": {
+                 "id": 2
+               },
+               "addressee": [
+                 {
+                   "id": 3
+                 }
+               ],
+               "nomenclature": {
+                 "id": 3,
+                 "creationDate": "2023-07-06T07:52:10.593Z",
+                 "archivedDate": "2023-07-06T07:52:10.593Z",
+                 "template": "%ЧИС%ГОД-%ЗНАЧ/2",
+                 "currentValue": 0,
+                 "index": "666"
+               },
+               "authors": [
+                 {
+                     "id": 4,
+                     "firstName": "Дмитрий",
+                     "lastName": "Рейн",
+                     "middleName": "Константинович",
+                     "address": "Address",
+                     "snils": "88012234682",
+                     "mobilePhone": "79776020338",
+                     "email": "room083@gmail.com",
+                     "employment": "UNEMPLOYED",
+                     "fioDative": "Рейну Дмитрию Константиновичу",
+                     "fioGenitive": "Рейна Дмитрия Константиновича",
+                     "fioNominative": "Дмитрий Константинович Рейн"
+                 }
+               ],
+               "file": [
+                 {
+                   "id": 1,
+                   "storageFileId": "0fd52378-819e-47f3-bd58-293edd25ed0a",
+                   "name": "cat",
+                   "extension": "jpg",
+                   "size": 1,
+                   "pageCount": 1,
+                   "uploadDate": "2023-04-25T11:26:04.3694004+03:00",
+                   "archivedDate": null,
+                   "creator": {
+                     "id": 1
+                   }
+                 }
+               ],
+               "question": [{
+                   "id": 1,
+                   "summary": "осы вынесли окно",
+                   "theme": {
+                     "id": 6,
+                     "code": "1.3",
+                     "parentThemeDto": {
+                             "id":1
+                             }
+                     }
+               }],
+               "appealStatus": null,
+               "sendingMethod": "BY_EMAIL",
+               "answeringMethod": "BY_EMAIL",
+               "region": {
+                 "id": 1,
+                 "externalId": "174",
+                 "regionName": "Челябинск",
+                 "archivedDate": "2023-07-06T07:56:00.763Z",
+                 "quantity": "5",
+                 "federalDistrict": {
+                   "id": 1
+                 },
+                 "numberOfPrimaryBranches": "3",
+                 "numberOfLocalBranches": "3"
+               }
+             }""";
     public static final String MULTIPLE_APPEALS = """
             [""
                         {

@@ -6,7 +6,6 @@ import com.education.util.Mapper.Mappable;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-
 @Mapper(componentModel = "spring", uses = {DepartmentMapper.class, AddressMapper.class})
 public interface DepartmentMapper extends Mappable<Department, DepartmentDto> {
     @Override

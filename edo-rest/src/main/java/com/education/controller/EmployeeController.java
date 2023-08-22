@@ -1,7 +1,7 @@
 package com.education.controller;
 
+import com.education.client.feign.employee.EmployeeFeignClient;
 import com.education.model.dto.EmployeeDto;
-import com.education.service.employee.EmployeeService;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -11,10 +11,8 @@ import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -26,20 +24,79 @@ import java.util.logging.Level;
 @Log
 @Log4j2
 public class EmployeeController {
-    private final EmployeeService service;
 
-    @ApiOperation(value = "Поиск пользователя по ФИО")
+    private final EmployeeFeignClient employeeFeignClient;
+
+    @ApiOperation("Получить сущность Employee по id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Employee was successfully found"),
+            @ApiResponse(code = 404, message = "Employee was not found")})
+    @GetMapping("/{id}")
+    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable("id") Long id,
+                                                       @RequestParam(name = "notArchivedOnly", defaultValue = "true")
+                                                       boolean notArchivedOnly) {
+        log.log(Level.INFO, "Получен запрос на поиск сущности с id = {0}", id);
+        EmployeeDto employeeDto = employeeFeignClient.getEmployeeById(id, notArchivedOnly);
+        log.log(employeeDto != null
+                        ? Level.INFO
+                        : Level.WARNING
+                , "Результат поиска: {0}", employeeDto);
+        return new ResponseEntity<>(employeeDto
+                , employeeDto != null ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+    }
+
+    @ApiOperation("Получить несколько сущностей Employee по id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Employee was successfully found"),
+            @ApiResponse(code = 404, message = "Employee was not found")})
+    @GetMapping
+    public ResponseEntity<List<EmployeeDto>> getAllEmployeeById(@RequestParam("ids") List<Long> ids,
+                                                                @RequestParam(name = "notArchivedOnly", defaultValue = "true")
+                                                                boolean notArchivedOnly) {
+        log.log(Level.INFO, "Получен запрос на поиск сущностей с id = {0}", ids);
+        List<EmployeeDto> employeeDtos = employeeFeignClient.getAllEmployeeById(ids, notArchivedOnly);
+        log.log(!employeeDtos.isEmpty()
+                        ? Level.INFO
+                        : Level.WARNING
+                , "Результат поиска: {0}", employeeDtos);
+        return new ResponseEntity<>(
+                employeeDtos
+                , !employeeDtos.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+    }
+
+    @ApiOperation("Сохранить сущность employee")
+    @ApiResponse(code = 201, message = "Employee was saved")
+    @PostMapping
+    public ResponseEntity<EmployeeDto> saveEmployee(@RequestBody EmployeeDto employee) {
+        log.log(Level.INFO, "Получен запрос на сохранение сущности");
+        EmployeeDto emp = employeeFeignClient.saveEmployee(employee);
+        log.log(Level.INFO, "Сущность сохранена");
+        return new ResponseEntity<>(emp, HttpStatus.CREATED);
+    }
+
+    @ApiOperation("Отправить сущность employee в архив")
+    @ApiResponse(code = 200, message = "Employee was moved to archive")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Long> moveToArchiveEmployeeById(@PathVariable("id") Long id) {
+        log.log(Level.INFO, "Получен запрос добавление сущности в архив");
+        employeeFeignClient.moveEmployeeToArchive(id);
+        log.log(Level.INFO, "Сущность успешно добавлена в архив");
+        return new ResponseEntity<>(id, HttpStatus.OK);
+    }
+
+    @ApiOperation("Поиск пользователя по ФИО")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Employee was successfully found"),
             @ApiResponse(code = 404, message = "Employee was not found")})
     @GetMapping("/byFIO/")
-    public ResponseEntity<List<EmployeeDto>> userSearch(@RequestParam("fio") String fio) {
+    public ResponseEntity<List<EmployeeDto>> userSearch(@RequestParam(value = "fio", required = false) String fio) {
         log.log(Level.INFO, "Получен запрос на поиск сущностей {0}", fio);
-        List<EmployeeDto> dtos = service.findAllByLastNameLikeOrderByLastName(fio);
-        log.log(!dtos.isEmpty()
+        List<EmployeeDto> listDTO = employeeFeignClient.findAllByLastNameLikeOrderByLastName(fio);
+        log.log(!CollectionUtils.isEmpty(listDTO)
                         ? Level.INFO
                         : Level.WARNING
-                , "Результат поиска сущностей: {0}", dtos);
-        return new ResponseEntity<>(dtos, HttpStatus.OK);
+                , "Результат поиска сущностей: {0}", listDTO);
+        return new ResponseEntity<>(listDTO
+                , !CollectionUtils.isEmpty(listDTO) ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 }

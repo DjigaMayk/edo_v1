@@ -1,0 +1,1 @@
+ALTER TABLE IF EXISTS facsimile RENAME COLUMN isArchived TO is_archived;

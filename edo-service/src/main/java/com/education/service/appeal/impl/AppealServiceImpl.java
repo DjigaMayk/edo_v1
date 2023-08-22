@@ -4,11 +4,12 @@ import com.education.author_feign.service.AuthorService;
 import com.education.model.constant.RabbitConstant;
 import com.education.model.dto.AppealAbbreviatedDto;
 import com.education.model.dto.AppealDto;
+import com.education.model.dto.QuestionDto;
 import com.education.model.enumEntity.EnumAppealStatus;
 import com.education.model.records.AppealReadRecord;
 import com.education.model.util.exceptions.AppealNotValidException;
 import com.education.service.appeal.AppealService;
-import com.education.service.nomenclature.NomenclatureService;
+import com.education.service.nomenclature.NomenclatureFeignService;
 import com.education.service.question.QuestionService;
 import com.education.service.region.RegionService;
 import com.netflix.appinfo.InstanceInfo;
@@ -46,7 +47,7 @@ public class AppealServiceImpl implements AppealService {
 
     private final EurekaClient EUREKA_CLIENT;
 
-    private final NomenclatureService nomenclatureService;
+    private final NomenclatureFeignService nomenclatureService;
 
     private final String BASE_URL = "/api/repository/appeal";
 
@@ -146,15 +147,23 @@ public class AppealServiceImpl implements AppealService {
     }
 
     @Override
-    public List<AppealAbbreviatedDto> findAllByIdEmployee(Long first, Long amount) {
+    public List<AppealAbbreviatedDto> findAllByIdEmployee(Long startIndex, Long amount) {
         InstanceInfo instanceInfo = getInstance();
-        String path = "/appealsByEmployee/?first=" +
-                first +
+        String path = "/appealsByEmployee/?startIndex=" +
+                startIndex +
                 "&amount=" +
                 amount;
         var uri = getURIByInstance(instanceInfo, path);
         AppealAbbreviatedDto[] response = TEMPLATE.getForObject(uri, AppealAbbreviatedDto[].class);
         return Arrays.asList(response);
+    }
+
+    @Override
+    public AppealDto findByQuestion(QuestionDto questionDto) {
+        InstanceInfo instanceInfo = getInstance();
+        var uri = getURIByInstance(instanceInfo, String.format("/byQuestionId/%s",
+                questionDto.getId().toString()));
+        return TEMPLATE.getForObject(uri, AppealDto.class);
     }
 
     private String validateAppealDto(AppealDto appealDto) {

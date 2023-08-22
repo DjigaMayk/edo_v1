@@ -42,6 +42,6 @@ public class Facsimile extends BaseEntity {
     /**
      * Архивирован ли факсимиле
      */
-    @Column(name = "is_Archived")
+    @Column(name = "is_archived")
     private boolean isArchived;
 }

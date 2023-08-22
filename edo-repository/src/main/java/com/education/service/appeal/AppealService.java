@@ -20,5 +20,7 @@ public interface AppealService {
 
     List<Appeal> findAllByIdEmployee(Long id, Long first, Long amount);
 
+    Appeal findAppealByQuestionId(Long questionId);
+
     void moveToUnderConsideration(Long resolutionId);
 }

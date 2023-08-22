@@ -3,6 +3,7 @@ package com.education.email.service;
 import com.education.model.constant.RabbitConstant;
 import com.education.model.dto.AppealDto;
 import com.education.model.dto.EmployeeDto;
+import com.education.model.records.ResolutionDtoAndAppealRecord;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import lombok.AllArgsConstructor;
@@ -28,9 +29,44 @@ public class EmailQueueListener {
     private final String SERVICE_NAME = "edo-rest";
 
     @RabbitListener(queues = RabbitConstant.addressCreateEmailQueue)
-    public void createEmail(AppealDto appealDto) {
-        sendNotificationOnAppeal(appealDto);
+    public void createEmail(Long id) {
+        sendNotificationOnAppeal(id);
         log.log(Level.INFO, "Отправлено письмо");
+    }
+
+    @RabbitListener(queues = RabbitConstant.resolutionNotificationQueue)
+    public void resolutionNotificationsListener(ResolutionDtoAndAppealRecord resolutionNotificationInfoRecord) {
+        log.info("appeal id: " + resolutionNotificationInfoRecord.appealDto().getId());
+        log.info("signer FIO: " + resolutionNotificationInfoRecord.resolutionDto().getSigner().getFioNominative());
+        var appealDto = resolutionNotificationInfoRecord.appealDto();
+        var resolutionDto = resolutionNotificationInfoRecord.resolutionDto();
+
+        try {
+            var notificationMailTemplate = "Добрый день, %1$s!\n" +
+                    "Вы являетесь %2$s резолюции в Обращении  с номером "
+                    + appealDto.getNumber() + "\n" + getURIByInstance(getInstance(),
+                    "/byId/" + appealDto.getId()).toURL();
+            sendResolutionNotificationToContributor(resolutionDto.getSigner(),
+                    notificationMailTemplate, "Подписантом");
+            sendResolutionNotificationToContributor(resolutionDto.getCurator(),
+                    notificationMailTemplate, "Куратором");
+            for (EmployeeDto executor : resolutionDto.getExecutors()) {
+                sendResolutionNotificationToContributor(executor,
+                        notificationMailTemplate, "Исполнителем");
+            }
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+        log.info("All notifications was sent");
+    }
+
+    /**
+     * The resolution notification message factory method.
+     */
+    private void sendResolutionNotificationToContributor(EmployeeDto memberDto,
+                                                         String notificationMailTemplate, String role) {
+        emailService.sendSimpleEmail(memberDto.getWorkEmail(), "Уведомление о создании резолюции",
+                notificationMailTemplate.formatted(memberDto.getFioNominative(), role));
     }
 
     /**
@@ -56,14 +92,17 @@ public class EmailQueueListener {
     /**
      * Метод для рассылки оповещений по почте всем адресантам и подписантам из обращения
      *
-     * @param appealDto - обращение
+     * @param id - для поиска Employee и Appeal в БД
      */
-    private void sendNotificationOnAppeal(AppealDto appealDto) {
+    private void sendNotificationOnAppeal(Long id) {
         try {
-            var templateMessage = "Добрый день, %1$s!\n%2$s с номером " + appealDto.getNumber() + "\n" +
-                    getURIByInstance(getInstance(), "/byId/" + appealDto.getId()).toURL();
-            assembleAndSendEmail(appealDto.getAddressee(), templateMessage, "Для вас адресовано Обращение", appealDto.getNumber());
-            assembleAndSendEmail(appealDto.getSigner(), templateMessage, "Вы являетесь Подписантом в Обращении", appealDto.getNumber());
+            var findAppeal = emailService.findByIdAppeal(id);
+            var findEmployee = emailService.findByIdEmployee(id);
+            var appealNumber = findAppeal.getNumber();
+            var templateMessage = "Добрый день, %1$s!\n%2$s с номером " + appealNumber + "\n" +
+                    getURIByInstance(getInstance(), "/byId/" + findEmployee.getId()).toURL();
+            assembleAndSendEmail(findAppeal.getAddressee(), templateMessage, "Для вас адресовано Обращение", appealNumber);
+            assembleAndSendEmail(findAppeal.getSigner(), templateMessage, "Вы являетесь Подписантом в Обращении", appealNumber);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
@@ -72,9 +111,10 @@ public class EmailQueueListener {
 
     private void assembleAndSendEmail(List<EmployeeDto> employers, String template, String greeting, String id) {
         for (EmployeeDto emp : employers) {
-            emailService.sendSimpleEmail(emp.getWorkEmail(), "Обращение № " + id,
-                    template.formatted(emp.getFioNominative(),
+            emailService.sendSimpleEmail(emailService.findByIdEmployee(emp.getId()).getWorkEmail(), "Обращение № " + id,
+                    template.formatted(emailService.findByIdEmployee(emp.getId()).getFioNominative(),
                             greeting));
         }
     }
+
 }

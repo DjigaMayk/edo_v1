@@ -34,7 +34,7 @@ public interface FilePoolRepository extends JpaRepository<FilePool, Long> {
      * Метод переводит в архив номенклатуру присваивая значение даты архивации
      */
     @Modifying
-    @Query(value = "UPDATE file_pool SET archived_date = CURRENT_TIMESTAMP WHERE id = :id", nativeQuery = true)
-    void moveToArchive(@Param("id") Long id);
+    @Query(value = "UPDATE file_pool SET archived_date = CASE WHEN :archived = true THEN CURRENT_TIMESTAMP END WHERE id = :id", nativeQuery = true)
+    void moveToArchive(@Param("id") Long id, @Param("archived") boolean isArchived);
 }
 

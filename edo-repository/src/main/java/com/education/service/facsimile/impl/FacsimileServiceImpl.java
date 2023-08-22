@@ -3,24 +3,64 @@ package com.education.service.facsimile.impl;
 import com.education.entity.Facsimile;
 import com.education.repository.FacsimileRepository;
 import com.education.service.facsimile.FacsimileService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-@AllArgsConstructor
+
+import java.io.IOException;
+import java.util.Optional;
+
+/**
+ * @author Никита Бадеев
+ *
+ * Class-service for Facsimile
+ */
 @Service
+@RequiredArgsConstructor
 public class FacsimileServiceImpl implements FacsimileService {
+
+    /**
+     * Class-repository object for Facsimile
+     */
     private final FacsimileRepository facsimileRepository;
 
     /**
-     * Метод для поиска объекта Facsimile по id среди всех записей
-     * @param id id объекта
-     * @return объект Facsimile
+     * Method for saving facsimile in DB
+     *
+     * @param facsimile saving facsimile
+     * @return saved facsimile
      */
+    @Transactional(rollbackFor = {IOException.class})
     @Override
-    @Transactional(readOnly = true)
-    public Facsimile findById(Long id) {
-        return facsimileRepository.findById(id).orElse(new Facsimile());
+    public Facsimile saveFacsimile(Facsimile facsimile) {
+        return facsimileRepository.saveAndFlush(facsimile);
     }
+
+
+    /**
+     * Method for archiving/unarchiving facsimile
+     *
+     * @param id Long
+     * @param isArchived boolean
+     */
+    @Transactional
+    @Override
+    public void moveInArchive(Long id, boolean isArchived) {
+        facsimileRepository.moveInArchive(id, isArchived);
+    }
+
+    /**
+     * Method for getting Facsimile from DB by id
+     *
+     * @param id - Entity's id
+     * @return Facsimile
+     */
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<Facsimile> findById(Long id) {
+        return facsimileRepository.findById(id);
+    }
+
     /**
      * Метод для поиска объекта Facsimile по employee_id среди всех записей
      * @param id employee_id объекта
@@ -31,5 +71,4 @@ public class FacsimileServiceImpl implements FacsimileService {
     public Facsimile findFacsimileByEmployeeId(Long id) {
         return facsimileRepository.findFacsimileByEmployeeId(id);
     }
-
 }

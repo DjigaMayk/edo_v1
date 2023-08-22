@@ -1,8 +1,8 @@
 security:
   enabled: false
 spring:
-#  profiles:
-#    include: security
+  #  profiles:
+  #    include: security
   application:
     name: edo-integration
   rabbitmq:
@@ -17,7 +17,10 @@ spring:
     properties:
       mail:
         smtp:
+          network:
+            default credentials: false
           auth: true
+          enableSsl: false
           starttls:
             enable: true
 server:
@@ -28,3 +31,4 @@ eureka:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
   instance:
     preferIpAddress: true
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.value}}

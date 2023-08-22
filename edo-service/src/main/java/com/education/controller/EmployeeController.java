@@ -1,6 +1,6 @@
 package com.education.controller;
 
-import com.education.client.feign.EmployeeFeignClient;
+import com.education.client.feign.employee.EmployeeFeignClient;
 import com.education.model.dto.EmployeeDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
@@ -8,7 +8,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

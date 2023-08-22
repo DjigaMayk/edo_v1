@@ -1,6 +1,6 @@
 package com.education.controller;
 
-import com.education.client.feign.EmployeeFeignClient;
+import com.education.client.feign.employee.EmployeeFeignClient;
 import com.education.model.dto.EmployeeDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;

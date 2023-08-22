@@ -1,15 +1,15 @@
 package com.education.feign.feign_appeal.service.impl;
 
+import com.education.author_feign.service.AuthorService;
 import com.education.feign.feign_appeal.service.AppealFeignService;
 import com.education.feign.feign_appeal.service.AppealService;
-import com.education.author_feign.service.AuthorService;
 import com.education.model.constant.RabbitConstant;
 import com.education.model.dto.AppealAbbreviatedDto;
 import com.education.model.dto.AppealDto;
 import com.education.model.enumEntity.EnumAppealStatus;
 import com.education.model.records.AppealReadRecord;
 import com.education.model.util.exceptions.AppealNotValidException;
-import com.education.service.nomenclature.NomenclatureService;
+import com.education.service.nomenclature.NomenclatureFeignService;
 import com.education.service.question.QuestionService;
 import com.education.service.region.RegionService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -40,7 +40,7 @@ public class AppealFeignServiceImpl implements AppealService {
 
     private final AmqpTemplate amqpTemplate;
 
-    private final NomenclatureService nomenclatureService;
+    private final NomenclatureFeignService nomenclatureService;
 
     @Override
     public AppealDto save(AppealDto appealDto) {

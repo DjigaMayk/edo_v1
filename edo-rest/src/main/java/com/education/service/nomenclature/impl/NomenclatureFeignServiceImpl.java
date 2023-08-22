@@ -106,16 +106,16 @@ public class NomenclatureFeignServiceImpl implements NomenclatureFeignService {
      */
     @Override
     public String getNumberFromTemplate(NomenclatureDto nomenclatureDto) {
-        var template = findById(nomenclatureDto.getId());
-        var numberFromTemplate = template.getTemplate();
+        var nomenclature = findById(nomenclatureDto.getId());
+        var numberFromTemplate = nomenclature.getTemplate();
         if (numberFromTemplate == null) {
             numberFromTemplate = TEMPLATE;
         }
-        Long currentValue = template.getCurrentValue();
-        template.setCurrentValue(currentValue + 1);
-        client.save(template);
-        String year = String.format("%02d", template.getCreationDate().getYear()%100);
-        String day = String.format("%02d", template.getCreationDate().getDayOfMonth());
+        Long currentValue = nomenclature.getCurrentValue();
+        nomenclature.setCurrentValue(currentValue + 1);
+        nomenclatureFeignClient.saveNomenclature(nomenclature);
+        String year = String.format("%02d", nomenclature.getCreationDate().getYear() % 100);
+        String day = String.format("%02d", nomenclature.getCreationDate().getDayOfMonth());
         return numberFromTemplate
 //  убирает больше двух знаков "%" подряд, оставляя один
                 .replaceAll("%{2,}", "%")

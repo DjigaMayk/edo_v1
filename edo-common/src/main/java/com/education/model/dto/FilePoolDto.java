@@ -1,5 +1,6 @@
 package com.education.model.dto;
 
+import com.education.model.enumEntity.EnumFileType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -23,6 +24,8 @@ public class FilePoolDto {
     private String name;
     @ApiModelProperty("Расширение файла")
     private String extension;
+    @ApiModelProperty("Тип файла")
+    private EnumFileType fileType;
     @ApiModelProperty("Размер файла")
     private Integer size;
     @ApiModelProperty("Количество страниц файла")

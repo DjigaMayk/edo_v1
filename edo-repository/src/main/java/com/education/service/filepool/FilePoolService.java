@@ -37,7 +37,7 @@ public interface FilePoolService {
      *
      * @param id Long
      */
-    void moveToArchive(Long id);
+    void moveToArchive(Long id, boolean isArchived);
 
     /**
      * Предоставляет не заархивированное FilePoolDto номенклатуры из БД по id

@@ -71,6 +71,9 @@ insert into appeal (creation_date, number, annotation, creator_id, nomenclature_
                     way_to_answer)
 values (now(), '12', 'Обращение', 1, 1, 'NEW', 'ON_PAPER', 'BY_RUSSIAN_POST');
 
+-- Заполнение таблицы appeal_question тестовыми данными
+insert into appeal_question (appeal_id, question_id)
+values ('1', '1');
 
 --Добавление строк в таблицу theme тема 15
 INSERT INTO theme (theme_name, code)

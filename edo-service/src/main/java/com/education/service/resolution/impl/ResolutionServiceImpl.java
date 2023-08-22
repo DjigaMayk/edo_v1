@@ -1,6 +1,7 @@
 package com.education.service.resolution.impl;
 
 import com.education.model.dto.ResolutionDto;
+import com.education.service.email.EmailService;
 import com.education.service.resolution.ResolutionService;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
@@ -24,6 +25,8 @@ public class ResolutionServiceImpl implements ResolutionService {
     private final RestTemplate TEMPLATE;
 
     private final EurekaClient EUREKA_CLIENT;
+
+    private final EmailService emailService;
 
     private final String BASE_URL = "/api/repository/resolution";
 
@@ -51,6 +54,9 @@ public class ResolutionServiceImpl implements ResolutionService {
         InstanceInfo instanceInfo = getInstance();
         var request = new RequestEntity(resolution, HttpMethod.POST, getURIByInstance(instanceInfo, ""));
         var response = TEMPLATE.exchange(request, ResolutionDto.class);
+        if (response.getStatusCode().is2xxSuccessful()) {
+            emailService.sendNotificationOnResolution(response.getBody());
+        }
         return response.getBody();
     }
 

@@ -66,8 +66,8 @@ public class DepartmentController {
     })
     @PostMapping("/findAll")
     public ResponseEntity<List<DepartmentDto>> getAllDepartment(@RequestBody
-                                                             @ApiParam(name = "Department list")
-                                                             List<Long> idList) {
+                                                                @ApiParam(name = "Department list")
+                                                                List<Long> idList) {
         List<Department> departmentList = service.findAllById(idList);
         if (departmentList == null) {
             log.warning("Department — not found!");
@@ -86,8 +86,8 @@ public class DepartmentController {
     })
     @PostMapping("/findAll/notArchived")
     public ResponseEntity<List<DepartmentDto>> getAllDepartmentsWhereArchivedIsNull(@RequestBody
-                                                                                 @ApiParam(name = "Department list")
-                                                                                 List<Long> idList) {
+                                                                                    @ApiParam(name = "Department list")
+                                                                                    List<Long> idList) {
         List<Department> departmentList = service.findAllByIdNotArchived(idList);
         if (departmentList == null) {
             log.warning("Department — not found!");

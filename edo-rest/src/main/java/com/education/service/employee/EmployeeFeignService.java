@@ -1,12 +1,11 @@
 package com.education.service.employee;
 
-
 import com.education.model.dto.EmployeeDto;
 
 import java.util.List;
 
+public interface EmployeeFeignService {
 
-public interface EmployeeRestTemplateService {
     EmployeeDto findById(Long id, boolean notArchivedOnly);
 
     List<EmployeeDto> findAllById(List<Long> ids, boolean notArchivedOnly);
@@ -14,5 +13,7 @@ public interface EmployeeRestTemplateService {
     EmployeeDto save(EmployeeDto emp);
 
     void moveToArchive(Long id);
-    public List<EmployeeDto> findAllByLastNameLikeOrderByLastName(String fio);
+
+    List<EmployeeDto> findAllByLastNameLikeOrderByLastName(String fio);
+
 }

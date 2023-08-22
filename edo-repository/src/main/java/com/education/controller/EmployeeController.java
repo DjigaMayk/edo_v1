@@ -3,36 +3,21 @@ package com.education.controller;
 import com.education.entity.Employee;
 import com.education.entity.Notification;
 import com.education.model.dto.EmployeeDto;
-import com.education.model.dto.NotificationDto;
-import com.education.model.enumEntity.EnumNotification;
 import com.education.service.employee.EmployeeService;
 import com.education.service.notification.NotificationService;
 import com.education.util.Mapper.impl.EmployeeMapper;
 import com.education.util.Mapper.impl.NotificationMapper;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 
 @RestController
@@ -117,8 +102,9 @@ public class EmployeeController {
             @ApiResponse(code = 404, message = "Employee was not found")})
     @GetMapping("/byFIO/")
     public ResponseEntity<List<EmployeeDto>> userSearch(@RequestParam(value = "fio", required = false) String fio) {
-        log.log(Level.INFO, "Получен запрос на поиск сущностей {0}", fio);
-        List<Employee> dtos = employeeService.findAllByLastNameLikeOrderByLastName(fio);
+        String decodedFio = URLDecoder.decode(fio, StandardCharsets.UTF_8);
+        log.log(Level.INFO, "Получен запрос на поиск сущностей {0}", decodedFio);
+        List<Employee> dtos = employeeService.findAllByLastNameLikeOrderByLastName(decodedFio);
         List<EmployeeDto> listDTO = mapper.toDto(dtos);
         log.log(!listDTO.isEmpty()
                         ? Level.INFO

@@ -1,11 +1,7 @@
 package com.education.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import com.education.model.enumEntity.EnumFileType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,6 +41,12 @@ public class FilePool extends BaseEntity{
      */
     @Column(name = "extension")
     private String extension;
+    /**
+     * Тип файла
+     */
+    @Column(name = "file_type")
+    @Enumerated(EnumType.STRING)
+    private EnumFileType fileType;
     /**
      * Размер файла
      */

@@ -6,12 +6,13 @@ import com.education.util.Mapper.Mappable;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {DepartmentMapper.class, AddressMapper.class})
 public interface DepartmentMapper extends Mappable<Department, DepartmentDto> {
-    /**
-     * Method to avoid the loop in the Mapper
-     */
     @Override
     @Mapping(target = "department.department", ignore = true)
     DepartmentDto toDto(Department department);
+
+    @Override
+    @Mapping(target = "department.department", ignore = true)
+    Department toEntity(DepartmentDto departmentDto);
 }

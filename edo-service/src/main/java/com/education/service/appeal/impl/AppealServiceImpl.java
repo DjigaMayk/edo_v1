@@ -146,10 +146,10 @@ public class AppealServiceImpl implements AppealService {
     }
 
     @Override
-    public List<AppealAbbreviatedDto> findAllByIdEmployee(Long first, Long amount) {
+    public List<AppealAbbreviatedDto> findAllByIdEmployee(Long startIndex, Long amount) {
         InstanceInfo instanceInfo = getInstance();
-        String path = "/appealsByEmployee/?first=" +
-                first +
+        String path = "/appealsByEmployee/?startIndex=" +
+                startIndex +
                 "&amount=" +
                 amount;
         var uri = getURIByInstance(instanceInfo, path);

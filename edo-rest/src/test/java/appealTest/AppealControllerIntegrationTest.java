@@ -29,7 +29,6 @@ public class AppealControllerIntegrationTest {
         return "http://localhost:" + port + "/api/rest/appeal";
     }
 
-
     @Test
     public void testSaveSingleAppeal() {
         given().contentType("application/json")

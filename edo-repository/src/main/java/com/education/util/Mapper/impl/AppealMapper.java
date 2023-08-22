@@ -8,11 +8,14 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.BeanUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        uses ={ RegionMapper.class,
+                EmployeeMapper.class,
+                NomenclatureMapper.class,
+                QuestionMapper.class,
+                FilePoolMapper.class,
+                AuthorMapper.class},
+        builder = @Builder(disableBuilder = true))
 public interface AppealMapper extends Mappable<Appeal, AppealDto> {
 
 	//создано для ухода от бесконечного цикла при маппинге

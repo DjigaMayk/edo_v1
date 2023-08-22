@@ -70,7 +70,7 @@ public class AppealServiceImpl implements AppealService {
 
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     @Override
-    public List<Appeal> findAllByIdEmployee(Long id, Long first, Long amount) {
-        return appealRepository.findByIdEmployee(id, first, amount);
+    public List<Appeal> findAllByIdEmployee(Long id, Long startIndex, Long amount) {
+        return appealRepository.findByIdEmployee(id, startIndex, amount);
     }
 }

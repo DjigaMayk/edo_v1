@@ -1,10 +1,9 @@
 package com.education.service.employee.impl;
 
-import com.education.client.feign.EmployeeFeignClient;
+import com.education.client.feign.employee.EmployeeFeignClient;
 import com.education.model.dto.EmployeeDto;
 import com.education.service.employee.EmployeeFeignService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

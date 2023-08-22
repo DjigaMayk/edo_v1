@@ -1,36 +1,27 @@
 package com.education.service.nomenclature.impl;
 
-import com.education.client.NomenclatureRestTemplateClient;
+import com.education.client.feign.nomenclature.NomenclatureFeignClient;
 import com.education.model.dto.NomenclatureDto;
-import com.education.service.nomenclature.NomenclatureService;
-import lombok.AllArgsConstructor;
+import com.education.service.nomenclature.NomenclatureFeignService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
 import java.util.List;
 
-/**
- * Представляет реализацию операций над номенклатурой
- *
- * @author Иван Кузнецов
- * @version 1.0
- * @since 1.0
- */
-
 @Service
-@AllArgsConstructor
-public class NomenclatureServiceImpl implements NomenclatureService {
+@Log4j2
+@RequiredArgsConstructor
+public class NomenclatureFeignServiceImpl implements NomenclatureFeignService {
 
     /**
      * Шаблон номера обращения
      */
     private static final String TEMPLATE = "%ЧИС%ГОД-%ЗНАЧ/2";
 
-    /**
-     * Клиент для связи с модулем edo-repository
-     */
-    private final NomenclatureRestTemplateClient client;
+
+    private final NomenclatureFeignClient nomenclatureFeignClient;
 
     /**
      * Сохраняет номенклатуру
@@ -40,7 +31,7 @@ public class NomenclatureServiceImpl implements NomenclatureService {
      */
     @Override
     public NomenclatureDto save(NomenclatureDto nomenclature) {
-        return client.save(nomenclature);
+        return nomenclatureFeignClient.saveNomenclature(nomenclature);
     }
 
     /**
@@ -50,7 +41,7 @@ public class NomenclatureServiceImpl implements NomenclatureService {
      */
     @Override
     public void moveToArchive(Long id) {
-        client.moveToArchive(id);
+        nomenclatureFeignClient.moveToArchiveNomenclature(id);
     }
 
     /**
@@ -61,7 +52,7 @@ public class NomenclatureServiceImpl implements NomenclatureService {
      */
     @Override
     public NomenclatureDto findById(Long id) {
-        return client.findById(id);
+        return nomenclatureFeignClient.findByIdNomenclature(id);
     }
 
     /**
@@ -72,7 +63,7 @@ public class NomenclatureServiceImpl implements NomenclatureService {
      */
     @Override
     public List<NomenclatureDto> findAllById(List<Long> list) {
-        return client.findAllById(list);
+        return nomenclatureFeignClient.findAllByIdNomenclature(list);
     }
 
     /**
@@ -83,7 +74,7 @@ public class NomenclatureServiceImpl implements NomenclatureService {
      */
     @Override
     public NomenclatureDto findByIdNotArchived(Long id) {
-        return client.findByIdNotArchived(id);
+        return nomenclatureFeignClient.findByIdNotArchivedNomenclature(id);
     }
 
     /**
@@ -94,7 +85,7 @@ public class NomenclatureServiceImpl implements NomenclatureService {
      */
     @Override
     public List<NomenclatureDto> findAllByIdNotArchived(List<Long> list) {
-        return client.findAllByIdNotArchived(list);
+        return nomenclatureFeignClient.findAllByIdNotArchivedNomenclature(list);
     }
 
     /**
@@ -104,11 +95,7 @@ public class NomenclatureServiceImpl implements NomenclatureService {
      */
     @Override
     public List<NomenclatureDto> findByIndex(String index) {
-        if (index.length() < 2) {
-            return null;
-        } else {
-            return client.findByIndex(index);
-        }
+        return index.length() < 2 ? null : nomenclatureFeignClient.findByIndex(index);
     }
 
     /**
@@ -119,16 +106,16 @@ public class NomenclatureServiceImpl implements NomenclatureService {
      */
     @Override
     public String getNumberFromTemplate(NomenclatureDto nomenclatureDto) {
-        var template = findById(nomenclatureDto.getId());
-        var numberFromTemplate = template.getTemplate();
+        var nomenclature = findById(nomenclatureDto.getId());
+        var numberFromTemplate = nomenclature.getTemplate();
         if (numberFromTemplate == null) {
             numberFromTemplate = TEMPLATE;
         }
-        Long currentValue = template.getCurrentValue();
-        template.setCurrentValue(currentValue + 1);
-        client.save(template);
-        String year = String.format("%02d", template.getCreationDate().getYear()%100);
-        String day = String.format("%02d", template.getCreationDate().getDayOfMonth());
+        Long currentValue = nomenclature.getCurrentValue();
+        nomenclature.setCurrentValue(currentValue + 1);
+        nomenclatureFeignClient.saveNomenclature(nomenclature);
+        String year = String.format("%02d", nomenclature.getCreationDate().getYear() % 100);
+        String day = String.format("%02d", nomenclature.getCreationDate().getDayOfMonth());
         return numberFromTemplate
 //  убирает больше двух знаков "%" подряд, оставляя один
                 .replaceAll("%{2,}", "%")

@@ -12,7 +12,6 @@ import com.education.service.email.EmailService;
 import com.education.service.notification.NotificationService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.Level;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +39,7 @@ public class EmailServiceImpl implements EmailService {
         notificationDto.setEmployee(EmployeeDto.builder().id(1L).build());
         notificationService.save(notificationDto);
 
-        log.log(Level.INFO, "Отправлен запрос в очередь по рассылке оповещений");
+        log.info("Отправлен запрос в очередь по рассылке оповещений");
     }
 
     /**

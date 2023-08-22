@@ -1,0 +1,1 @@
+ALTER TABLE IF EXISTS file_pool ADD COLUMN file_type TEXT;

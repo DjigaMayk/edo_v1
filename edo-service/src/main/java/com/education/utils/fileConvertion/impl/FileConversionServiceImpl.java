@@ -34,9 +34,20 @@ public class FileConversionServiceImpl implements FileConversionService {
 
     @Override
     public Map<String, Object> convertFile(MultipartFile multipartFile) {
-        String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename()); //определяем расширение файла
+        //определяем расширение файла
+        String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+//        без конвертации если файл уже в формате pdf
+        if ("pdf".equals(extension)) {
+            try (BufferedInputStream bis = new BufferedInputStream(
+                    new ByteArrayInputStream(multipartFile.getBytes()))) {
+                PdfReader pdf = new PdfReader(bis);
+                int pageCount = pdf.getNumberOfPages();
+                return Map.of("pageCount", pageCount, "file", multipartFile.getBytes());
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
 //        конвертация файлов с расширениями doc, docx
-        if ("doc".equals(extension) || "docx".equals(extension)) {
+        } if ("doc".equals(extension) || "docx".equals(extension)) {
             try (BufferedInputStream buffIs = new BufferedInputStream(
                     new ByteArrayInputStream(multipartFile.getBytes()));
                  ByteArrayOutputStream os = new ByteArrayOutputStream()) {

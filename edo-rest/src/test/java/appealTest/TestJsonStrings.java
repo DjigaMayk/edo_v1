@@ -3,7 +3,7 @@ package appealTest;
 public final class TestJsonStrings {
     public static final String SINGLE_APPEAL = """
             {
-               "id": 1,
+               "id": null,
                "number": "123",
                "annotation": "some annotation",
                "signer": [

@@ -3,6 +3,7 @@ package com.education.email.service;
 import com.education.model.constant.RabbitConstant;
 import com.education.model.dto.AppealDto;
 import com.education.model.dto.EmployeeDto;
+import com.education.model.records.ResolutionDtoAndAppealRecord;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,41 @@ public class EmailQueueListener {
     public void createEmail(Long id) {
         sendNotificationOnAppeal(id);
         log.log(Level.INFO, "Отправлено письмо");
+    }
+
+    @RabbitListener(queues = RabbitConstant.resolutionNotificationQueue)
+    public void resolutionNotificationsListener(ResolutionDtoAndAppealRecord resolutionNotificationInfoRecord) {
+        log.info("appeal id: " + resolutionNotificationInfoRecord.appealDto().getId());
+        log.info("signer FIO: " + resolutionNotificationInfoRecord.resolutionDto().getSigner().getFioNominative());
+        var appealDto = resolutionNotificationInfoRecord.appealDto();
+        var resolutionDto = resolutionNotificationInfoRecord.resolutionDto();
+
+        try {
+            var notificationMailTemplate = "Добрый день, %1$s!\n" +
+                    "Вы являетесь %2$s резолюции в Обращении  с номером "
+                    + appealDto.getNumber() + "\n" + getURIByInstance(getInstance(),
+                    "/byId/" + appealDto.getId()).toURL();
+            sendResolutionNotificationToContributor(resolutionDto.getSigner(),
+                    notificationMailTemplate, "Подписантом");
+            sendResolutionNotificationToContributor(resolutionDto.getCurator(),
+                    notificationMailTemplate, "Куратором");
+            for (EmployeeDto executor : resolutionDto.getExecutors()) {
+                sendResolutionNotificationToContributor(executor,
+                        notificationMailTemplate, "Исполнителем");
+            }
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+        log.info("All notifications was sent");
+    }
+
+    /**
+     * The resolution notification message factory method.
+     */
+    private void sendResolutionNotificationToContributor(EmployeeDto memberDto,
+                                                         String notificationMailTemplate, String role) {
+        emailService.sendSimpleEmail(memberDto.getWorkEmail(), "Уведомление о создании резолюции",
+                notificationMailTemplate.formatted(memberDto.getFioNominative(), role));
     }
 
     /**
@@ -80,4 +116,5 @@ public class EmailQueueListener {
                             greeting));
         }
     }
+
 }

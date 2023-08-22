@@ -1,6 +1,10 @@
 package com.education.email.service.impl;
 
+import com.education.email.FeignClient.EmailFeignClientAppeal;
+import com.education.email.FeignClient.EmailFeignClientEmployee;
 import com.education.email.service.EmailService;
+import com.education.model.dto.AppealDto;
+import com.education.model.dto.EmployeeDto;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
@@ -21,6 +25,35 @@ import java.io.FileNotFoundException;
 @Service
 @AllArgsConstructor
 public class EmailServiceImpl implements EmailService {
+
+    /**
+     * Объект для работы с Appeal
+     */
+    private final EmailFeignClientAppeal clientAppeal;
+
+    /**
+     * Объект для работы с Employee
+     */
+    private final EmailFeignClientEmployee clientEmployee;
+
+    /**
+     * Метод для поиска Appeal в БД
+     * @param id - id Appeal
+     */
+    @Override
+    public AppealDto findByIdAppeal(Long id){
+        return clientAppeal.findById(id);
+    }
+
+    /**
+     * Метод для поиска Employee в БД
+     * @param id - id Employee
+     */
+    @Override
+    public EmployeeDto findByIdEmployee(Long id) {
+        return clientEmployee.findById(id);
+    }
+
     /**
      * Объект для работы с почтой
      */

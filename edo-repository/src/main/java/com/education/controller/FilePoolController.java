@@ -93,7 +93,7 @@ public class FilePoolController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> moveToArchived(@PathVariable("id") Long id) {
         log.info("Got request to move file pool to archive");
-        repository.moveToArchive(id);
+        repository.moveToArchive(id, true);
         return ResponseEntity.ok().build();
     }
 

@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +46,12 @@ public class AppealServiceImpl implements AppealService {
 
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     @Override
+    public Appeal findAppealByQuestionId(Long questionId) {
+        return appealRepository.findAppealByQuestionId(questionId);
+    }
+
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
+    @Override
     public Appeal findByIdNotArchived(Long id) {
         return appealRepository.findByIdNotArchived(id).orElse(null);
     }
@@ -66,7 +70,7 @@ public class AppealServiceImpl implements AppealService {
 
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     @Override
-    public List<Appeal> findAllByIdEmployee(Long id, Long first, Long amount) {
-        return appealRepository.findByIdEmployee(id, first, amount);
+    public List<Appeal> findAllByIdEmployee(Long id, Long startIndex, Long amount) {
+        return appealRepository.findByIdEmployee(id, startIndex, amount);
     }
 }

@@ -14,6 +14,8 @@ public class EmployeeFeignServiceImpl implements EmployeeFeignService {
 
     private final EmployeeFeignClient employeeFeignClient;
 
+    private static final int FIOLENGTH = 3;
+
     @Override
     public EmployeeDto findById(Long id, boolean notArchivedOnly) {
         return employeeFeignClient.getEmployeeById(id, notArchivedOnly);
@@ -36,7 +38,7 @@ public class EmployeeFeignServiceImpl implements EmployeeFeignService {
 
     @Override
     public List<EmployeeDto> findAllByLastNameLikeOrderByLastName(String fio) {
-        return fio.length() < 3 ? null : employeeFeignClient.findAllByLastNameLikeOrderByLastName(fio);
+        return fio.length() < FIOLENGTH ? null : employeeFeignClient.findAllByLastNameLikeOrderByLastName(fio);
     }
 
 }

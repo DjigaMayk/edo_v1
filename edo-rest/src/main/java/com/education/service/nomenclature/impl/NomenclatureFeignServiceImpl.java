@@ -20,6 +20,7 @@ public class NomenclatureFeignServiceImpl implements NomenclatureFeignService {
      */
     private static final String TEMPLATE = "%ЧИС%ГОД-%ЗНАЧ/2";
 
+
     private final NomenclatureFeignClient nomenclatureFeignClient;
 
     /**
@@ -112,8 +113,8 @@ public class NomenclatureFeignServiceImpl implements NomenclatureFeignService {
         }
         Long currentValue = template.getCurrentValue();
         template.setCurrentValue(currentValue + 1);
-        nomenclatureFeignClient.saveNomenclature(template);
-        String year = String.format("%02d", template.getCreationDate().getYear() % 100);
+        client.save(template);
+        String year = String.format("%02d", template.getCreationDate().getYear()%100);
         String day = String.format("%02d", template.getCreationDate().getDayOfMonth());
         return numberFromTemplate
 //  убирает больше двух знаков "%" подряд, оставляя один

@@ -1,5 +1,7 @@
 package com.education.email.service;
 
+import com.education.model.dto.AppealDto;
+import com.education.model.dto.EmployeeDto;
 import jakarta.mail.MessagingException;
 
 import java.io.FileNotFoundException;
@@ -9,6 +11,19 @@ import java.io.FileNotFoundException;
  * Интерфейс для отправки email
  */
 public interface EmailService {
+
+    /**
+     * Метод для поиска Appeal в БД
+     * @param id
+     */
+    AppealDto findByIdAppeal(Long id);
+
+    /**
+     * Метод для поиска Employee в БД
+     * @param id
+     */
+    EmployeeDto findByIdEmployee(Long id);
+
     /**
      * Метод для отправки email без attachment
      * @param toAddress

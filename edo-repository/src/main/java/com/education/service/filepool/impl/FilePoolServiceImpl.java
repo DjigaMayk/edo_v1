@@ -70,8 +70,8 @@ public class FilePoolServiceImpl implements FilePoolService {
      * @param id Long
      */
     @Transactional(rollbackFor = Exception.class)
-    public void moveToArchive(Long id) {
-        repository.moveToArchive(id);
+    public void moveToArchive(Long id, boolean isArchived) {
+        repository.moveToArchive(id, isArchived);
     }
 
     /**

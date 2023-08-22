@@ -1,5 +1,6 @@
 package com.education.configuration;
 
+import org.springframework.amqp.core.Queue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
@@ -13,9 +14,18 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
 
 @Configuration
 public class RabbitMQConfig {
+
+    @Value("${rabbitmq.queue.name}")
+    private String queueName;
+
+    @Bean
+    public Queue employeeQueue() {
+        return new Queue(queueName);
+    }
 
     @Bean
     public MessageConverter jsonMessageConverter(ObjectMapper mapper){

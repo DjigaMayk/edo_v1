@@ -1,13 +1,19 @@
 package com.education.service.facsimile;
 
-import com.education.model.dto.FacsimileDTO;
+import com.education.model.dto.FacsimileDto;
 import com.education.model.dto.FilePoolDto;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface FacsimileService {
-    FacsimileDTO getById(Long id);
+    FacsimileDto findById(Long id);
+
     FilePoolDto saveAsFile(MultipartFile multipartFile);
-    FacsimileDTO save(String jsonFile);
-    FacsimileDTO archiveFacsimile(String jsonFile);
+
+    FacsimileDto save(String jsonFile);
+
+    FacsimileDto archiveFacsimile(String jsonFile);
+
+    FacsimileDto getById(Long id);
+
     boolean isValidate(MultipartFile multipartFile);
 }

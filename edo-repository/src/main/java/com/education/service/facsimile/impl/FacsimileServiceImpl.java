@@ -60,4 +60,15 @@ public class FacsimileServiceImpl implements FacsimileService {
     public Optional<Facsimile> findById(Long id) {
         return facsimileRepository.findById(id);
     }
+
+    /**
+     * Метод для поиска объекта Facsimile по employee_id среди всех записей
+     * @param id employee_id объекта
+     * @return объект Facsimile
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Facsimile findFacsimileByEmployeeId(Long id) {
+        return facsimileRepository.findFacsimileByEmployeeId(id);
+    }
 }

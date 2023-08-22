@@ -1,6 +1,6 @@
 package com.education.controller;
 
-import com.education.model.dto.FacsimileDTO;
+import com.education.model.dto.FacsimileDto;
 import com.education.model.dto.FilePoolDto;
 import com.education.service.facsimile.FacsimileService;
 import io.swagger.annotations.*;
@@ -56,7 +56,7 @@ public class FacsimileController {
      */
     @ApiOperation("Сохранить сущность факсимиле")
     @PostMapping("/")
-    public ResponseEntity<FacsimileDTO> saveFacsimileEntity(@RequestBody String jsonFile) {
+    public ResponseEntity<FacsimileDto> saveFacsimileEntity(@RequestBody String jsonFile) {
         log.info("Request for saving facsimile entity");
         return ResponseEntity.ok().body(facsimileService.save(jsonFile));
     }
@@ -69,7 +69,7 @@ public class FacsimileController {
      */
     @ApiOperation("Архивировать факсимиле")
     @DeleteMapping("/archive")
-    public ResponseEntity<FacsimileDTO> archiveFacsimile(@RequestBody String jsonFile) {
+    public ResponseEntity<FacsimileDto> archiveFacsimile(@RequestBody String jsonFile) {
         log.info("Request to archive facsimile");
         return ResponseEntity.ok().body(facsimileService.archiveFacsimile(jsonFile));
     }

@@ -18,3 +18,4 @@ public interface FilePoolMapper extends Mappable<FilePool, FilePoolDto> {
     @Mapping(target = "creator", ignore = true)
     FilePool toEntity(FilePoolDto filePoolDto);
 }
+

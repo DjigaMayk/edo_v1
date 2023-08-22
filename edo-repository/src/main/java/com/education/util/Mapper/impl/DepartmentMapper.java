@@ -16,3 +16,4 @@ public interface DepartmentMapper extends Mappable<Department, DepartmentDto> {
     @Mapping(target = "department.department", ignore = true)
     Department toEntity(DepartmentDto departmentDto);
 }
+

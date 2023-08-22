@@ -14,7 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FacsimileDTO {
+public class FacsimileDto {
 
     @ApiModelProperty("Id Факсимиле")
     private Long id;
@@ -29,5 +29,5 @@ public class FacsimileDTO {
     private FilePoolDto file;
 
     @ApiModelProperty("Архивирован ли факсимиле")
-    boolean isArchived;
+    private boolean isArchived;
 }

@@ -1,12 +1,23 @@
 package com.education.util.Mapper.impl;
 
-import com.education.entity.*;
-import com.education.model.dto.*;
+import com.education.entity.Appeal;
+import com.education.entity.Employee;
+import com.education.entity.Notification;
+import com.education.entity.Question;
+import com.education.model.dto.AppealDto;
+import com.education.model.dto.EmployeeDto;
+import com.education.model.dto.NotificationDto;
+import com.education.model.dto.QuestionDto;
 import com.education.util.Mapper.Mappable;
+import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.BeanUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring",
         uses ={ RegionMapper.class,

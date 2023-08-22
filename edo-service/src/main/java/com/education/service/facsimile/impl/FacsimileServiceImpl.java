@@ -4,7 +4,6 @@ import com.education.client.FacsimileRestTemplateClient;
 import com.education.client.FileRestTemplateClient;
 import com.education.model.dto.DepartmentDto;
 import com.education.model.dto.EmployeeDto;
-import com.education.model.dto.FacsimileDTO;
 import com.education.model.dto.FacsimileDto;
 import com.education.model.dto.FilePoolDto;
 import com.education.model.enumEntity.EnumFileType;
@@ -102,7 +101,7 @@ public class FacsimileServiceImpl implements FacsimileService {
      * @return facsimileDTO
      */
     @Override
-    public FacsimileDTO save(String jsonFile) {
+    public FacsimileDto save(String jsonFile) {
 
         String lastPathComponent = "/";
         URI uri = generateUri(this.getInstance(), lastPathComponent);
@@ -113,14 +112,14 @@ public class FacsimileServiceImpl implements FacsimileService {
             EmployeeDto employee = objectMapper.treeToValue(jsonNode.get("employee"), EmployeeDto.class);
             DepartmentDto department = objectMapper.treeToValue(jsonNode.get("department"), DepartmentDto.class);
             FilePoolDto filePool = objectMapper.treeToValue(jsonNode.get("file_pool"), FilePoolDto.class);
-            FacsimileDTO facsimileDTO = FacsimileDTO.builder()
+            var facsimileDTO = FacsimileDto.builder()
                     .employee(employee)
                     .department(department)
                     .file(filePool)
                     .isArchived(false)
                     .build();
             var request = new RequestEntity<>(facsimileDTO, HttpMethod.POST, uri);
-            return TEMPLATE.exchange(request, FacsimileDTO.class).getBody();
+            return TEMPLATE.exchange(request, FacsimileDto.class).getBody();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -133,19 +132,19 @@ public class FacsimileServiceImpl implements FacsimileService {
      * @return FacsimileDto
      */
     @Override
-    public FacsimileDTO archiveFacsimile(String jsonFile) {
+    public FacsimileDto archiveFacsimile(String jsonFile) {
         String lastPathComponent = "/archive";
         URI uri = generateUri(this.getInstance(), lastPathComponent);
 
         try {
             JsonNode jsonNode = objectMapper.readTree(jsonFile);
 
-            FacsimileDTO facsimileFromJson = objectMapper.treeToValue(jsonNode.get("facsimile"), FacsimileDTO.class);
-            FacsimileDTO facsimileDTO = getById(facsimileFromJson.getId());
+            FacsimileDto facsimileFromJson = objectMapper.treeToValue(jsonNode.get("facsimile"), FacsimileDto.class);
+            FacsimileDto facsimileDTO = getById(facsimileFromJson.getId());
             facsimileDTO.setArchived(facsimileFromJson.isArchived());
-//            filePoolService.moveToArchive(facsimileDTO.getFile().getId());
+            filePoolService.moveToArchive(facsimileDTO.getFile().getId());
             var request = new RequestEntity<>(facsimileDTO, HttpMethod.DELETE, uri);
-            return TEMPLATE.exchange(request, FacsimileDTO.class).getBody();
+            return TEMPLATE.exchange(request, FacsimileDto.class).getBody();
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -158,11 +157,11 @@ public class FacsimileServiceImpl implements FacsimileService {
      * @return FacsimileDto
      */
     @Override
-    public FacsimileDTO getById(Long id) {
+    public FacsimileDto getById(Long id) {
         String lastPathName = "/" + id;
         URI uri = generateUri(this.getInstance(), lastPathName);
         RequestEntity<Object> request = new RequestEntity<>(null, HttpMethod.GET, uri);
-        return TEMPLATE.exchange(request, FacsimileDTO.class).getBody();
+        return TEMPLATE.exchange(request, FacsimileDto.class).getBody();
     }
 
     /**

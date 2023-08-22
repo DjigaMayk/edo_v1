@@ -1,6 +1,6 @@
 package com.education.service.facsimile.impl;
 
-import com.education.model.dto.FacsimileDTO;
+import com.education.model.dto.FacsimileDto;
 import com.education.model.dto.FilePoolDto;
 import com.education.service.facsimile.FacsimileService;
 import com.netflix.appinfo.InstanceInfo;
@@ -62,12 +62,12 @@ public class FacsimileServiceImpl implements FacsimileService {
      * @return facsimileDTO
      */
     @Override
-    public FacsimileDTO saveFacsimileEntity(String jsonFile) {
+    public FacsimileDto saveFacsimileEntity(String jsonFile) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<>(jsonFile, headers);
         return TEMPLATE.exchange(getDefaultUriComponentBuilder(BASE_URL + "/").build()
-                .toUri(), HttpMethod.POST, request, FacsimileDTO.class).getBody();
+                .toUri(), HttpMethod.POST, request, FacsimileDto.class).getBody();
     }
 
     /**
@@ -77,12 +77,12 @@ public class FacsimileServiceImpl implements FacsimileService {
      * @return FacsimileDto
      */
     @Override
-    public FacsimileDTO archiveFacsimile(String jsonFile) {
+    public FacsimileDto archiveFacsimile(String jsonFile) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<>(jsonFile, headers);
         return TEMPLATE.exchange(getDefaultUriComponentBuilder(BASE_URL + "/archive").build()
-                .toUri(), HttpMethod.DELETE, request, FacsimileDTO.class).getBody();
+                .toUri(), HttpMethod.DELETE, request, FacsimileDto.class).getBody();
     }
 
     /**

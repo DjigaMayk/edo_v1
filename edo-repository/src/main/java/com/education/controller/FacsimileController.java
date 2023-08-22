@@ -1,7 +1,6 @@
 package com.education.controller;
 
 import com.education.entity.Facsimile;
-import com.education.model.dto.FacsimileDTO;
 import com.education.model.dto.FacsimileDto;
 import com.education.service.facsimile.FacsimileService;
 import com.education.service.filepool.FilePoolService;
@@ -39,7 +38,7 @@ public class FacsimileController {
             @ApiResponse(code = 404, message = "Not found - The Facsimile was not found")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<FacsimileDTO> getFacsimile(@PathVariable("id") Long id) {
+    public ResponseEntity<FacsimileDto> getFacsimile(@PathVariable("id") Long id) {
         log.info("Request to get facsimile by id = " + id);
 
         var result = facsimileService.findById(id);
@@ -63,7 +62,7 @@ public class FacsimileController {
             @ApiResponse(code = 201, message = "Successfully added")
     })
     @PostMapping("/")
-    public ResponseEntity<FacsimileDTO> saveFacsimile(@RequestBody Facsimile facsimile) {
+    public ResponseEntity<FacsimileDto> saveFacsimile(@RequestBody Facsimile facsimile) {
         log.info("Request for saving facsimile");
 
         Facsimile facsimileSaved = facsimileService.saveFacsimile(facsimile);
@@ -78,15 +77,16 @@ public class FacsimileController {
 
     @ApiOperation(value = "Архивация факсимиле")
     @DeleteMapping("/archive")
-    public ResponseEntity<FacsimileDTO> archiveFacsimile(@RequestBody Facsimile facsimile) {
+    public ResponseEntity<FacsimileDto> archiveFacsimile(@RequestBody Facsimile facsimile) {
         log.info("Request to archive/unarchive facsimile by id - " + facsimile.getId());
 
         facsimileService.moveInArchive(facsimile.getId(), facsimile.isArchived());
         filePoolService.moveToArchive(facsimile.getFile().getId(), facsimile.isArchived());
-        FacsimileDTO facsimileDTO = facsimileMapper.toDto(facsimile);
+        FacsimileDto facsimileDTO = facsimileMapper.toDto(facsimile);
         facsimileDTO.setArchived(facsimile.isArchived());
         return new ResponseEntity<>(facsimileDTO, HttpStatus.OK);
     }
+
     @ApiOperation("Получить сущность Facsimile по employee_id")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "Facsimile was successfully found"),
             @ApiResponse(code = 404, message = "Facsimile was not found")})

@@ -38,7 +38,6 @@ public class AppealController {
     })
     @PostMapping
     public ResponseEntity<AppealDto> saveAppeal(@RequestBody AppealDto appealDto) {
-
         AppealDto appealAfter = mapper.toDto(appealService.save(mapper.toEntity(appealDto)));
         log.info("Создано ОБРАЩЕНИЕ с id {}", appealAfter.getId());
         return new ResponseEntity<>(appealAfter, HttpStatus.CREATED);

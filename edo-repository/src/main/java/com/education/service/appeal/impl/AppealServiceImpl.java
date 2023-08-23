@@ -4,14 +4,18 @@ import com.education.entity.Appeal;
 import com.education.repository.AppealRepository;
 import com.education.service.appeal.AppealService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AppealServiceImpl implements AppealService {
 
     final AppealRepository appealRepository;
@@ -30,13 +34,11 @@ public class AppealServiceImpl implements AppealService {
         appealRepository.moveToArchive(id);
     }
 
-
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     @Override
     public Appeal findById(Long id) {
-        return appealRepository.findById(id).get();
+        return appealRepository.findById(id).orElse(null);
     }
-
 
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     @Override

@@ -52,5 +52,6 @@ public interface AppealRepository extends JpaRepository<Appeal, Long> {
             " left join resolution r on aq.question_id= r.question_id" +
             " where r.id = :resolutionId)", nativeQuery = true)
     void moveToUnderConsideration(@Param("resolutionId") long resolutionId);
+
 }
 

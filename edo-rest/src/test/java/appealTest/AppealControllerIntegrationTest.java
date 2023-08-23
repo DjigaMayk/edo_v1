@@ -9,12 +9,18 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 
 /**
  * Интеграционный тест отправки appeal.
+ *
  * Для запуска требуется запустить следующие модули:
  * edo-cloud-server
  * edo-service
+ * edo-repository
+ * postgres_SQL
+ * edo_db необходимо заполнить тестовыми данными за исключением раздела resolution:
+ * edo-repository/src/main/resources/db.populating/tables_populating_for_tests.sql
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -28,6 +34,9 @@ public class AppealControllerIntegrationTest {
     private String getRootUrl() {
         return "http://localhost:" + port + "/api/rest/appeal";
     }
+    private String getEditAppealUrl() {
+        return "http://localhost:" + port + "/api/rest/appeal/edit";
+    }
 
     @Test
     public void testSaveSingleAppeal() {
@@ -35,6 +44,26 @@ public class AppealControllerIntegrationTest {
                 .body(TestJsonStrings.SINGLE_APPEAL)
                 .when().post(getRootUrl())
                 .then().statusCode(201);
+    }
+
+    @Test
+    public void testEditSingleAppeal() {
+        given().contentType("application/json")
+                .body(TestJsonStrings.CHANGED_SINGLE_APPEAL)
+                .when().put(getEditAppealUrl())
+                .then()
+                .statusCode(200)
+                .and()
+                .body("annotation", equalTo("some new annotation"));
+    }
+
+    @Test
+    public void testEditSingleAppealWithNotExistsId() {
+        given().contentType("application/json")
+                .body(TestJsonStrings.SINGLE_APPEAL_WITH_NOT_EXISTS_ID)
+                .when().put(getEditAppealUrl())
+                .then()
+                .statusCode(404);
     }
 
     @Test

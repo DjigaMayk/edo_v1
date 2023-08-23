@@ -9,6 +9,8 @@ import java.util.List;
 public interface CreatingAppealService {
     AppealDto createAppeal(AppealDto appealDto);
 
+    AppealDto editAppeal(AppealDto appealDto);
+
     List<AppealAbbreviatedDto> findAllByIdEmployee(Long first, Long amount);
 
     AppealDto findById(Long id);

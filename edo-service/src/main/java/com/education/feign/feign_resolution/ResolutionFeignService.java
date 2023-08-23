@@ -1,4 +1,4 @@
-package com.education.feign.feign_resolution.service;
+package com.education.feign.feign_resolution;
 
 import com.education.model.dto.ResolutionDto;
 import org.springframework.cloud.openfeign.FeignClient;

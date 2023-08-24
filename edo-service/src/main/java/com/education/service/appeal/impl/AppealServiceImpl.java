@@ -15,13 +15,9 @@ import com.education.service.question.QuestionService;
 import com.education.service.region.RegionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpHost;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Date;
 import java.util.List;
@@ -75,7 +71,7 @@ public class AppealServiceImpl implements AppealService {
     public AppealDto findById(Long id) {
         AppealDto response = appealFeignService.findById(id);
         if (response != null && response.getAppealStatus().equals(EnumAppealStatus.NEW)) {
-            amqpTemplate.convertAndSend(RabbitConstant.exchange, RabbitConstant.addressAppealIsRead,
+            amqpTemplate.convertAndSend(RabbitConstant.EXCHANGE, RabbitConstant.ADDRESS_APPEAL_IS_READ,
                     new AppealReadRecord(id, new Date()));
         }
         return response;

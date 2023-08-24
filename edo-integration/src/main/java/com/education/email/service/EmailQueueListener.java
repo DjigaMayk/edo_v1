@@ -1,7 +1,6 @@
 package com.education.email.service;
 
 import com.education.model.constant.RabbitConstant;
-import com.education.model.dto.AppealDto;
 import com.education.model.dto.EmployeeDto;
 import com.education.model.records.ResolutionDtoAndAppealRecord;
 import com.netflix.appinfo.InstanceInfo;
@@ -28,13 +27,13 @@ public class EmailQueueListener {
     private final String BASE_URL = "/api/rest/appeal";
     private final String SERVICE_NAME = "edo-rest";
 
-    @RabbitListener(queues = RabbitConstant.addressCreateEmailQueue)
+    @RabbitListener(queues = RabbitConstant.ADDRESS_CREATE_EMAIL_QUEUE)
     public void createEmail(Long id) {
         sendNotificationOnAppeal(id);
         log.log(Level.INFO, "Отправлено письмо");
     }
 
-    @RabbitListener(queues = RabbitConstant.resolutionNotificationQueue)
+    @RabbitListener(queues = RabbitConstant.RESOLUTION_NOTIFICATION_QUEUE)
     public void resolutionNotificationsListener(ResolutionDtoAndAppealRecord resolutionNotificationInfoRecord) {
         log.info("appeal id: " + resolutionNotificationInfoRecord.appealDto().getId());
         log.info("signer FIO: " + resolutionNotificationInfoRecord.resolutionDto().getSigner().getFioNominative());

@@ -20,12 +20,12 @@ public class RabbitMqConfig {
 
     @Bean
     public Queue newEmailQueue() {
-        return new Queue(RabbitConstant.addressCreateEmailQueue, false);
+        return new Queue(RabbitConstant.ADDRESS_CREATE_EMAIL_QUEUE, false);
     }
 
     @Bean
     public DirectExchange exchange() {
-        return new DirectExchange(RabbitConstant.exchange);
+        return new DirectExchange(RabbitConstant.EXCHANGE);
     }
 
     @Bean
@@ -33,12 +33,12 @@ public class RabbitMqConfig {
         return BindingBuilder
                 .bind(newEmailQueue)
                 .to(exchange)
-                .with(RabbitConstant.addressCreateEmailQueue);
+                .with(RabbitConstant.ADDRESS_CREATE_EMAIL_QUEUE);
     }
 
     @Bean
     public Queue resolutionNotificationQueue() {
-        return new Queue(RabbitConstant.resolutionNotificationQueue, false);
+        return new Queue(RabbitConstant.RESOLUTION_NOTIFICATION_QUEUE, false);
     }
 
     @Bean
@@ -46,7 +46,7 @@ public class RabbitMqConfig {
         return BindingBuilder
                 .bind(resolutionNotificationQueue)
                 .to(exchange)
-                .with(RabbitConstant.resolutionNotificationQueue);
+                .with(RabbitConstant.RESOLUTION_NOTIFICATION_QUEUE);
     }
 
     @Bean

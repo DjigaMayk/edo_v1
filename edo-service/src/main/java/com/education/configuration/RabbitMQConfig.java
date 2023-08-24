@@ -7,7 +7,10 @@ import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
-import org.springframework.amqp.core.*;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -21,22 +24,22 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
     @Bean
     public Queue addressCreateDB() {
-        return new Queue(RabbitConstant.addressCreateDBQueue, false);
+        return new Queue(RabbitConstant.ADDRESS_CREATE_DB_QUEUE, false);
     }
 
     @Bean
     public Queue addressCreateService() {
-        return new Queue(RabbitConstant.addressCreateServiceQueue, false);
+        return new Queue(RabbitConstant.ADDRESS_CREATE_SERVICE_QUEUE, false);
     }
 
     @Bean
     public Queue appealReadService() {
-        return new Queue(RabbitConstant.addressAppealIsRead, false);
+        return new Queue(RabbitConstant.ADDRESS_APPEAL_IS_READ, false);
     }
 
     @Bean
     public DirectExchange exchange() {
-        return new DirectExchange(RabbitConstant.exchange);
+        return new DirectExchange(RabbitConstant.EXCHANGE);
     }
 
     @Bean

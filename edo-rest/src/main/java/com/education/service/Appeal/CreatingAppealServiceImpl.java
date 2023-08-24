@@ -1,26 +1,21 @@
 package com.education.service.Appeal;
 
-import com.education.model.constant.RabbitConstant;
+import com.education.feign.feign_appeal.AppealFeignClient;
 import com.education.model.dto.AppealAbbreviatedDto;
 import com.education.model.dto.AppealDto;
-import com.education.model.enumEntity.EnumAppealStatus;
-import com.education.model.records.AppealReadRecord;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.http.HttpHost;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
-import static org.apache.commons.lang.StringUtils.EMPTY;
+import static com.education.model.enumEntity.EnumAppealStatus.NEW;
 
 @Log4j2
 @Service
@@ -29,7 +24,7 @@ public class CreatingAppealServiceImpl implements CreatingAppealService {
 
     private final RestTemplate TEMPLATE;
     private final EurekaClient EUREKA_CLIENT;
-    private final EnumAppealStatus STATUS_FOR_NEW_APPEAL = EnumAppealStatus.NEW;
+    private final AppealFeignClient appealFeignClient;
 
     private final String BASE_URL = "/api/service/appeal";
 
@@ -52,10 +47,8 @@ public class CreatingAppealServiceImpl implements CreatingAppealService {
 
     @Override
     public AppealDto createAppeal(AppealDto appealDto) {
-        InstanceInfo instanceInfo = getInstance();
-        appealDto.setAppealStatus(STATUS_FOR_NEW_APPEAL);
-        var response = TEMPLATE.postForObject(getURIByInstance(instanceInfo, EMPTY), appealDto, AppealDto.class);
-        return response;
+        appealDto.setAppealStatus(NEW);
+        return appealFeignClient.createAppeal(appealDto);
     }
 
     @Override
@@ -69,22 +62,14 @@ public class CreatingAppealServiceImpl implements CreatingAppealService {
 
     @Override
     public List<AppealAbbreviatedDto> findAllByIdEmployee(Long first, Long amount) {
-        InstanceInfo instanceInfo = getInstance();
-        String path = "/appealsByEmployee/?first=" +
-                first +
-                "&amount=" +
-                amount;
-        var uri = getURIByInstance(instanceInfo, path);
-        AppealAbbreviatedDto[] response = TEMPLATE.getForObject(uri, AppealAbbreviatedDto[].class);
-        return Arrays.asList(response);
+        return appealFeignClient.findAllByIdEmployee(first, amount);
     }
 
     @Override
     public AppealDto findById(Long id) {
         try {
-            return TEMPLATE.getForObject(getURIByInstance(getInstance(),
-                    String.format("/byId/%s", id.toString())), AppealDto.class);
-        } catch (HttpClientErrorException.NotFound e) {
+            return appealFeignClient.findById(id);
+        } catch (FeignException.FeignClientException.NotFound e) {
             return null;
         }
     }

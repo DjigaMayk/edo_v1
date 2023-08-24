@@ -32,7 +32,7 @@ public class EmailServiceImpl implements EmailService {
      */
     @Override
     public void sendNotificationOnAppeal(AppealDto appealDto) {
-        amqpTemplate.convertAndSend(RabbitConstant.exchange, RabbitConstant.addressCreateEmailQueue, appealDto);
+        amqpTemplate.convertAndSend(RabbitConstant.EXCHANGE, RabbitConstant.ADDRESS_CREATE_EMAIL_QUEUE, appealDto);
 
         var notificationDto = new NotificationDto();
         notificationDto.setEnumNotification(EnumNotification.EMAIL);
@@ -55,7 +55,7 @@ public class EmailServiceImpl implements EmailService {
 
         var resolutionNotificationInfoRecord = new ResolutionDtoAndAppealRecord(resolutionDto,
                 appealService.findByQuestion(resolutionDto.getQuestion()));
-        amqpTemplate.convertAndSend(RabbitConstant.exchange, RabbitConstant.resolutionNotificationQueue,
+        amqpTemplate.convertAndSend(RabbitConstant.EXCHANGE, RabbitConstant.RESOLUTION_NOTIFICATION_QUEUE,
                 resolutionNotificationInfoRecord);
 
         log.info("Отправлен запрос в очередь по рассылке " +

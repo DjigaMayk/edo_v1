@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.education.model.constant.RabbitConstant.EXCHANGE;
+
 @Service
 public class EmployeeListener {
 
@@ -22,7 +24,7 @@ public class EmployeeListener {
         this.employeeMapper = employeeMapper;
     }
 
-    @RabbitListener(queues = "${rabbitmq.queue.name}")
+    @RabbitListener(queues = EXCHANGE)
     public void processEmployee(List<EmployeeDto> employeeDtoList) {
         for(EmployeeDto employeeDto : employeeDtoList) {
             Employee employee = employeeMapper.toEntity(employeeDto);

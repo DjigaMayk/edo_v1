@@ -1,9 +1,9 @@
 package com.education.scheduler;
 
+import com.education.DTO.FullEmployeeDto;
 import com.education.mapper.EmployeeDtoMapper;
 import com.education.model.dto.DepartmentDto;
 import com.education.model.dto.EmployeeDto;
-import com.education.DTO.FullEmployeeDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,11 +14,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import static com.education.model.constant.RabbitConstant.*;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static com.education.model.constant.RabbitConstant.EXCHANGE;
+import static com.education.model.constant.RabbitConstant.ROUTING_KEY_SCHEDULER;
 
 @Service
 @RequiredArgsConstructor
@@ -60,8 +63,8 @@ public class EmployeeScheduler {
                     }
 
                     // Send the lists to the queue
-                    rabbitTemplate.convertAndSend(exchange, ROUTING_KEY_SCHEDULER, employeeDtoList);
-                    rabbitTemplate.convertAndSend(exchange, ROUTING_KEY_SCHEDULER, departmentDtoSet);
+                    rabbitTemplate.convertAndSend(EXCHANGE, ROUTING_KEY_SCHEDULER, employeeDtoList);
+                    rabbitTemplate.convertAndSend(EXCHANGE, ROUTING_KEY_SCHEDULER, departmentDtoSet);
                     System.out.println("sent");
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();

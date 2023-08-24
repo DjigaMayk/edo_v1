@@ -1,13 +1,13 @@
 package com.education.model.constant;
 
 public class RabbitConstant {
-    public static final String exchange = "edo.direct";
-    public static final String schedulerQueue = "schedulerQueue";
-    public static final String addressCreateQueue = "address.create.service";
-    public static final String addressCreateDBQueue = "address.create.DB";
-    public static final String addressCreateServiceQueue = "address.create.service";
-    public static final String addressCreateEmailQueue = "email.create.service";
-    public static final String addressAppealIsRead = "appeal.read.service";
-    public static final String resolutionNotificationQueue = "email.createResolution.service";
+    public static final String EXCHANGE = "edo.direct";
+    public static final String SCHEDULER_QUEUE = "schedulerQueue";
+    public static final String ADDRESS_CREATE_SERVICE = "address.create.service";
+    public static final String ADDRESS_CREATE_DB_QUEUE = "address.create.DB";
+    public static final String ADDRESS_CREATE_SERVICE_QUEUE = "address.create.service";
+    public static final String ADDRESS_CREATE_EMAIL_QUEUE = "email.create.service";
+    public static final String ADDRESS_APPEAL_IS_READ = "appeal.read.service";
+    public static final String RESOLUTION_NOTIFICATION_QUEUE = "email.createResolution.service";
     public static final String ROUTING_KEY_SCHEDULER = "schedulerRoutingKey";
 }

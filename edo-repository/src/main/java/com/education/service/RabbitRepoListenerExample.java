@@ -1,8 +1,8 @@
 package com.education.service;
 
 import com.education.entity.Address;
-import com.education.model.dto.AddressDto;
 import com.education.model.constant.RabbitConstant;
+import com.education.model.dto.AddressDto;
 import com.education.repository.AddressRepository;
 import com.education.util.Mapper.impl.AddressMapper;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,8 @@ public class RabbitRepoListenerExample {
     private AddressRepository addressRepository;
 
     private AddressMapper mapper;
-    @RabbitListener(queues = RabbitConstant.addressCreateDBQueue)
+
+    @RabbitListener(queues = RabbitConstant.ADDRESS_CREATE_DB_QUEUE)
     public void createAddress(AddressDto addressDto) {
 
         Address address = mapper.toEntity(addressDto);

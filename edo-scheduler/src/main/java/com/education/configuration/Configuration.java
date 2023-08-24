@@ -13,6 +13,7 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
+
 import static com.education.model.constant.RabbitConstant.*;
 import static com.fasterxml.jackson.databind.DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY;
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
@@ -50,12 +51,12 @@ public class Configuration {
 
     @Bean
     Queue employeeQueue() {
-        return new Queue(schedulerQueue, false);
+        return new Queue(SCHEDULER_QUEUE, false);
     }
 
     @Bean
     DirectExchange exchange() {
-        return new DirectExchange(exchange);
+        return new DirectExchange(EXCHANGE);
     }
 
     @Bean

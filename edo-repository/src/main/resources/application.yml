@@ -22,12 +22,11 @@ spring:
   application:
     name: edo-repository
 server:
-  port: 
+  port: 0
 eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://${spring.flyway.host}:8761/eureka}
-
   instance:
     preferIpAddress: true
     instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${random.value}}

@@ -1,8 +1,10 @@
 security:
   enabled: false
 spring:
-#  profiles:
-#      include: security
+  main:
+    allow-bean-definition-overriding: true
+  #  profiles:
+  #      include: security
   application:
     name: edo-rest
 server:

@@ -3,14 +3,10 @@ package com.education.service;
 import com.education.model.constant.RabbitConstant;
 import com.education.model.dto.AddressDto;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.Level;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,10 +16,10 @@ public class RabbitServiceListenerAndProducerExample {
 
     private AmqpTemplate template;
 
-    @RabbitListener(queues =RabbitConstant.addressCreateQueue)
+    @RabbitListener(queues = RabbitConstant.ADDRESS_CREATE_SERVICE)
     public void getMessage(AddressDto addressDto) {
 
-        template.convertAndSend(RabbitConstant.exchange,RabbitConstant.addressCreateDBQueue, addressDto);
+        template.convertAndSend(RabbitConstant.EXCHANGE, RabbitConstant.ADDRESS_CREATE_DB_QUEUE, addressDto);
         log.log(Level.INFO, "Сущность принята и отправлена в DB " + addressDto.toString());
 
 

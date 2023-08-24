@@ -1,8 +1,11 @@
 security:
   enabled: false
 spring:
-#  profiles:
-#      include: security
+  rabbitmq:
+    password: guest
+    username: guest
+  #  profiles:
+  #      include: security
   jpa:
     properties:
       hibernate:

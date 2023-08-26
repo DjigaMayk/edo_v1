@@ -1,5 +1,6 @@
 package com.education.service.region.impl;
 
+import com.education.feign.feign_region.RegionFeignService;
 import com.education.model.dto.RegionDto;
 import com.education.service.region.RegionService;
 import com.netflix.appinfo.InstanceInfo;
@@ -8,7 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -21,10 +24,9 @@ import java.util.List;
 @Log4j2
 public class RegionServiceImpl implements RegionService {
 
-    private RestTemplate rest;
     private EurekaClient client;
-    private final String BASE_URL = "/api/repository/region";
-    private final String HTTP = "http";
+
+    private final RegionFeignService regionFeignService;
 
     /**
      * Метод для сохранения объекта region в БД.
@@ -33,15 +35,13 @@ public class RegionServiceImpl implements RegionService {
      */
     @Override
     public RegionDto save(RegionDto region) {
-        var request = new RequestEntity(region, HttpMethod.POST, getUri(""));
-
-        var response = rest.exchange(request, RegionDto.class);
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new RuntimeException("Can't save region");
+        var regionDto = regionFeignService.saveRegion(region);
+        if (regionDto == null) {
+            throw new RuntimeException("Регион не сохранен");
         }
-        return response.getBody();
-    }
 
+        return regionDto;
+    }
 
     /**
      * Метод для поиска обращения Region по id.
@@ -51,61 +51,38 @@ public class RegionServiceImpl implements RegionService {
      */
     @Override
     public RegionDto findById(Long id) {
-        var uri = getUri(Long.toString(id));
-        try {
-            return rest.getForObject(uri, RegionDto.class);
-        } catch (Exception e) {
-            return null;
+        var regionDto = regionFeignService.findByIdRegion(id);
+        if (regionDto == null) {
+            throw new RuntimeException("Регион с таким id не найден");
         }
+
+        return regionDto;
     }
 
     /**
-     * Метод поиска списка обращений Region по списку id
+     * Метод получения списка регионов
      *
      * @return List<RegionDto>
      */
     @Override
     public List<RegionDto> findAll() {
-        return getRegionDtos("all");
+        return regionFeignService.findAll();
     }
 
-
     /**
-     * Метод получения списка регионов
+     * Метод для удаления региона по id
      *
-     * @param path
-     * @return List<RegionDto>
+     * @param id
+     * @return HttpStatus
      */
     @Override
-    public List<RegionDto> getRegionDtos(String path) {
-        var uri = getUri(path);
-        var request = new RequestEntity<>(HttpMethod.GET, uri);
-        try {
-            var response
-                    = rest.exchange(request, new ParameterizedTypeReference<List<RegionDto>>() {
-            });
-            return response.getBody();
-        } catch (Exception e) {
-            return null;
+    public HttpStatus deleteByIdRegion(Long id) {
+        var responseEntity = regionFeignService.deleteByIdRegion(id);
+        if (responseEntity.getStatusCode().is4xxClientError()) {
+            throw new RuntimeException("Попытка удалить регион с несуществующим id");
         }
-    }
 
-    /**
-     * Метод для получения URI.
-     *
-     * @param path
-     * @return URI
-     */
-    @Override
-    public URI getUri(String path) {
-        InstanceInfo instance = getInstance();
-        return UriComponentsBuilder
-                .fromPath(BASE_URL + path)
-                .scheme(HTTP)
-                .host(instance.getHostName())
-                .port(instance.getPort())
-                .buildAndExpand(path)
-                .toUri();
+        return HttpStatus.OK;
     }
 
     /**

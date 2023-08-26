@@ -56,18 +56,18 @@ public class RegionController {
     }
 
     @ApiOperation(value = "Получение всех регионов")
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<Region>> findAll() {
         regionService.findAll();
         log.log(Level.INFO, "Получение всех регионов");
         return new ResponseEntity<>(regionService.findAll(), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/byId/{id}")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Сущность найдена и удалена"),
             @ApiResponse(code = 404, message = "Сущность не найдена")
     })
+    @DeleteMapping(value = "/byId/{id}")
     public ResponseEntity<HttpStatus> deleteByIdRegion(@PathVariable Long id) {
         try {
             regionService.delete(id);

@@ -4,6 +4,7 @@ import com.education.model.dto.RegionDto;
 import com.netflix.appinfo.InstanceInfo;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -17,10 +18,9 @@ public interface RegionService {
     RegionDto findById(Long id);
 
     List<RegionDto> findAll();
-    List<RegionDto> getRegionDtos(String path);
-    URI getUri(String path);
+
+    HttpStatus deleteByIdRegion(Long id);
 
     InstanceInfo getInstance();
-
 
 }

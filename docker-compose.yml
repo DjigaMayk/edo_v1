@@ -9,12 +9,13 @@ services:
     image: minio/minio
     ports:
       - 9000:9000
+      - 9001:9001
     environment:
-      - MINIO_ROOT_USER=access_key
-      - MINIO_ROOT_PASSWORD=secret_key
+      - MINIO_ACCESS_KEY=access_key
+      - MINIO_SECRET_KEY=secret_key
     volumes:
       - minio_data:/data
-    command: server /data
+    command: server --console-address :9001 /data
 
   #postgres
   postgres:

@@ -36,11 +36,11 @@ public class FileServiceImpl implements FileService {
      * предварительно сконвертировав его в pdf и наложив facsimile.
      * Создает и возвращает FilePoolDto.
      * Проверить функционал можно следующим образом:
-     * - отправить POST-запрос через Postman на http://127.0.0.1:8080/api/rest/file, приложив факсимиле(в формате .pdf) во вкладке Body.
+     * - отправить POST-запрос через Postman на http://127.0.0.1:8080/api/rest/facsimile, приложив факсимиле(в формате .jpg или .png) во вкладке Body.
      *      В ответ полчаем JSON с необходимым ID факсимиле, по которому его можно найти в таблице БД File_pool
      * - добавить в таблицу БД Facsimile строчку с file_id равным ID факсимиле и employee_id равным 1
      * - отправить POST-запрос через Postman на http://127.0.0.1:8080/api/rest/file, приложив загружаемый документ(в формате pdf/png/jpeg/doc/docx) во вкладке Body.
-     *      В ответ получаем JSON с необходимым UUID документа, который был сконвертирован в pdf, подписан загруженным ранее факисимиле и сохранен в Minio.
+     *      В ответ получаем JSON с необходимым UUID (storageFileId) документа, который был сконвертирован в pdf, подписан загруженным ранее факисимиле и сохранен в Minio.
      * - отправить GET-запрос на http://127.0.0.1:8080/api/rest/file/{UUID документа}
      * - проверить в корневой папке наличие файла MYPDF.pdf
      */
@@ -52,7 +52,10 @@ public class FileServiceImpl implements FileService {
 
         Map<String, Object> convertedFile = fileConversionService.convertFile(multipartFile);
         log.info("Конвертация файла в .pdf завершена");
-        byte [] overlayedFile = facsimileOverlayService.overlay(convertedFile, getFileByUUID(facsimile.getFile().getStorageFileId()));
+        Map<String, Object> convertedFacsimile = fileConversionService.convertFacsimile
+                (getFileByUUID(facsimile.getFile().getStorageFileId()));
+        log.info("Конвертация факсимиле в .pdf завершена");
+        byte [] overlayedFile = facsimileOverlayService.overlay(convertedFile, convertedFacsimile);
         log.info("Наложение факсимиле завершено");
         var savedFileUUID = fileRestTemplateClient.saveFile(overlayedFile);
 

@@ -92,4 +92,10 @@ public class Resolution extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "resolution")
     private List<Deadline> deadlines;
 
+    /**
+     * Признак черновика резолюции
+     */
+    @Column(name = "is_draft")
+    private Boolean isDraft;
+
 }

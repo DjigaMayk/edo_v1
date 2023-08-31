@@ -2,6 +2,7 @@ package com.education.service.resolution.impl;
 
 import com.education.entity.Resolution;
 import com.education.repository.ResolutionRepository;
+import com.education.service.appeal.AppealService;
 import com.education.service.resolution.ResolutionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,12 +16,18 @@ import java.util.List;
 public class ResolutionServiceImpl implements ResolutionService {
 
     final ResolutionRepository resolutionRepository;
+    final private AppealService appealService;
 
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Resolution save(Resolution resolution) {
-        return resolutionRepository.save(resolution);
+        // Если резолюция не является черновиком, то меняем статус обращения на UNDER_CONSIDERATION("На рассмотрении")
+        var resolutionAfter = resolutionRepository.save(resolution);
+        if (!resolutionAfter.getIsDraft()) {
+            appealService.moveToUnderConsideration(resolutionAfter.getId());
+        }
+        return resolutionAfter;
     }
 
     @Transactional(rollbackFor = Exception.class)

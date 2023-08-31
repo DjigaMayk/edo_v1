@@ -9,12 +9,16 @@ import org.springframework.stereotype.Service;
 @Log4j2
 @Service
 @RequiredArgsConstructor
-public class ResolutionServiceImpl implements ResolutionService{
+public class ResolutionServiceImpl implements ResolutionService {
 
     private final ResolutionFeignClient resolutionFeignClient;
 
     @Override
     public ResolutionDto save(ResolutionDto resolutionDto) {
+        // Если явно не указали, что резолюция является черновиком, то устанавливаем полю isDraft значение true
+        if (resolutionDto.getIsDraft() == null) {
+            resolutionDto.setIsDraft(true);
+        }
         return resolutionFeignClient.save(resolutionDto);
     }
 }

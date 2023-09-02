@@ -7,11 +7,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -54,6 +53,12 @@ public class AppealServiceImpl implements AppealService {
 
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     @Override
+    public Appeal findAppealByResolutionId(Long resolutionId) {
+        return appealRepository.findAppealByResolutionId(resolutionId);
+    }
+
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
+    @Override
     public Appeal findByIdNotArchived(Long id) {
         return appealRepository.findByIdNotArchived(id).orElse(null);
     }
@@ -68,6 +73,18 @@ public class AppealServiceImpl implements AppealService {
     @Override
     public void moveToUnderConsideration(Long resolutionId) {
         appealRepository.moveToUnderConsideration(resolutionId);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void moveToRegistered(Long id) {
+        appealRepository.moveToRegistered(id);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void moveToNew(Long id) {
+        appealRepository.moveToNew(id);
     }
 
     @Transactional(readOnly = true, rollbackFor = Exception.class)

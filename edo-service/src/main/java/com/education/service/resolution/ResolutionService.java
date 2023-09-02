@@ -16,4 +16,6 @@ public interface ResolutionService {
     ResolutionDto findByIdNotArchived(Long id);
 
     List<ResolutionDto> findAllByIdNotArchived(Iterable<Long> ids);
+
+    List<ResolutionDto> findAllByAppealIdNotArchived(Long appealId);
 }

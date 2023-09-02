@@ -121,4 +121,20 @@ public class ResolutionController {
         log.log(Level.INFO, "Сущности найдены");
         return new ResponseEntity<>(mapper.toDto(resolution), HttpStatus.OK);
     }
+
+    @ApiOperation(value = "Получение сущностей по id обращения без даты архивации ")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Сущности найдены"),
+            @ApiResponse(code = 404, message = "Сущности не найдены")
+    })
+    @GetMapping(value = "/allByAppealIdNotArchived/{appealId}")
+    public ResponseEntity<List<ResolutionDto>> findAllByAppealIdNotArchived(@PathVariable Long appealId) {
+        List<Resolution> resolution = resolutionService.findAllByAppealIdNotArchived(appealId);
+        if (resolution == null && resolution.isEmpty()) {
+            log.log(Level.WARN, "Сущности не найдены");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        log.log(Level.INFO, "Сущности найдены");
+        return new ResponseEntity<>(mapper.toDto(resolution), HttpStatus.OK);
+    }
 }

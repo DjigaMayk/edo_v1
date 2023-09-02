@@ -144,6 +144,22 @@ public class AppealController {
         return new ResponseEntity<>(appeal, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Получение сущности Appeal по резолюции")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Сущность найдена"),
+            @ApiResponse(code = 404, message = "Сущность не найдена")
+    })
+    @GetMapping(value = "/byResolutionId/{resolutionId}")
+    public ResponseEntity<AppealDto> findAppealByResolutionId(@PathVariable Long resolutionId) {
+        var appeal = appealService.findAppealByResolutionId(resolutionId);
+        if (appeal == null) {
+            log.warn("Сущность не найдена");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        log.info("Сущность найдена");
+        return new ResponseEntity<>(appeal, HttpStatus.OK);
+    }
+
     @ExceptionHandler
     public ResponseEntity<String> validationHandler(AppealNotValidException e) {
 

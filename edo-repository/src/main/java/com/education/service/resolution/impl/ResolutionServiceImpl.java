@@ -54,4 +54,10 @@ public class ResolutionServiceImpl implements ResolutionService {
         return resolutionRepository.findAllByIdNotArchived(ids);
 
     }
+
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
+    @Override
+    public List<Resolution> findAllByAppealIdNotArchived(Long appealId) {
+        return resolutionRepository.findAllByAppealIdNotArchived(appealId);
+    }
 }

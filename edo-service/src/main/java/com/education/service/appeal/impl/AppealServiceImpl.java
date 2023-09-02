@@ -102,6 +102,21 @@ public class AppealServiceImpl implements AppealService {
         return appealFeignService.findByQuestionId(questionDto.getId());
     }
 
+    @Override
+    public AppealDto findAppealByResolutionId(Long resolutionId) {
+        return appealFeignService.findAppealByResolutionId(resolutionId);
+    }
+
+    @Override
+    public void moveToRegistered(Long id) {
+        appealFeignService.moveToRegistered(id);
+    }
+
+    @Override
+    public void moveToNew(Long id) {
+        appealFeignService.moveToNew(id);
+    }
+
     private String validateAppealDto(AppealDto appealDto) {
 
         final String emailRegEx = "\\w+@\\w+\\.\\w+";

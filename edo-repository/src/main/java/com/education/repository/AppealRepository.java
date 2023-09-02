@@ -4,6 +4,7 @@ import com.education.entity.Appeal;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -37,12 +38,19 @@ public interface AppealRepository extends JpaRepository<Appeal, Long> {
     Appeal findAppealByQuestionId(@Param("questionId") Long questionId);
 
     @Query(nativeQuery = true,
+            value = "SELECT a FROM appeal a " +
+                    "LEFT JOIN employee e ON a.creator_id = e.id " +
+                    "WHERE e.id = :id ORDER BY a.id OFFSET :startIndex LIMIT :amount")
+    List<Appeal> findByIdEmployee(@Param(value = "id") Long id,
+                                  @Param(value = "startIndex") Long startIndex,
+                                  @Param(value = "amount") Long amount);
+
+    @Query(nativeQuery = true,
             value = "SELECT a.* FROM appeal a " +
-            "LEFT JOIN employee e ON a.creator_id = e.id " +
-            "WHERE e.id = :id ORDER BY a.id OFFSET :startIndex LIMIT :amount")
-    List<Appeal> findByIdEmployee(@Param(value = "id")Long id,
-                                  @Param(value = "startIndex")Long startIndex,
-                                  @Param(value = "amount")Long amount);
+                    "LEFT JOIN appeal_question aq on a.id = aq.appeal_id " +
+                    "LEFT JOIN resolution r on aq.question_id = r.question_id " +
+                    "WHERE r.id = :resolutionId")
+    Appeal findAppealByResolutionId(@Param("resolutionId") Long resolutionId);
 
 
     @Modifying
@@ -51,7 +59,17 @@ public interface AppealRepository extends JpaRepository<Appeal, Long> {
             " left join appeal_question aq on a.id = aq.appeal_id" +
             " left join resolution r on aq.question_id= r.question_id" +
             " where r.id = :resolutionId)", nativeQuery = true)
-    void moveToUnderConsideration(@Param("resolutionId") long resolutionId);
+    void moveToUnderConsideration(@Param("resolutionId") Long resolutionId);
+
+    @Modifying
+    @Query(nativeQuery = true,
+            value = "UPDATE appeal SET appeal_status = 'REGISTERED' where id = :id")
+    void moveToRegistered(@Param("id") Long id);
+
+    @Modifying
+    @Query(nativeQuery = true,
+            value = "UPDATE appeal SET appeal_status = 'NEW' where id = :id")
+    void moveToNew(@Param("id") Long id);
 
 }
 

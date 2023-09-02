@@ -33,4 +33,13 @@ public interface AppealFeignService {
 
     @GetMapping(value = "/byQuestionId/{questionId}")
     AppealDto findByQuestionId(@PathVariable("questionId") Long questionId);
+
+    @GetMapping(value = "byResolutionId/{resolutionId}")
+    AppealDto findAppealByResolutionId(@PathVariable("resolutionId") Long resolutionId);
+
+    @PutMapping(value = "/toRegistered/{id}")
+    void moveToRegistered(@PathVariable("id") Long id);
+
+    @PutMapping(value = "/toNew/{id}")
+    void moveToNew(@PathVariable("id") Long id);
 }

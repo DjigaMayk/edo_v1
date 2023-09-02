@@ -21,5 +21,11 @@ public interface AppealService {
 
     List<AppealAbbreviatedDto> findAllByIdEmployee(Long startIndex, Long amount);
 
-    AppealDto findByQuestion (QuestionDto questionDto);
+    AppealDto findByQuestion(QuestionDto questionDto);
+
+    AppealDto findAppealByResolutionId(Long resolutionId);
+
+    void moveToRegistered(Long id);
+
+    void moveToNew(Long id);
 }

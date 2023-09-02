@@ -149,10 +149,48 @@ public class AppealController {
     public ResponseEntity<AppealDto> findAppealByQuestion(@PathVariable Long questionId) {
         Appeal appeal = appealService.findAppealByQuestionId(questionId);
         if (appeal == null) {
-            log.info("Сущность не найдена");
+            log.warn("Сущность не найдена");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         log.info("Сущность найдена");
         return new ResponseEntity<>(mapper.toDto(appeal), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Получение сущности по резолюции")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Сущность найдена"),
+            @ApiResponse(code = 404, message = "Сущность не найдена")
+    })
+    @GetMapping(value = "/byResolutionId/{resolutionId}")
+    public ResponseEntity<AppealDto> findAppealByResolutionId(@PathVariable Long resolutionId) {
+        var appeal = appealService.findAppealByResolutionId(resolutionId);
+        if (appeal == null) {
+            log.warn("Сущность не найдена");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        log.info("Сущность найдена");
+        return new ResponseEntity<>(mapper.toDto(appeal), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Изменение статуса обращения на REGISTERED")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Сущность изменена"),
+    })
+    @PutMapping("/toRegistered/{id}")
+    public ResponseEntity<HttpStatus> moveToRegistered(@PathVariable Long id) {
+        appealService.moveToRegistered(id);
+        log.log(Level.INFO, "Статус обращения изменен");
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Изменение статуса обращения на NEW")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Сущность изменена"),
+    })
+    @PutMapping("/toNew/{id}")
+    public ResponseEntity<HttpStatus> moveToNew(@PathVariable Long id) {
+        appealService.moveToNew(id);
+        log.log(Level.INFO, "Статус обращения изменен");
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

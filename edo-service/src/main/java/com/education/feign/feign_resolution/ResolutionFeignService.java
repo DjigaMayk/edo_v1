@@ -28,4 +28,7 @@ public interface ResolutionFeignService {
 
     @GetMapping(value = "/allNotArchived/{ids}")
     List<ResolutionDto> findAllByIdNotArchived(@PathVariable("ids") Iterable<Long> ids);
+
+    @GetMapping(value = "/allByAppealIdNotArchived/{appealId}")
+    List<ResolutionDto> findAllByAppealIdNotArchived(@PathVariable("appealId") Long appealId);
 }

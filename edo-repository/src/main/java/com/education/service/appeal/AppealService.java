@@ -22,5 +22,11 @@ public interface AppealService {
 
     Appeal findAppealByQuestionId(Long questionId);
 
+    Appeal findAppealByResolutionId(Long resolutionId);
+
     void moveToUnderConsideration(Long resolutionId);
+
+    void moveToRegistered(Long id);
+
+    void moveToNew(Long id);
 }

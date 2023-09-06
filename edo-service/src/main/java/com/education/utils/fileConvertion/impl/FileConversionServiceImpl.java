@@ -1,7 +1,6 @@
 package com.education.utils.fileConvertion.impl;
 
 import com.education.utils.fileConvertion.FileConversionService;
-import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -32,6 +31,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class FileConversionServiceImpl implements FileConversionService {
 
+    private final String pageCountKey = "pageCount";
+    private final String fileKey = "file";
+    private final String facsimileKey = "facsimile";
+
     @Override
     public Map<String, Object> convertFile(MultipartFile multipartFile) {
         //определяем расширение файла
@@ -41,8 +44,8 @@ public class FileConversionServiceImpl implements FileConversionService {
             try (var bis = new BufferedInputStream(
                     new ByteArrayInputStream(multipartFile.getBytes()))) {
                 var pdf = new PdfReader(bis);
-                int pageCount = pdf.getNumberOfPages();
-                return Map.of("pageCount", pageCount, "file", multipartFile.getBytes());
+                int pageCountValue = pdf.getNumberOfPages();
+                return Map.of(pageCountKey, pageCountValue, fileKey, multipartFile.getBytes());
             } catch (Throwable e) {
                 e.printStackTrace();
             }
@@ -55,9 +58,9 @@ public class FileConversionServiceImpl implements FileConversionService {
                 var wordMLPackage = WordprocessingMLPackage.load(buffIs);
                 Docx4J.toPDF(wordMLPackage, os);
                 var pdf = new PdfReader(os.toByteArray());
-                int pageCount = pdf.getNumberOfPages();
+                int pageCountValue = pdf.getNumberOfPages();
                 os.flush();
-                return Map.of("pageCount", pageCount, "file", os.toByteArray());
+                return Map.of(pageCountKey, pageCountValue, fileKey, os.toByteArray());
             } catch (Throwable e) {
                 e.printStackTrace();
             }
@@ -66,12 +69,12 @@ public class FileConversionServiceImpl implements FileConversionService {
             try (var buffIs = new BufferedInputStream(
                     new ByteArrayInputStream(multipartFile.getBytes()));
                  var os = new ByteArrayOutputStream()) {
-                return convertJpgAndPng(os, buffIs, "file");
+                return convertJpgAndPng(os, buffIs, fileKey);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        return Map.of("pageCount", 0, "file", new byte[0]);
+        return Map.of(pageCountKey, 0, fileKey, new byte[0]);
     }
 
     @Override
@@ -79,11 +82,11 @@ public class FileConversionServiceImpl implements FileConversionService {
         try (var buffIs = new BufferedInputStream(
                 new ByteArrayInputStream(facsimile));
              var os = new ByteArrayOutputStream()) {
-            return convertJpgAndPng(os, buffIs, "facsimile");
+            return convertJpgAndPng(os, buffIs, facsimileKey);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return Map.of("pageCount", 0, "facsimile", new byte[0]);
+        return Map.of(pageCountKey, 0, facsimileKey, new byte[0]);
     }
 
     private Map<String, Object> convertJpgAndPng(ByteArrayOutputStream os, BufferedInputStream buffIs,
@@ -94,8 +97,8 @@ public class FileConversionServiceImpl implements FileConversionService {
         var data = ImageDataFactory.create(buffIs.readAllBytes());
         var image = new Image(data);
         document.add(image);
-        int pageCount = document.getPdfDocument().getNumberOfPages();
+        int pageCountValue = document.getPdfDocument().getNumberOfPages();
         document.close();
-        return Map.of("pageCount", pageCount, key, os.toByteArray());
+        return Map.of(pageCountKey, pageCountValue, key, os.toByteArray());
     }
 }

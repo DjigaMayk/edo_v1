@@ -52,8 +52,8 @@ public class FileServiceImpl implements FileService {
 
         Map<String, Object> convertedFile = fileConversionService.convertFile(multipartFile);
         log.info("Конвертация файла в .pdf завершена");
-        Map<String, Object> convertedFacsimile = fileConversionService.convertFacsimile
-                (getFileByUUID(facsimile.getFile().getStorageFileId()));
+        Map<String, Object> convertedFacsimile =
+                fileConversionService.convertFacsimile(getFileByUUID(facsimile.getFile().getStorageFileId()));
         log.info("Конвертация факсимиле в .pdf завершена");
         byte [] overlayedFile = facsimileOverlayService.overlay(convertedFile, convertedFacsimile);
         log.info("Наложение факсимиле завершено");

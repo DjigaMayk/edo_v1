@@ -5,6 +5,7 @@ import com.education.model.dto.ResolutionDto;
 import com.education.service.appeal.AppealService;
 import com.education.service.resolution.ResolutionService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang.BooleanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class ResolutionServiceImpl implements ResolutionService {
 
     /**
      * Метод для сохранения резолюции
+     * Если явно не указали, что резолюция является черновиком, то устанавливаем полю isDraft значение true.
      * Если резолюция не является черновиком, то статус обращения менятся на UNDER_CONSIDERATION("На рассмотрении").
      *
      * @param resolutionDto
@@ -25,8 +27,11 @@ public class ResolutionServiceImpl implements ResolutionService {
      */
     @Override
     public ResolutionDto save(ResolutionDto resolutionDto) {
+        if (resolutionDto.getIsDraft() == null) {
+            resolutionDto.setIsDraft(true);
+        }
         var resolutionAfter = resolutionFeignService.save(resolutionDto);
-        if (!resolutionAfter.getIsDraft()) {
+        if (BooleanUtils.isNotTrue(resolutionDto.getIsDraft())) {
             appealService.moveToUnderConsideration(resolutionAfter.getId());
         }
         return resolutionAfter;

@@ -15,10 +15,6 @@ public class ResolutionServiceImpl implements ResolutionService {
 
     @Override
     public ResolutionDto save(ResolutionDto resolutionDto) {
-        // Если явно не указали, что резолюция является черновиком, то устанавливаем полю isDraft значение true
-        if (resolutionDto.getIsDraft() == null) {
-            resolutionDto.setIsDraft(true);
-        }
         return resolutionFeignClient.save(resolutionDto);
     }
 }

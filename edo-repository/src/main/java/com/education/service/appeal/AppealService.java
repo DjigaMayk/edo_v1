@@ -26,7 +26,5 @@ public interface AppealService {
 
     void moveToUnderConsideration(Long resolutionId);
 
-    void moveToRegistered(Long id);
-
-    void moveToNew(Long id);
+    void moveToNewOrRegistered(Long id, String appealStatus);
 }

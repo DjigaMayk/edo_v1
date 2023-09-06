@@ -37,9 +37,7 @@ public interface AppealFeignService {
     @GetMapping(value = "byResolutionId/{resolutionId}")
     AppealDto findAppealByResolutionId(@PathVariable("resolutionId") Long resolutionId);
 
-    @PutMapping(value = "/toRegistered/{id}")
-    void moveToRegistered(@PathVariable("id") Long id);
-
-    @PutMapping(value = "/toNew/{id}")
-    void moveToNew(@PathVariable("id") Long id);
+    @PutMapping("/toNewOrRegistered/")
+    void moveToNewOrRegistered(@RequestParam("id") Long id,
+                          @RequestParam("appealStatus") String appealStatus);
 }

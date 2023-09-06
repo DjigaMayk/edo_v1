@@ -2,10 +2,12 @@ package com.education.service.resolution.impl;
 
 import com.education.feign.feign_resolution.ResolutionFeignService;
 import com.education.model.dto.ResolutionDto;
+import com.education.model.enumEntity.EnumAppealStatus;
 import com.education.service.appeal.AppealService;
 import com.education.service.resolution.ResolutionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -32,12 +34,10 @@ public class ResolutionServiceImpl implements ResolutionService {
     public void moveToArchive(Long id) {
         resolutionFeignService.moveToArchive(id);
         var appeal = appealService.findAppealByResolutionId(id);
-        if (findAllByAppealIdNotArchived(appeal.getId()).isEmpty()) {
-            if (appeal.getRegistrationDate() != null) {
-                appealService.moveToRegistered(appeal.getId());
-            } else {
-                appealService.moveToNew(appeal.getId());
-            }
+        if (CollectionUtils.isEmpty(findAllByAppealIdNotArchived(appeal.getId()))) {
+            String appealStatus = appeal.getRegistrationDate() == null ? EnumAppealStatus.NEW.toString() :
+                    EnumAppealStatus.REGISTERED.toString();
+            appealService.moveToNewOrRegistered(appeal.getId(), appealStatus);
         }
     }
 

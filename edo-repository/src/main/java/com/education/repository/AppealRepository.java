@@ -38,7 +38,7 @@ public interface AppealRepository extends JpaRepository<Appeal, Long> {
     Appeal findAppealByQuestionId(@Param("questionId") Long questionId);
 
     @Query(nativeQuery = true,
-            value = "SELECT a FROM appeal a " +
+            value = "SELECT a.* FROM appeal a " +
                     "LEFT JOIN employee e ON a.creator_id = e.id " +
                     "WHERE e.id = :id ORDER BY a.id OFFSET :startIndex LIMIT :amount")
     List<Appeal> findByIdEmployee(@Param(value = "id") Long id,
@@ -63,13 +63,9 @@ public interface AppealRepository extends JpaRepository<Appeal, Long> {
 
     @Modifying
     @Query(nativeQuery = true,
-            value = "UPDATE appeal SET appeal_status = 'REGISTERED' where id = :id")
-    void moveToRegistered(@Param("id") Long id);
-
-    @Modifying
-    @Query(nativeQuery = true,
-            value = "UPDATE appeal SET appeal_status = 'NEW' where id = :id")
-    void moveToNew(@Param("id") Long id);
+            value = "UPDATE appeal SET appeal_status = :appealStatus where id = :id")
+    void moveToNewOrRegistered(@Param("id") Long id,
+                               @Param("appealStatus") String appealStatus);
 
 }
 

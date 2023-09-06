@@ -108,13 +108,8 @@ public class AppealServiceImpl implements AppealService {
     }
 
     @Override
-    public void moveToRegistered(Long id) {
-        appealFeignService.moveToRegistered(id);
-    }
-
-    @Override
-    public void moveToNew(Long id) {
-        appealFeignService.moveToNew(id);
+    public void moveToNewOrRegistered(Long id, String appealStatus) {
+        appealFeignService.moveToNewOrRegistered(id, appealStatus);
     }
 
     private String validateAppealDto(AppealDto appealDto) {

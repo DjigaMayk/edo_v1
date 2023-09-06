@@ -77,14 +77,8 @@ public class AppealServiceImpl implements AppealService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void moveToRegistered(Long id) {
-        appealRepository.moveToRegistered(id);
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void moveToNew(Long id) {
-        appealRepository.moveToNew(id);
+    public void moveToNewOrRegistered(Long id, String appealStatus) {
+        appealRepository.moveToNewOrRegistered(id, appealStatus);
     }
 
     @Transactional(readOnly = true, rollbackFor = Exception.class)

@@ -172,25 +172,16 @@ public class AppealController {
         return new ResponseEntity<>(mapper.toDto(appeal), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Изменение статуса обращения на REGISTERED")
+    @ApiOperation(value = "Изменение статуса обращения на NEW или REGISTERED")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Сущность изменена"),
     })
-    @PutMapping("/toRegistered/{id}")
-    public ResponseEntity<HttpStatus> moveToRegistered(@PathVariable Long id) {
-        appealService.moveToRegistered(id);
-        log.log(Level.INFO, "Статус обращения изменен");
+    @PutMapping("/toNewOrRegistered/")
+    public ResponseEntity<HttpStatus> moveToNewOrRegistered(@RequestParam("id") Long id,
+                                                       @RequestParam("appealStatus") String appealStatus) {
+        appealService.moveToNewOrRegistered(id, appealStatus);
+        log.info("Статус обращения изменен");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Изменение статуса обращения на NEW")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Сущность изменена"),
-    })
-    @PutMapping("/toNew/{id}")
-    public ResponseEntity<HttpStatus> moveToNew(@PathVariable Long id) {
-        appealService.moveToNew(id);
-        log.log(Level.INFO, "Статус обращения изменен");
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }

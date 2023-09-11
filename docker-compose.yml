@@ -1,0 +1,47 @@
+#Докер файл для созданный для запуска 4 сервисов: minio, postgres, rabbitMQ и keycloak
+
+#Для запуска всех сервисов нажимаем на двойную стрелку
+#Для запуска отдельных сервисов нажимаем стрелку напротив нужного
+version: '3'
+services:
+  minio:
+    image: minio/minio
+    ports:
+      - 9000:9000
+      - 9001:9001
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    volumes:
+      - minio_data:/data
+    command: server --console-address :9001 /data && mc mb myminio/test
+
+  postgres:
+    ports:
+      - "5432:5432"
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=edo_db
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0.1
+    ports:
+      - 8080:8080
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    command: start-dev
+
+volumes:
+  minio_data:

@@ -15,11 +15,11 @@ import java.util.Map;
 public class FacsimileOverlayServiceImpl implements FacsimileOverlayService {
 
     @Override
-    public byte[] overlay(Map<String, Object> map, byte[] bytes) {
+    public byte[] overlay(Map<String, Object> fileMap, Map<String, Object> facsimileMap) {
         try (BufferedInputStream bis = new BufferedInputStream(
-                new ByteArrayInputStream((byte[]) map.get("file")));
+                new ByteArrayInputStream((byte[]) fileMap.get("file")));
              BufferedInputStream bis2 = new BufferedInputStream(
-                new ByteArrayInputStream(bytes));
+                new ByteArrayInputStream((byte[]) facsimileMap.get("facsimile")));
              PDDocument facsimile = PDDocument.load(bis2);
              PDDocument originalDoc = PDDocument.load(bis);
              OverlayClone overlayObj = new OverlayClone();

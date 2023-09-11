@@ -1,7 +1,6 @@
 package com.education.controller;
 
 import com.education.model.dto.ResolutionDto;
-import com.education.service.appeal.AppealService;
 import com.education.service.resolution.ResolutionService;
 import com.education.util.Mapper.impl.ResolutionMapper;
 import io.swagger.annotations.ApiOperation;
@@ -26,7 +25,6 @@ public class ResolutionController {
 
     final private ResolutionMapper mapper;
     final private ResolutionService resolutionService;
-    final private AppealService appealService;
 
     @ApiOperation(value = "Сохранение сущности в БД")
     @ApiResponses(value = {
@@ -37,8 +35,6 @@ public class ResolutionController {
     public ResponseEntity<ResolutionDto> saveResolution(@RequestBody ResolutionDto resolutionDto) {
         Resolution resolutionAfter = resolutionService.save(mapper.toEntity(resolutionDto));
         if (resolutionAfter.getId() != null) {
-            //при создании резолюции меняем статус обращения на UNDER_CONSIDERATION("На рассмотрении")
-            appealService.moveToUnderConsideration(resolutionAfter.getId());
             log.info("Сущность сохранена или обновлена");
             return new ResponseEntity<>(mapper.toDto(resolutionAfter), HttpStatus.CREATED);
         }

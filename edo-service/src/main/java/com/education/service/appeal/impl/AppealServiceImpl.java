@@ -112,6 +112,11 @@ public class AppealServiceImpl implements AppealService {
         appealFeignService.moveToNewOrRegistered(id, appealStatus);
     }
 
+    @Override
+    public void moveToUnderConsideration(Long id) {
+        appealFeignService.moveToUnderConsideration(id);
+    }
+
     private String validateAppealDto(AppealDto appealDto) {
 
         final String emailRegEx = "\\w+@\\w+\\.\\w+";

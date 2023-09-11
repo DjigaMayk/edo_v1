@@ -178,10 +178,20 @@ public class AppealController {
     })
     @PutMapping("/toNewOrRegistered/")
     public ResponseEntity<HttpStatus> moveToNewOrRegistered(@RequestParam("id") Long id,
-                                                       @RequestParam("appealStatus") String appealStatus) {
+                                                            @RequestParam("appealStatus") String appealStatus) {
         appealService.moveToNewOrRegistered(id, appealStatus);
         log.info("Статус обращения изменен");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Изменение статуса обращения на UNDER_CONSIDERATION")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Сущность изменена"),
+    })
+    @PutMapping("/toUnderConsideration/{id}")
+    public ResponseEntity<HttpStatus> moveToUnderConsideration(@PathVariable Long id) {
+        appealService.moveToUnderConsideration(id);
+        log.log(Level.INFO, "Статус обращения изменен");
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

@@ -33,4 +33,7 @@ public interface AppealFeignService {
 
     @GetMapping(value = "/byQuestionId/{questionId}")
     AppealDto findByQuestionId(@PathVariable("questionId") Long questionId);
+
+    @PutMapping(value = "/toUnderConsideration/{id}")
+    void moveToUnderConsideration(@PathVariable Long id);
 }

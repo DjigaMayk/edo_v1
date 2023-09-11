@@ -21,5 +21,7 @@ public interface AppealService {
 
     List<AppealAbbreviatedDto> findAllByIdEmployee(Long startIndex, Long amount);
 
-    AppealDto findByQuestion (QuestionDto questionDto);
+    AppealDto findByQuestion(QuestionDto questionDto);
+
+    void moveToUnderConsideration(Long id);
 }

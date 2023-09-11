@@ -155,4 +155,15 @@ public class AppealController {
         log.info("Сущность найдена");
         return new ResponseEntity<>(mapper.toDto(appeal), HttpStatus.OK);
     }
+
+    @ApiOperation(value = "Изменение статуса обращения на UNDER_CONSIDERATION")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Сущность изменена"),
+    })
+    @PutMapping("/toUnderConsideration/{id}")
+    public ResponseEntity<HttpStatus> moveToUnderConsideration(@PathVariable Long id) {
+        appealService.moveToUnderConsideration(id);
+        log.log(Level.INFO, "Статус обращения изменен");
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

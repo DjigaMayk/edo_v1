@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Log4j2
 @Service
 @RequiredArgsConstructor
-public class ResolutionServiceImpl implements ResolutionService{
+public class ResolutionServiceImpl implements ResolutionService {
 
     private final ResolutionFeignClient resolutionFeignClient;
 

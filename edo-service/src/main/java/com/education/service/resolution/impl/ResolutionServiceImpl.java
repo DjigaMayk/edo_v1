@@ -2,10 +2,11 @@ package com.education.service.resolution.impl;
 
 import com.education.feign.feign_resolution.ResolutionFeignService;
 import com.education.model.dto.ResolutionDto;
-import com.education.model.enumEntity.EnumAppealStatus;
 import com.education.service.appeal.AppealService;
+import com.education.model.enumEntity.EnumAppealStatus;
 import com.education.service.resolution.ResolutionService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang.BooleanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -18,9 +19,24 @@ public class ResolutionServiceImpl implements ResolutionService {
     private final ResolutionFeignService resolutionFeignService;
     private final AppealService appealService;
 
+    /**
+     * Метод для сохранения резолюции
+     * Если явно не указали, что резолюция является черновиком, то устанавливаем полю isDraft значение true.
+     * Если резолюция не является черновиком, то статус обращения менятся на UNDER_CONSIDERATION("На рассмотрении").
+     *
+     * @param resolutionDto
+     * @return
+     */
     @Override
-    public ResolutionDto save(ResolutionDto resolution) {
-        return resolutionFeignService.save(resolution);
+    public ResolutionDto save(ResolutionDto resolutionDto) {
+        if (resolutionDto.getIsDraft() == null) {
+            resolutionDto.setIsDraft(true);
+        }
+        var resolutionAfter = resolutionFeignService.save(resolutionDto);
+        if (BooleanUtils.isNotTrue(resolutionDto.getIsDraft())) {
+            appealService.moveToUnderConsideration(resolutionAfter.getId());
+        }
+        return resolutionAfter;
     }
 
     /**
@@ -35,8 +51,9 @@ public class ResolutionServiceImpl implements ResolutionService {
         resolutionFeignService.moveToArchive(id);
         var appeal = appealService.findAppealByResolutionId(id);
         if (CollectionUtils.isEmpty(findAllByAppealIdNotArchived(appeal.getId()))) {
-            String appealStatus = appeal.getRegistrationDate() == null ? EnumAppealStatus.NEW.toString() :
-                    EnumAppealStatus.REGISTERED.toString();
+            String appealStatus = appeal.getRegistrationDate() == null
+                    ? EnumAppealStatus.NEW.toString()
+                    : EnumAppealStatus.REGISTERED.toString();
             appealService.moveToNewOrRegistered(appeal.getId(), appealStatus);
         }
     }

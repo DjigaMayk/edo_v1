@@ -39,5 +39,8 @@ public interface AppealFeignService {
 
     @PutMapping("/toNewOrRegistered/")
     void moveToNewOrRegistered(@RequestParam("id") Long id,
-                          @RequestParam("appealStatus") String appealStatus);
+                               @RequestParam("appealStatus") String appealStatus);
+
+    @PutMapping(value = "/toUnderConsideration/{id}")
+    void moveToUnderConsideration(@PathVariable Long id);
 }

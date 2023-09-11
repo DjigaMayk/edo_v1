@@ -4,6 +4,7 @@ import com.education.model.enumEntity.EnumResolution;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -47,5 +48,8 @@ public class ResolutionDto {
 
     @ApiModelProperty("Список дедлайнов")
     private List<DeadlineDto> deadlines;
+
+    @ApiModelProperty("Признак черновика резолюции")
+    private Boolean isDraft;
 
 }

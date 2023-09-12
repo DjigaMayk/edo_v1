@@ -34,4 +34,7 @@ public interface ResolutionFeignService {
 
     @GetMapping(value = "/allByAppealIdNotArchived/{appealId}")
     List<ResolutionDto> findAllByAppealIdNotArchived(@PathVariable("appealId") Long appealId);
+
+    @GetMapping(value = "/getResolutionDraftStatus/{id}")
+    Boolean isDraft(@PathVariable("id") Long id);
 }

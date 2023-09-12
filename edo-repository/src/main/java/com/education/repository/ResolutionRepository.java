@@ -40,4 +40,8 @@ public interface ResolutionRepository extends JpaRepository<Resolution, Long> {
                     "left join appeal_question aq on r.question_id = aq.question_id " +
                     "left join appeal a on aq.appeal_id = a.id where a.id = :appealId and r.archived_date is null")
     List<Resolution> findAllByAppealIdNotArchived(@Param("appealId") Long appealId);
+
+    @Query(nativeQuery = true,
+            value = "SELECT is_draft from resolution where id = :id")
+    Optional<Boolean> isDraft(@Param("id") Long id);
 }

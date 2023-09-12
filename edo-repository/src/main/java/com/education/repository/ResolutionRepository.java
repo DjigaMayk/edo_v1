@@ -29,4 +29,10 @@ public interface ResolutionRepository extends JpaRepository<Resolution, Long> {
     @Query(value = "select r from Resolution r where r.id in :ids and r.archivedDate is null ")
     @EntityGraph(attributePaths = {"creator", "signer", "executors", "curator"})
     List<Resolution> findAllByIdNotArchived(@Param("ids") Iterable<Long> ids);
+
+    @Query(nativeQuery = true,
+            value = "select r.* from resolution r " +
+                    "left join appeal_question aq on r.question_id = aq.question_id " +
+                    "left join appeal a on aq.appeal_id = a.id where a.id = :appealId and r.archived_date is null")
+    List<Resolution> findAllByAppealIdNotArchived(@Param("appealId") Long appealId);
 }

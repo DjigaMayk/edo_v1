@@ -23,5 +23,9 @@ public interface AppealService {
 
     AppealDto findByQuestion(QuestionDto questionDto);
 
+    AppealDto findAppealByResolutionId(Long resolutionId);
+
+    void moveToNewOrRegistered(Long id, String appealStatus);
+
     void moveToUnderConsideration(Long id);
 }

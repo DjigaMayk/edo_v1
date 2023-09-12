@@ -149,11 +149,39 @@ public class AppealController {
     public ResponseEntity<AppealDto> findAppealByQuestion(@PathVariable Long questionId) {
         Appeal appeal = appealService.findAppealByQuestionId(questionId);
         if (appeal == null) {
-            log.info("Сущность не найдена");
+            log.warn("Сущность не найдена");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         log.info("Сущность найдена");
         return new ResponseEntity<>(mapper.toDto(appeal), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Получение сущности по резолюции")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Сущность найдена"),
+            @ApiResponse(code = 404, message = "Сущность не найдена")
+    })
+    @GetMapping(value = "/byResolutionId/{resolutionId}")
+    public ResponseEntity<AppealDto> findAppealByResolutionId(@PathVariable Long resolutionId) {
+        var appeal = appealService.findAppealByResolutionId(resolutionId);
+        if (appeal == null) {
+            log.warn("Сущность не найдена");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        log.info("Сущность найдена");
+        return new ResponseEntity<>(mapper.toDto(appeal), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Изменение статуса обращения на NEW или REGISTERED")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Сущность изменена"),
+    })
+    @PutMapping("/toNewOrRegistered/")
+    public ResponseEntity<HttpStatus> moveToNewOrRegistered(@RequestParam("id") Long id,
+                                                            @RequestParam("appealStatus") String appealStatus) {
+        appealService.moveToNewOrRegistered(id, appealStatus);
+        log.info("Статус обращения изменен");
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ApiOperation(value = "Изменение статуса обращения на UNDER_CONSIDERATION")

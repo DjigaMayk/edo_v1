@@ -103,6 +103,16 @@ public class AppealServiceImpl implements AppealService {
     }
 
     @Override
+    public AppealDto findAppealByResolutionId(Long resolutionId) {
+        return appealFeignService.findAppealByResolutionId(resolutionId);
+    }
+
+    @Override
+    public void moveToNewOrRegistered(Long id, String appealStatus) {
+        appealFeignService.moveToNewOrRegistered(id, appealStatus);
+    }
+
+    @Override
     public void moveToUnderConsideration(Long id) {
         appealFeignService.moveToUnderConsideration(id);
     }

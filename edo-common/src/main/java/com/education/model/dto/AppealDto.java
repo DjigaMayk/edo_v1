@@ -3,8 +3,6 @@ package com.education.model.dto;
 import com.education.model.enumEntity.EnumAppealStatus;
 import com.education.model.enumEntity.EnumWayToAnswer;
 import com.education.model.enumEntity.EnumWayToReceive;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -30,6 +28,9 @@ public class AppealDto {
 
     @ApiModelProperty("Дата архивирования обращения")
     private ZonedDateTime archivedDate;
+
+    @ApiModelProperty("Дата регистрации обращения")
+    private ZonedDateTime registrationDate;
 
     @ApiModelProperty("Номер обращения")
     private String number;

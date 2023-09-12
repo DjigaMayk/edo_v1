@@ -47,7 +47,7 @@ values (now(), 'Осы залетают в окно', 6);
 
 insert into resolution (creation_date, resolution_name, creator_id, signer_id,
                         curator_id, question_id, is_draft)
-values (now(), 'Запрос', '1', '1', '1', '1', false);
+values (now(), 'REQUEST', '1', '1', '1', '1', false);
 
 -- Заполнение таблицы file_pool тестовыми данными
 

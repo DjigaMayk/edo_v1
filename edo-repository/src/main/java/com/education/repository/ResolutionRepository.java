@@ -22,6 +22,11 @@ public interface ResolutionRepository extends JpaRepository<Resolution, Long> {
             nativeQuery = true)
     void moveToArchive(@Param("id") Long id);
 
+    @Modifying
+    @Query(value = "UPDATE resolution SET archived_date = null where id = :id",
+            nativeQuery = true)
+    void removeFromArchive(@Param("id") Long id);
+
     @Query("select r from Resolution r where r.id = :id and r.archivedDate is null")
     @EntityGraph(attributePaths = {"creator", "signer", "executors", "curator"})
     Optional<Resolution> findByIdNotArchived(@Param("id") Long id);

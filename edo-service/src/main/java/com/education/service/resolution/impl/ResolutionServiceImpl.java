@@ -58,6 +58,23 @@ public class ResolutionServiceImpl implements ResolutionService {
         }
     }
 
+    /**
+     * Метод для удаления резолюции из архива.
+     * После удаления резолюции из архива метод проверяет, есть ли у этого обращения еще незаархивированные резолюции.
+     * Если разархивируемая резолюция единственная, и она не является черновиком, то статус обращения меняется на UNDER_CONSIDERATION.
+     *
+     * @param id идентификатор резолюции, удаляемой из архива
+     */
+    public void removeFromArchive(Long id) {
+        resolutionFeignService.removeFromArchive(id);
+        var appeal = appealService.findAppealByResolutionId(id);
+        var resolutions = findAllByAppealIdNotArchived(appeal.getId());
+        if (resolutions != null && resolutions.size() == 1
+                && BooleanUtils.isFalse(findById(id).getIsDraft())) {
+            appealService.moveToUnderConsideration(appeal.getId());
+        }
+    }
+
     @Override
     public ResolutionDto findById(Long id) {
         return resolutionFeignService.findById(id);

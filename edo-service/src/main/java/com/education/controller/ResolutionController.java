@@ -51,6 +51,17 @@ public class ResolutionController {
         return new ResponseEntity<>(resolutionService.findById(id), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Удаление даты архивации")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Сущность изменена"),
+    })
+    @PutMapping("/fromArchive/{id}")
+    public ResponseEntity<ResolutionDto> removeFromArchiveResolution(@ApiParam("id") @PathVariable Long id) {
+        resolutionService.removeFromArchive(id);
+        log.log(Level.INFO, "Дата архивации удалена");
+        return new ResponseEntity<>(resolutionService.findById(id), HttpStatus.OK);
+    }
+
     @ApiOperation(value = "Получение сущности по id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Сущность найдена"),

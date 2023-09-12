@@ -29,6 +29,11 @@ public class ResolutionServiceImpl implements ResolutionService {
         resolutionRepository.moveToArchive(id);
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void removeFromArchive(Long id) {
+        resolutionRepository.removeFromArchive(id);
+    }
 
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     @Override

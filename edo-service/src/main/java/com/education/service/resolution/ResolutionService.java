@@ -9,6 +9,8 @@ public interface ResolutionService {
 
     void moveToArchive(Long id);
 
+    void removeFromArchive(Long id);
+
     ResolutionDto findById(Long id);
 
     List<ResolutionDto> findAllById(Iterable<Long> ids);

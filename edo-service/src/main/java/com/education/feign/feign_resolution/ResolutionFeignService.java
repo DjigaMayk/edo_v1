@@ -17,6 +17,9 @@ public interface ResolutionFeignService {
     @PutMapping("/toArchive/{id}")
     void moveToArchive(@PathVariable("id") Long id);
 
+    @PutMapping("/fromArchive/{id}")
+    void removeFromArchive(@PathVariable("id") Long id);
+
     @GetMapping("/byId/{id}")
     ResolutionDto findById(@PathVariable("id") Long id);
 
@@ -31,4 +34,7 @@ public interface ResolutionFeignService {
 
     @GetMapping(value = "/allByAppealIdNotArchived/{appealId}")
     List<ResolutionDto> findAllByAppealIdNotArchived(@PathVariable("appealId") Long appealId);
+
+    @GetMapping(value = "/isDraft/{id}")
+    Boolean isDraft(@PathVariable("id") Long id);
 }

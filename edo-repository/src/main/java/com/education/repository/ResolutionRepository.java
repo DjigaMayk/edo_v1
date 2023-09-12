@@ -22,6 +22,11 @@ public interface ResolutionRepository extends JpaRepository<Resolution, Long> {
             nativeQuery = true)
     void moveToArchive(@Param("id") Long id);
 
+    @Modifying
+    @Query(value = "UPDATE resolution SET archived_date = null where id = :id",
+            nativeQuery = true)
+    void removeFromArchive(@Param("id") Long id);
+
     @Query("select r from Resolution r where r.id = :id and r.archivedDate is null")
     @EntityGraph(attributePaths = {"creator", "signer", "executors", "curator"})
     Optional<Resolution> findByIdNotArchived(@Param("id") Long id);
@@ -35,4 +40,8 @@ public interface ResolutionRepository extends JpaRepository<Resolution, Long> {
                     "left join appeal_question aq on r.question_id = aq.question_id " +
                     "left join appeal a on aq.appeal_id = a.id where a.id = :appealId and r.archived_date is null")
     List<Resolution> findAllByAppealIdNotArchived(@Param("appealId") Long appealId);
+
+    @Query(nativeQuery = true,
+            value = "SELECT is_draft from resolution where id = :id")
+    Optional<Boolean> isDraft(@Param("id") Long id);
 }

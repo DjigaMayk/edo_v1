@@ -144,4 +144,16 @@ public class ResolutionController {
         log.log(Level.INFO, "Сущности найдены");
         return new ResponseEntity<>(mapper.toDto(resolution), HttpStatus.OK);
     }
+
+    @ApiOperation(value = "Получение статуса черновика резолюции по id ")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Сущность найдены"),
+            @ApiResponse(code = 404, message = "Сущностьне найдены")
+    })
+    @GetMapping(value = "/isDraft/{id}")
+    public ResponseEntity<Boolean> isDraft(@PathVariable Long id) {
+        Boolean isDraft = resolutionService.isDraft(id);
+        log.log(Level.INFO, "Статус получен");
+        return new ResponseEntity<>(isDraft, HttpStatus.OK);
+    }
 }

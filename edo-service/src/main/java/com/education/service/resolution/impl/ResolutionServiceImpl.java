@@ -69,8 +69,8 @@ public class ResolutionServiceImpl implements ResolutionService {
         resolutionFeignService.removeFromArchive(id);
         var appeal = appealService.findAppealByResolutionId(id);
         var resolutions = findAllByAppealIdNotArchived(appeal.getId());
-        if (resolutions != null && resolutions.size() == 1
-                && BooleanUtils.isFalse(findById(id).getIsDraft())) {
+        if (!CollectionUtils.isEmpty(resolutions) && resolutions.size() == 1
+                && !resolutionFeignService.isDraft(id)) {
             appealService.moveToUnderConsideration(appeal.getId());
         }
     }

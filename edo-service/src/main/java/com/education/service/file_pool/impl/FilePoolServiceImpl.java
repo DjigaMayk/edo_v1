@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -57,9 +58,10 @@ public class FilePoolServiceImpl implements FilePoolService {
     public FilePoolDto add(FilePoolDto filePoolDto) {
         URI uri = generateUri(this.getInstance(), "/");
         RequestEntity<Object> request = new RequestEntity(filePoolDto, HttpMethod.POST, uri);
-        return restTemplate.exchange(request, FilePoolDto.class)
+        var uuid =  restTemplate.exchange(request, String.class)
                 .getBody();
-
+log.info(uuid);
+return new FilePoolDto();
     }
 
     /**

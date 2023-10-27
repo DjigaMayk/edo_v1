@@ -1,11 +1,11 @@
 package com.education.service.file.impl;
 
-import com.education.client.FacsimileRestTemplateClient;
 import com.education.client.FileRestTemplateClient;
 import com.education.model.dto.EmployeeDto;
 import com.education.model.dto.FacsimileDto;
 import com.education.model.dto.FilePoolDto;
 import com.education.model.enumEntity.EnumFileType;
+import com.education.service.facsimile.impl.FacsimileServiceImpl;
 import com.education.service.file.FileService;
 import com.education.service.file_pool.FilePoolService;
 import com.education.utils.fileConvertion.FacsimileOverlayService;
@@ -15,6 +15,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.Map;
 import java.util.UUID;
 
@@ -30,7 +31,7 @@ public class FileServiceImpl implements FileService {
     private final FileConversionService fileConversionService;
     private final FacsimileOverlayService facsimileOverlayService;
     private final FileRestTemplateClient fileRestTemplateClient;
-    private final FacsimileRestTemplateClient facsimileRestTemplateClient;
+    private final FacsimileServiceImpl facsimileService;
     /**
      * Метод сохраняет полученный файл в файловое хранилище,
      * предварительно сконвертировав его в pdf и наложив facsimile.
@@ -48,7 +49,7 @@ public class FileServiceImpl implements FileService {
     public FilePoolDto saveFile(MultipartFile multipartFile) {
 
         // Ищем факсимиле, принадлежащее employee с id = 1
-        FacsimileDto facsimile = facsimileRestTemplateClient.getFacsimileByEmployeeId(1L);
+        FacsimileDto facsimile = facsimileService.getFacsimileByEmployeeId(1L);
 
         Map<String, Object> convertedFile = fileConversionService.convertFile(multipartFile);
         log.info("Конвертация файла в .pdf завершена");

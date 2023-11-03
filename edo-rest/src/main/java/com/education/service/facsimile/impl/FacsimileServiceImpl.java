@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Log4j2
 @RequiredArgsConstructor
 public class FacsimileServiceImpl implements FacsimileService {
-    private final FacsimileFeignClient FEIGN;
+    private final FacsimileFeignClient feignClient;
 
     /**
      * Method for saving Facsimile in file-storage
@@ -27,7 +27,7 @@ public class FacsimileServiceImpl implements FacsimileService {
      */
     @Override
     public FilePoolDto saveFacsimile(MultipartFile multipartFile) {
-        return FEIGN.saveFacsimile(multipartFile);
+        return feignClient.saveFacsimile(multipartFile);
     }
 
     /**
@@ -38,7 +38,7 @@ public class FacsimileServiceImpl implements FacsimileService {
      */
     @Override
     public FacsimileDto saveFacsimileEntity(String jsonFile) {
-        return FEIGN.saveFacsimileEntity(jsonFile);
+        return feignClient.saveFacsimileEntity(jsonFile);
     }
 
     /**
@@ -49,6 +49,6 @@ public class FacsimileServiceImpl implements FacsimileService {
      */
     @Override
     public FacsimileDto archiveFacsimile(String jsonFile) {
-        return FEIGN.archiveFacsimile(jsonFile);
+        return feignClient.archiveFacsimile(jsonFile);
     }
 }

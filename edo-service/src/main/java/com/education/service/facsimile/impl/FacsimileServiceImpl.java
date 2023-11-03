@@ -44,7 +44,7 @@ public class FacsimileServiceImpl implements FacsimileService {
     /**
      * Client for sending and receiving requests
      */
-    private final FacsimileFeignService FEIGN;
+    private final FacsimileFeignService feignClient;
 
 
     /**
@@ -90,7 +90,7 @@ public class FacsimileServiceImpl implements FacsimileService {
                     .file(filePool)
                     .isArchived(false)
                     .build();
-            return FEIGN.saveFacsimile(facsimileDTO);
+            return feignClient.saveFacsimile(facsimileDTO);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -110,7 +110,7 @@ public class FacsimileServiceImpl implements FacsimileService {
             FacsimileDto facsimileDTO = getById(facsimileFromJson.getId());
             facsimileDTO.setArchived(facsimileFromJson.isArchived());
             filePoolService.moveToArchive(facsimileDTO.getFile().getId());
-            return FEIGN.archiveFacsimile(facsimileDTO);
+            return feignClient.archiveFacsimile(facsimileDTO);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -124,7 +124,7 @@ public class FacsimileServiceImpl implements FacsimileService {
      */
     @Override
     public FacsimileDto getById(Long id) {
-        return FEIGN.getFacsimile(id);
+        return feignClient.getFacsimile(id);
     }
 
 
@@ -137,8 +137,9 @@ public class FacsimileServiceImpl implements FacsimileService {
      */
     public FacsimileDto getFacsimileByEmployeeId(Long id) {
         try {
-            return FEIGN.getFacsimileByEmployeeId(id);
+            return feignClient.getFacsimileByEmployeeId(id);
         } catch (HttpClientErrorException.NotFound e) {
+            log.info("Пользователь с id: " + id + " не найден");
             return null;
         }
     }

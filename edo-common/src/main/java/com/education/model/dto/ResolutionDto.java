@@ -1,14 +1,13 @@
 package com.education.model.dto;
 
 import com.education.model.enumEntity.EnumResolution;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.ZonedDateTime;
 import java.util.List;
 
-@ApiModel("DTO для POJO класса Resolution")
+@Schema(description = "DTO для POJO класса Resolution")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -16,40 +15,40 @@ import java.util.List;
 @Builder
 public class ResolutionDto {
 
-    @ApiModelProperty("Id резолюции")
+    @Schema(description = "Id резолюции")
     private Long id;
 
-    @ApiModelProperty("Дата создания резолюции")
+    @Schema(description = "Дата создания резолюции")
     private ZonedDateTime creationDate;
 
-    @ApiModelProperty("Дата создания резолюции")
+    @Schema(description = "Дата создания резолюции")
     private ZonedDateTime archivedDate;
 
-    @ApiModelProperty("Дата последнего события")
+    @Schema(description = "Дата последнего события")
     private ZonedDateTime lastActionDate;
 
-    @ApiModelProperty("Переменная отражающая тип решения")
+    @Schema(description = "Переменная отражающая тип решения")
     private EnumResolution enumResolution;
 
-    @ApiModelProperty("Работник создавший резолюцию")
+    @Schema(description = "Работник создавший резолюцию")
     private EmployeeDto creator;
 
-    @ApiModelProperty("Работник подписывающий документ")
+    @Schema(description = "Работник подписывающий документ")
     private EmployeeDto signer;
 
-    @ApiModelProperty("Работники выполняющие решение")
+    @Schema(description = "Работники выполняющие решение")
     private List<EmployeeDto> executors;
 
-    @ApiModelProperty("Работник курирующий работу")
+    @Schema(description = "Работник курирующий работу")
     private EmployeeDto curator;
 
-    @ApiModelProperty("Вопрос, к которому относится резолюция")
+    @Schema(description = "Вопрос, к которому относится резолюция")
     private QuestionDto question;
 
-    @ApiModelProperty("Список дедлайнов")
+    @Schema(description = "Список дедлайнов")
     private List<DeadlineDto> deadlines;
 
-    @ApiModelProperty("Признак черновика резолюции")
+    @Schema(description = "Признак черновика резолюции")
     private Boolean isDraft;
 
 }

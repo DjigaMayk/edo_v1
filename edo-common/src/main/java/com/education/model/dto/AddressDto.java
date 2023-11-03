@@ -1,39 +1,47 @@
 package com.education.model.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-@ApiModel("Класс AddressDto, dto для класса Address.class")
+@Schema(description = "Класс AddressDto, dto для класса Address.class")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
 public class AddressDto {
-    @ApiModelProperty("Id")
+
+    @Schema(description = "Id")
     private Long id;
 
-    @ApiModelProperty("Полный адрес")
+    @Schema(description = "Полный адрес")
     private String fullAddress;
-    @ApiModelProperty("Улица")
-    private String street;
-    @ApiModelProperty("Номер дома")
-    private String house;
-    @ApiModelProperty("Индекс")
-    private String index;
-    @ApiModelProperty("Корпус")
-    private String housing;
-    @ApiModelProperty("Строение")
-    private String building;
-    @ApiModelProperty("Город")
-    private String city;
-    @ApiModelProperty("Регион")
-    private String region;
-    @ApiModelProperty("Страна")
-    private String country;
-    @ApiModelProperty("Этаж")
-    private String flat;
 
+    @Schema(description = "Улица")
+    private String street;
+
+    @Schema(description = "Номер дома")
+    private String house;
+
+    @Schema(description = "Индекс")
+    private String index;
+
+    @Schema(description = "Корпус")
+    private String housing;
+
+    @Schema(description = "Строение")
+    private String building;
+
+    @Schema(description = "Город")
+    private String city;
+
+    @Schema(description = "Регион")
+    private String region;
+
+    @Schema(description = "Страна")
+    private String country;
+
+    @Schema(description = "Этаж")
+    private String flat;
 
 }

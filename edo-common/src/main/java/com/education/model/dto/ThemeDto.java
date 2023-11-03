@@ -1,12 +1,7 @@
 package com.education.model.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
 import java.time.ZonedDateTime;
 
@@ -15,24 +10,25 @@ import java.time.ZonedDateTime;
 @Getter
 @Setter
 @ToString
-@ApiModel("Класс ThemeDto, DTO для класса Theme.class")
+@Schema(description = "Класс ThemeDto, DTO для класса Theme.class")
 public class ThemeDto {
 
-    @ApiModelProperty("id темы обращения")
+    @Schema(description = "id темы обращения")
     private Long id;
 
-    @ApiModelProperty("Название темы обращения")
+    @Schema(description = "Название темы обращения")
     private String name;
 
-    @ApiModelProperty("Дата создания темы")
+    @Schema(description = "Дата создания темы")
     private ZonedDateTime creationDate;
 
-    @ApiModelProperty("Дата архивации темы")
+    @Schema(description = "Дата архивации темы")
     private ZonedDateTime archivedDate;
 
-    @ApiModelProperty("Код темы")
+    @Schema(description = "Код темы")
     private String code;
 
-    @ApiModelProperty("Родительская тема")
+    @Schema(description = "Родительская тема",hidden = true)
     private ThemeDto parentThemeDto;
+
 }

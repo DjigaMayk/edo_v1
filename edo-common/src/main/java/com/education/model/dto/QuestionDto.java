@@ -1,37 +1,43 @@
 package com.education.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
 import java.time.ZonedDateTime;
 import java.util.List;
+
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
-@ApiModel("Класс QuestionDto - DTO для Question.class")
+@Schema(description = "Класс QuestionDto - DTO для Question.class")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @SuperBuilder
 public class QuestionDto {
-    @ApiModelProperty("Id обращения")
+
+    @Schema(description = "Id обращения")
     private Long id;
 
-    @ApiModelProperty("Дата создания обращения")
+    @Schema(description = "Дата создания обращения")
     private ZonedDateTime creationDate;
 
-    @ApiModelProperty("Дата архивирования обращения")
+    @Schema(description = "Дата архивирования обращения")
     private ZonedDateTime archivedDate;
 
-    @ApiModelProperty("Краткое содержание обращения")
+    @Schema(description = "Краткое содержание обращения")
     private String summary;
 
-    @ApiModelProperty("Список резолюций по вопросу")
+    @Schema(description = "Список резолюций по вопросу")
     @JsonInclude(NON_NULL)
     private List<ResolutionDto> resolutions;
 
-    @ApiModelProperty("Тема, к которой относится вопрос")
+    @Schema(description = "Тема, к которой относится вопрос")
     private ThemeDto theme;
+
 }

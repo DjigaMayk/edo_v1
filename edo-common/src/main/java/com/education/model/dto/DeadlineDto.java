@@ -1,13 +1,15 @@
 package com.education.model.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.ZonedDateTime;
 
-@ApiModel("Класс DeadlineDto - DTO для Deadline.class")
+@Schema(description = "Класс DeadlineDto - DTO для Deadline.class")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -15,16 +17,16 @@ import java.time.ZonedDateTime;
 @SuperBuilder
 public class DeadlineDto {
 
-    @ApiModelProperty("id дедлайна")
+    @Schema(description = "id дедлайна")
     private Long id;
 
-    @ApiModelProperty("Дата дедлайна")
+    @Schema(description = "Дата дедлайна")
     private ZonedDateTime date;
 
-    @ApiModelProperty("Причина переноса")
+    @Schema(description = "Причина переноса")
     private String comment;
 
-    @ApiModelProperty("Резолюция, к которой относится дедлайн")
+    @Schema(description = "Резолюция, к которой относится дедлайн",hidden = true)
     private ResolutionDto resolution;
 
 }

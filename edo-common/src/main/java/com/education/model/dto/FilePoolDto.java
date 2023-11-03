@@ -1,41 +1,48 @@
 package com.education.model.dto;
 
 import com.education.model.enumEntity.EnumFileType;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-@ApiModel("Класс FilePoolDto, dto для класса FilePool.class")
+@Schema(description = "Класс FilePoolDto, dto для класса FilePool.class")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 public class FilePoolDto {
-    @ApiModelProperty("ID")
+
+    @Schema(description = "ID")
     private Long id;
-    @ApiModelProperty("ID хранилища файла")
+
+    @Schema(description = "ID хранилища файла")
     private UUID storageFileId;
-    @ApiModelProperty("Имя хранилища файла")
+
+    @Schema(description = "Имя хранилища файла")
     private String name;
-    @ApiModelProperty("Расширение файла")
+
+    @Schema(description = "Расширение файла")
     private String extension;
-    @ApiModelProperty("Тип файла")
+
+    @Schema(description = "Тип файла")
     private EnumFileType fileType;
-    @ApiModelProperty("Размер файла")
+
+    @Schema(description = "Размер файла")
     private Integer size;
-    @ApiModelProperty("Количество страниц файла")
+
+    @Schema(description = "Количество страниц файла")
     private Integer pageCount;
 
-    @ApiModelProperty("Дата загрузки файла")
+    @Schema(description = "Дата загрузки файла")
     private ZonedDateTime uploadDate;
 
-    @ApiModelProperty("Дата архивирования файла")
+    @Schema(description = "Дата архивирования файла")
     private ZonedDateTime archivedDate;
-    @ApiModelProperty("Автор файла")
+
+    @Schema(description = "Автор файла")
     private EmployeeDto creator;
+
 }

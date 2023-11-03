@@ -1,33 +1,41 @@
 package com.education.model.dto;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.ZonedDateTime;
 
-@ApiModel("Класс RegionDto, dto для класса Region.class")
+@Schema(description = "Класс RegionDto, dto для класса Region.class")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
 public class RegionDto {
-    @ApiModelProperty("Идентификатор")
+
+    @Schema(description = "Идентификатор")
     private Long id;
-    @ApiModelProperty("Идентификатор региона из внешних систем")
+
+    @Schema(description = "Идентификатор региона из внешних систем")
     private String externalId;
-    @ApiModelProperty("Название региона")
+
+    @Schema(description = "Название региона")
     private String regionName;
-    @ApiModelProperty("Дата архивации")
+
+    @Schema(description = "Дата архивации")
     private ZonedDateTime archivedDate;
-    @ApiModelProperty("Количество")
+
+    @Schema(description = "Количество")
     private String quantity;
-    @ApiModelProperty("ID федерального округа")
+
+    @Schema(description = "ID федерального округа")
     private FederalDistrictDto federalDistrict;
-    @ApiModelProperty("Количество первичных отделений в регионе")
+
+    @Schema(description = "Количество первичных отделений в регионе")
     private String numberOfPrimaryBranches;
-    @ApiModelProperty("Количество местных отделений в регионе")
+
+    @Schema(description = "Количество местных отделений в регионе")
     private String numberOfLocalBranches;
+
 }

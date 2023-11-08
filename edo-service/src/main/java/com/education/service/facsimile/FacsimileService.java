@@ -5,7 +5,7 @@ import com.education.model.dto.FilePoolDto;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface FacsimileService {
-    FacsimileDto findById(Long id);
+    FacsimileDto getFacsimileByEmployeeId(Long id);
 
     FilePoolDto saveAsFile(MultipartFile multipartFile);
 

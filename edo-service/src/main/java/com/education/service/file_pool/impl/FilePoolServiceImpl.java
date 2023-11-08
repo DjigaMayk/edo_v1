@@ -59,7 +59,6 @@ public class FilePoolServiceImpl implements FilePoolService {
         RequestEntity<Object> request = new RequestEntity(filePoolDto, HttpMethod.POST, uri);
         return restTemplate.exchange(request, FilePoolDto.class)
                 .getBody();
-
     }
 
     /**

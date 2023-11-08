@@ -76,7 +76,7 @@ public class FacsimileControllerTest {
                     .andExpect(status().isBadRequest());
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
-            assertEquals("400 : \"Facsimile should be jpg or png and should less than 100x100px\"", ex.getCause().getMessage());
+            assertEquals("[400] during [POST] to [http://edo-service/api/service/facsimile] [FacsimileFeignClient#saveFacsimile(MultipartFile)]: [Facsimile should be jpg or png and should less than 100x100px]", ex.getCause().getMessage());
         }
     }
 
@@ -103,4 +103,5 @@ public class FacsimileControllerTest {
                 .when().delete(getRootUrl() + "/archive")
                 .then().statusCode(200);
     }
+
 }

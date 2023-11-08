@@ -16,7 +16,7 @@ public class NotificationDto {
     @Schema(description = "Id оповещения")
     private Long id;
 
-    @Schema(description = "Id работника, для которого уведомление",hidden = true)
+    @Schema(description = "Id работника, для которого уведомление")
     private EmployeeDto employee;
 
     @Schema(description = "Тип оповещения")

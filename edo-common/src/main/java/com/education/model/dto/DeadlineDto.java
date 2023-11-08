@@ -26,7 +26,7 @@ public class DeadlineDto {
     @Schema(description = "Причина переноса")
     private String comment;
 
-    @Schema(description = "Резолюция, к которой относится дедлайн",hidden = true)
+    @Schema(description = "Резолюция, к которой относится дедлайн")
     private ResolutionDto resolution;
 
 }

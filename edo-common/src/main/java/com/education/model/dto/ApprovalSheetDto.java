@@ -1,8 +1,7 @@
 package com.education.model.dto;
 
 import com.education.model.enumEntity.EnumApprovalUrgency;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.ZonedDateTime;
@@ -11,7 +10,7 @@ import java.time.ZonedDateTime;
  * @author Ivan Chursinov
  */
 
-@ApiModel("Класс ApprovalSheetDto, dto для класса ApprovalSheet.class")
+@Schema(description = "Класс ApprovalSheetDto, dto для класса ApprovalSheet.class")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -19,31 +18,31 @@ import java.time.ZonedDateTime;
 @ToString
 public class ApprovalSheetDto {
 
-    @ApiModelProperty("ID листа согласования")
+    @Schema(description = "ID листа согласования")
     private Long id;
 
-    @ApiModelProperty("Срочность рассмотрения")
+    @Schema(description = "Срочность рассмотрения")
     private EnumApprovalUrgency approvalUrgency;
 
-    @ApiModelProperty("Ссылка на родительский лист согласования")
+    @Schema(description = "Ссылка на родительский лист согласования", hidden = true)
     private ApprovalSheetDto parentApprovalSheetDto;
 
-    @ApiModelProperty("Комментарий инициатора")
+    @Schema(description = "Комментарий инициатора")
     private String initiatorComment;
 
-    @ApiModelProperty("Дата создания листа согласования")
+    @Schema(description = "Дата создания листа согласования")
     private ZonedDateTime creationDate;
 
-    @ApiModelProperty("Дата перевода направления на согласование")
+    @Schema(description = "Дата перевода направления на согласование")
     private ZonedDateTime referralDate;
 
-    @ApiModelProperty("Дата подписания")
+    @Schema(description = "Дата подписания")
     private ZonedDateTime signingDate;
 
-    @ApiModelProperty("Дата перевода в архив")
+    @Schema(description = "Дата перевода в архив")
     private ZonedDateTime archivedDate;
 
-    @ApiModelProperty("Номер листа согласования")
+    @Schema(description = "Номер листа согласования")
     private String number;
 
 }

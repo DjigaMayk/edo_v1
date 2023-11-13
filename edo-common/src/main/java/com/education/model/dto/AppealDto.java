@@ -3,8 +3,7 @@ package com.education.model.dto;
 import com.education.model.enumEntity.EnumAppealStatus;
 import com.education.model.enumEntity.EnumWayToAnswer;
 import com.education.model.enumEntity.EnumWayToReceive;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -13,61 +12,63 @@ import java.util.List;
 
 
 @Data
-@ApiModel("Класс AppealDTO, dto для класса appeal.class")
+@Schema(description = "Класс AppealDTO, dto для класса appeal.class")
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
 @Getter
 @Setter
 public class AppealDto {
-    @ApiModelProperty("Id обращения")
+
+    @Schema(description = "Id обращения")
     private Long id;
 
-    @ApiModelProperty("Дата создания обращения")
+    @Schema(description = "Дата создания обращения")
     private ZonedDateTime creationDate;
 
-    @ApiModelProperty("Дата архивирования обращения")
+    @Schema(description = "Дата архивирования обращения")
     private ZonedDateTime archivedDate;
 
-    @ApiModelProperty("Дата регистрации обращения")
+    @Schema(description = "Дата регистрации обращения")
     private ZonedDateTime registrationDate;
 
-    @ApiModelProperty("Номер обращения")
+    @Schema(description = "Номер обращения")
     private String number;
 
-    @ApiModelProperty("Описание обращения")
+    @Schema(description = "Описание обращения")
     private String annotation;
 
-    @ApiModelProperty("Подписи")
+    @Schema(description = "Подписи")
     private List<EmployeeDto> signer;
 
-    @ApiModelProperty("Автор")
+    @Schema(description = "Автор")
     private EmployeeDto creator;
 
-    @ApiModelProperty("Получатели")
+    @Schema(description = "Получатели")
     private List<EmployeeDto> addressee;
 
-    @ApiModelProperty("Номенклатура")
+    @Schema(description = "Номенклатура")
     private NomenclatureDto nomenclature;
 
-    @ApiModelProperty("Авторы обращения")
+    @Schema(description = "Авторы обращения")
     private List<AuthorDto> authors;
 
-    @ApiModelProperty("Файлы, связанные с обращением")
+    @Schema(description = "Файлы, связанные с обращением")
     private List<FilePoolDto> file;
 
-    @ApiModelProperty("Вопросы, связанные с обращением")
+    @Schema(description = "Вопросы, связанные с обращением")
     private List<QuestionDto> question;
 
-    @ApiModelProperty("Статус обращения")
+    @Schema(description = "Статус обращения")
     private EnumAppealStatus appealStatus;
 
-    @ApiModelProperty("Способ получения обращения")
+    @Schema(description = "Способ получения обращения")
     private EnumWayToReceive sendingMethod;
 
-    @ApiModelProperty("Способ получения ответа на обращение")
+    @Schema(description = "Способ получения ответа на обращение")
     private EnumWayToAnswer answeringMethod;
 
-    @ApiModelProperty("ID региона, связанного с обращением")
+    @Schema(description = "ID региона, связанного с обращением")
     private RegionDto region;
+
 }

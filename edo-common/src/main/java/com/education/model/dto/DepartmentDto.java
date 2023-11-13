@@ -1,75 +1,44 @@
 package com.education.model.dto;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
-@ApiModel("Dto для Department.class")
+@Schema(description = "Dto для Department.class")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class DepartmentDto {
-    @ApiModelProperty(
-            notes = "Department id",
-            dataType = "Long",
-            example = "1",
-            required = true
-    )
+    @Schema(description = "Department id")
     private Long id;
 
-    @ApiModelProperty(
-            notes = "Аббревиатура отдела",
-            dataType = "String"
-    )
+    @Schema(description = "Аббревиатура отдела")
     private String shortName;
 
-    @ApiModelProperty(
-            notes = "Название отдела полностью",
-            dataType = "String"
-    )
+    @Schema(description = "Название отдела полностью")
     private String fullName;
 
-    @ApiModelProperty(
-            notes = "Адрес отдела",
-            dataType = "AddressDto.class"
-    )
+    @Schema(description = "Адрес отдела")
     private AddressDto address;
 
-    @ApiModelProperty(
-            notes = "Ключ внешней таблицы",
-            value = "external_id",
-            dataType = "String"
-    )
+    @Schema(description = "Ключ внешней таблицы")
     private String externalId;
 
-    @ApiModelProperty(
-            notes = "Телефонный номер",
-            dataType = "String"
-    )
+    @Schema(description = "Телефонный номер")
     private String phone;
 
-    @ApiModelProperty(
-            notes = "Вышестоящий отдел",
-            dataType = "DepartmentDto.class"
-    )
+    @Schema(description = "Вышестоящий отдел", hidden = true)
     private DepartmentDto department;
 
-    @ApiModelProperty(
-            notes = "Дата открытия",
-            dataType = "ZonedDateTime"
-    )
+    @Schema(description = "Дата открытия")
     private ZonedDateTime creationDate;
 
-    @ApiModelProperty(
-            notes = "Дата закрытия",
-            dataType = "ZonedDateTime"
-    )
+    @Schema(description = "Дата закрытия")
     private ZonedDateTime archivedDate;
 
     @Override

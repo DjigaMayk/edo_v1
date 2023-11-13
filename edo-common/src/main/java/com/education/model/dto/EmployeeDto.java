@@ -1,14 +1,8 @@
 package com.education.model.dto;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.*;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -16,7 +10,7 @@ import java.util.List;
 /**
  * @author Степан Ритман
  */
-@ApiModel("DTO для класса Employee")
+@Schema(description = "DTO для класса Employee")
 @Getter
 @Setter
 @ToString
@@ -24,57 +18,59 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class EmployeeDto {
-    @ApiModelProperty("Id работника")
+
+    @Schema(description = "Id работника")
     private Long id;
 
-    @ApiModelProperty("Имя работника")
+    @Schema(description = "Имя работника")
     private String firstName;
 
-    @ApiModelProperty("Фамилия работника")
+    @Schema(description = "Фамилия работника")
     private String lastName;
 
-    @ApiModelProperty("Отчество работника")
+    @Schema(description = "Отчество работника")
     private String middleName;
 
-    @ApiModelProperty("Адрес")
+    @Schema(description = "Адрес")
     private String address;
 
-    @ApiModelProperty("URL-адрес фото")
+    @Schema(description = "URL-адрес фото")
     private String photoUrl;
 
-    @ApiModelProperty("ФИО в дательном падеже")
+    @Schema(description = "ФИО в дательном падеже")
     private String fioDative;
 
-    @ApiModelProperty("ФИО в именительном падеже")
+    @Schema(description = "ФИО в именительном падеже")
     private String fioNominative;
 
-    @ApiModelProperty("ФИО в родительном падеже")
+    @Schema(description = "ФИО в родительном падеже")
     private String fioGenitive;
 
-    @ApiModelProperty("Внешний идентификатор")
+    @Schema(description = "Внешний идентификатор")
     private String externalId;
 
-    @ApiModelProperty("Мобильный номер телефона")
+    @Schema(description = "Мобильный номер телефона")
     private String phone;
 
-    @ApiModelProperty("Рабочий номер телефона")
+    @Schema(description = "Рабочий номер телефона")
     private String workPhone;
 
-    @ApiModelProperty("Рабочая почта")
+    @Schema(description = "Рабочая почта")
     private String workEmail;
 
-    @ApiModelProperty("Дата рождения")
+    @Schema(description = "Дата рождения")
     private ZonedDateTime birthDate;
 
-    @ApiModelProperty("Имя пользователя")
+    @Schema(description = "Имя пользователя")
     private String username;
 
-    @ApiModelProperty("Дата создания")
+    @Schema(description = "Дата создания")
     private ZonedDateTime creationDate;
 
-    @ApiModelProperty("Дата архивирования")
+    @Schema(description = "Дата архивирования")
     private ZonedDateTime archivedDate;
 
-    @ApiModelProperty("Типы оповещения, которые выбрали пользователи")
+    @Schema(description = "Типы оповещения, которые выбрали пользователи")
     private List<NotificationDto> notification;
+
 }

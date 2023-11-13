@@ -1,33 +1,36 @@
 package com.education.model.dto;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Никита Бадеев
  */
 
-@ApiModel("DTO для Facsimile")
+@Schema(description = "DTO для Facsimile")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class FacsimileDto {
 
-    @ApiModelProperty("Id Факсимиле")
+    @Schema(description = "Id Факсимиле")
     private Long id;
 
-    @ApiModelProperty("Связь с работником")
+    @Schema(description = "Связь с работником")
     private EmployeeDto employee;
 
-    @ApiModelProperty("Связь с департаментом")
+    @Schema(description = "Связь с департаментом")
     private DepartmentDto department;
 
-    @ApiModelProperty("Связь с файлом")
+    @Schema(description = "Связь с файлом")
     private FilePoolDto file;
 
-    @ApiModelProperty("Архивирован ли факсимиле")
+    @Schema(description = "Архивирован ли факсимиле")
     private boolean isArchived;
+
 }

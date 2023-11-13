@@ -1,21 +1,24 @@
 package com.education.model.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 
-@ApiModel("Класс FederalDistrictDto, dto для класса FederalDistrict.class")
+@Schema(description = "Класс FederalDistrictDto, dto для класса FederalDistrict.class")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
 public class FederalDistrictDto {
-    @ApiModelProperty("Идентификатор")
+
+    @Schema(description = "Идентификатор")
     private Long id;
-    @ApiModelProperty("Название федерального округа")
+
+    @Schema(description = "Название федерального округа")
     private String federalDistrictName;
-    @ApiModelProperty("Сайт федерального округа")
+
+    @Schema(description = "Сайт федерального округа")
     private String website;
+
 }

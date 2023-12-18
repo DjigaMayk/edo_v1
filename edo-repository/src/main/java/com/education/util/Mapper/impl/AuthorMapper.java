@@ -7,4 +7,10 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface AuthorMapper extends Mappable<Author, AuthorDto> {
+
+    @Override
+    AuthorDto toDto(Author author);
+
+    @Override
+    Author toEntity(AuthorDto authorDto);
 }

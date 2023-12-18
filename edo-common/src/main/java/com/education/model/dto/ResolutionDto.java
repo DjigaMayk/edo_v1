@@ -18,6 +18,9 @@ public class ResolutionDto {
     @Schema(description = "Id резолюции")
     private Long id;
 
+    @Schema(description = "Родительская резолюция")
+    private ResolutionDto parentResolution;
+
     @Schema(description = "Дата создания резолюции")
     private ZonedDateTime creationDate;
 

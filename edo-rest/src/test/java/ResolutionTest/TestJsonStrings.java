@@ -4,6 +4,7 @@ public final class TestJsonStrings {
     public static final String SINGLE_RESOLUTION = """
             {
                 "id": null,
+                "parentResolution": null,
                 "creationDate": null,
                 "archivedDate": null,
                 "lastActionDate": null,

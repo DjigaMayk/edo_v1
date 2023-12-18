@@ -17,4 +17,5 @@ public interface AuthorService {
     void delete(Long id);
     Author findById(Long id);
     List<AuthorDto> findAllById(List<Long> id);
+    List<Author> findAuthorByFIO(String fio);
 }

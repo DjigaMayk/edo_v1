@@ -70,4 +70,15 @@ public class AuthorServiceImpl implements AuthorService {
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Метод, производящий поиск в таблице сущностей Author по введенным символам
+     * @param fio
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<Author> findAuthorByFIO(String fio) {
+        return authorRepository.findAuthorByFIO(fio);
+    }
 }

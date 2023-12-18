@@ -67,6 +67,7 @@ public class EmailController {
         try {
             final AppealDto appeal = emailService.findByIdAppeal(appealId);
             emailService.sendEmailWithAttachment(appeal.getCreator().getWorkEmail(), null, "Example message 2", null);
+            appeal.setMailSent(true);
             log.info("Message sent successfully to authors email {} with appealId {}", appeal.getCreator().getWorkEmail(), appealId);
         } catch (MailException | MessagingException | FileNotFoundException ex) {
             log.error("Error while sending out email..{}", ex.getStackTrace());

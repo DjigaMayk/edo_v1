@@ -10,5 +10,4 @@ public class RabbitConstant {
     public static final String ADDRESS_APPEAL_IS_READ = "appeal.read.service";
     public static final String RESOLUTION_NOTIFICATION_QUEUE = "email.createResolution.service";
     public static final String ROUTING_KEY_SCHEDULER = "schedulerRoutingKey";
-    public static final String SEND_EMAIL_TO_AUTHOR_QUEUE = "email.sendToAuthor.service";
 }

@@ -26,7 +26,7 @@ public class Resolution extends BaseEntity {
      * Родительская резолюция
      */
     @ManyToOne
-    @JoinColumn(name ="resolution_id")
+    @JoinColumn(name ="parent_resolution_id")
     private Resolution parentResolution;
 
     /**

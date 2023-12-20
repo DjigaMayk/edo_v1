@@ -73,15 +73,14 @@ public class AuthorController {
         String transformFio = QuestionUtil.textTransformer(fio);
         String decodedFio = URLDecoder.decode(transformFio, StandardCharsets.UTF_8);
         log.info("Получен запрос на поиск сущностей {0}", decodedFio);
-        List<Author> dtos = authorService.findAuthorByFIO(decodedFio);
-        List<AuthorDto> listDTO = mapper.toDto(dtos);
-        if (!listDTO.isEmpty()) {
-            log.info("Результат поиска сущностей: {0}", listDTO);
+        List<AuthorDto> dtos = authorService.findAuthorByFIO(decodedFio);
+        if (!dtos.isEmpty()) {
+            log.info("Результат поиска сущностей: {0}", dtos);
         }else {
-            log.warn("Результат поиска сущностей: {0}", listDTO);
+            log.warn("Результат поиска сущностей: {0}", dtos);
         }
-        return new ResponseEntity<>(listDTO
-                , !listDTO.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(dtos
+                , !dtos.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 
 }

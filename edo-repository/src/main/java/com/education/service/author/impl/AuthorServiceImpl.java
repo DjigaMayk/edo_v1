@@ -78,7 +78,9 @@ public class AuthorServiceImpl implements AuthorService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<Author> findAuthorByFIO(String fio) {
+    public List<AuthorDto> findAuthorByFIO(String fio) {
         return authorRepository.findAuthorByFIO(fio);
     }
+
+
 }

@@ -28,4 +28,6 @@ public interface AppealService {
     void moveToNewOrRegistered(Long id, String appealStatus);
 
     void moveToUnderConsideration(Long id);
+
+    void markMailIsSent(Long id);
 }

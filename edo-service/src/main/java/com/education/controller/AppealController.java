@@ -160,6 +160,18 @@ public class AppealController {
         return new ResponseEntity<>(appeal, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Изменение статуса отправки обращения на isMessageSent")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Сущность изменена"),
+            @ApiResponse(code = 404, message = "Сущность не найдена")
+    })
+    @PutMapping("/toMessageSent/{id}")
+    public ResponseEntity<HttpStatus> moveToMessageSent(@PathVariable Long id) {
+        appealService.markMailIsSent(id);
+        log.log(Level.INFO, "Статус отправки обращения изменен");
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @ExceptionHandler
     public ResponseEntity<String> validationHandler(AppealNotValidException e) {
 

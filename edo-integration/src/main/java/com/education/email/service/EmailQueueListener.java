@@ -31,7 +31,6 @@ public class EmailQueueListener {
     @RabbitListener(queues = RabbitConstant.ADDRESS_CREATE_EMAIL_QUEUE)
     public void createEmail(Long id) {
         sendNotificationOnAppeal(id);
-        sendEmailToAuthor(id);
         log.log(Level.INFO, "Отправлено письмо");
     }
 

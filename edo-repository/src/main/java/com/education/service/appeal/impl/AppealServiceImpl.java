@@ -86,4 +86,10 @@ public class AppealServiceImpl implements AppealService {
     public List<Appeal> findAllByIdEmployee(Long id, Long startIndex, Long amount) {
         return appealRepository.findByIdEmployee(id, startIndex, amount);
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void markMailIsSent(Long id) {
+        appealRepository.markAsSent(id);
+    }
 }

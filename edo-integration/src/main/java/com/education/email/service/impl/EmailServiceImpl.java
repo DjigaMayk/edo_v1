@@ -45,6 +45,11 @@ public class EmailServiceImpl implements EmailService {
         return clientAppeal.findById(id);
     }
 
+    @Override
+    public void markMailIsSent(Long id) {
+        clientAppeal.markMailIsSent(id);
+    }
+
     /**
      * Метод для поиска Employee в БД
      * @param id - id Employee

@@ -57,21 +57,24 @@ public class EmailController {
      * @return ответ с сообщением о статусе отправки письма автору
      * @author Mustafa
      */
-    @Operation(summary = "Отправка email автору с прикрепленным файлом")
-    @GetMapping("/send/{appealId}")
+    @Operation(summary = "Отправка email автору")
+    @GetMapping("/send/author/{appealId}")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Письмо отправлено"),
+            @ApiResponse(code = 200, message = "Письмо отправлено автору"),
             @ApiResponse(code = 500, message = "Письмо не отправлено. Ошибка сервера")
     })
-    public @ResponseBody ResponseEntity<String> sendEmailToAuthorWithAttachment(@PathVariable("appealId") Long appealId) {
+    public @ResponseBody ResponseEntity<String> sendEmailToAuthor(@PathVariable("appealId") Long appealId) {
         try {
-            final AppealDto appeal = emailService.findByIdAppeal(appealId);
-            emailService.sendEmailWithAttachment(appeal.getCreator().getWorkEmail(), null, "Example message 2", null);
-            appeal.setMailSent(true);
-            log.info("Message sent successfully to authors email {} with appealId {}", appeal.getCreator().getWorkEmail(), appealId);
-        } catch (MailException | MessagingException | FileNotFoundException ex) {
-            log.error("Error while sending out email..{}", ex.getStackTrace());
+            final AppealDto appealDto = emailService.findByIdAppeal(appealId);
+            emailService.sendEmailWithAttachment(appealDto.getCreator().getWorkEmail(), "Заголовок письма автора", "Example message for author", null);
+            appealDto.setMailSent(true);
+            emailService.markMailIsSent(appealId);
+            log.info("Message sent successfully to authors email {} with appealId {}", appealDto.getCreator().getWorkEmail(), appealId);
+        } catch (MailException ex) {
+            log.error("Error while sending out email..{}", (Object) ex.getStackTrace());
             return new ResponseEntity<>("Unable to send email", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (MessagingException | FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
         return new ResponseEntity<>("Please check your inbox", HttpStatus.OK);
     }

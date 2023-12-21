@@ -40,4 +40,6 @@ public interface EmailService {
      */
     void sendEmailWithAttachment(String toAddress, String subject, String message, String attachment)
             throws MessagingException, FileNotFoundException;
+
+    void markMailIsSent(Long id);
 }

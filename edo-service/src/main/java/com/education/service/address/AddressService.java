@@ -1,4 +1,4 @@
-package com.education.service.Address;
+package com.education.service.address;
 
 import com.education.model.dto.AddressDto;
 

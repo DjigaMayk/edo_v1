@@ -2,7 +2,7 @@ package com.education.service.theme.impl;
 
 import com.education.entity.Theme;
 import com.education.model.dto.ThemeDto;
-import com.education.repository.theme.ThemeRepository;
+import com.education.repository.ThemeRepository;
 import com.education.service.theme.ThemeService;
 import com.education.util.Mapper.impl.ThemeMapper;
 import lombok.RequiredArgsConstructor;

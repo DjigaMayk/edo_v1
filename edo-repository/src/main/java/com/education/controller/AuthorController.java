@@ -1,17 +1,12 @@
-package com.education.controller.author;
+package com.education.controller;
 
 import com.education.Utils.QuestionUtil;
-import com.education.entity.Author;
 import com.education.model.dto.AuthorDto;
 import com.education.service.author.AuthorService;
 import com.education.util.Mapper.impl.AuthorMapper;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.logging.Level;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -35,26 +30,38 @@ public class AuthorController {
 
     @Operation(summary = "Поиск сущности по id")
     @GetMapping("/{id}")
-    public AuthorDto showById(@PathVariable("id") Long id) {
-        log.info("отправил AuthorDto.class");
-        return Author.authorToDto(authorService.findById(id));
+    public ResponseEntity<AuthorDto> showById(@PathVariable("id") Long id) {
+        Optional<AuthorDto> authorDto = Optional.ofNullable(authorService.findById(id));
+        if (authorDto.isEmpty()) {
+            log.warn("Сущность не найдена");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        log.info("Сущность найдена");
+        return new ResponseEntity<>(authorDto.get(), HttpStatus.OK);
     }
 
     @Operation(summary = "Поиск сущностей по значениям их id")
     @PostMapping("/findAll")
-    public List<AuthorDto> showAllById(@RequestBody List<Long> ids) {
-        log.info("отправил list AuthorDto.class");
-        return authorService.findAllById(ids);
+    public ResponseEntity<List<AuthorDto>> showAllById(@RequestBody List<Long> ids) {
+        List<AuthorDto> authorDtos = authorService.findAllById(ids);
+        if (authorDtos == null && authorDtos.isEmpty()) {
+            log.warn("Сущности не найдены");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        log.info("Сущности найдены");
+        return new ResponseEntity<>(authorDtos, HttpStatus.OK);
     }
 
     @Operation(summary = "Сохранение сущности")
     @PostMapping
     public ResponseEntity<AuthorDto> saveAuthor(@RequestBody AuthorDto authorDto) {
         authorDto = authorService.save(authorDto);
-        log.info("сохранил AuthorDto.class");
-        return authorDto != null ?
-                ResponseEntity.ok(authorDto)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        if (authorDto.getId() != null) {
+            log.info("Сущность сохранена или обновлена");
+            return new ResponseEntity<>(authorDto, HttpStatus.CREATED);
+        }
+        log.warn("Сущность не сохранена и не обновлена");
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
     @Operation(summary = "Удаление сущности")
@@ -66,21 +73,18 @@ public class AuthorController {
     }
 
     @Operation(summary = "Поиск Автора по ФИО")
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "Author was successfully found"),
-            @ApiResponse(code = 404, message = "Author was not found")})
     @GetMapping("/byFIO/")
     public ResponseEntity<List<AuthorDto>> findAuthorByFIO(@RequestParam(value = "fio", required = false) String fio) {
         String transformFio = QuestionUtil.textTransformer(fio);
         String decodedFio = URLDecoder.decode(transformFio, StandardCharsets.UTF_8);
-        log.info("Получен запрос на поиск сущностей {0}", decodedFio);
+        log.info("Получен запрос на поиск сущностей {}", decodedFio);
         List<AuthorDto> dtos = authorService.findAuthorByFIO(decodedFio);
         if (!dtos.isEmpty()) {
-            log.info("Результат поиска сущностей: {0}", dtos);
+            log.info("Результат поиска сущностей: {}", dtos);
         }else {
-            log.warn("Результат поиска сущностей: {0}", dtos);
+            log.warn("Результат поиска сущностей: {}", dtos);
         }
-        return new ResponseEntity<>(dtos
-                , !dtos.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(dtos, !dtos.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 
 }

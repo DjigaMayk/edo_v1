@@ -1,7 +1,7 @@
 package com.education.controller;
 
 import com.education.model.dto.AddressDto;
-import com.education.service.Address.AddressService;
+import com.education.service.address.AddressService;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;

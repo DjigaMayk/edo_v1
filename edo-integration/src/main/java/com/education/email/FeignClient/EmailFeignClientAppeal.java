@@ -16,5 +16,5 @@ public interface EmailFeignClientAppeal {
     AppealDto findById(@PathVariable("id") Long id);
 
     @PutMapping("/toMessageSent/{id}")
-    void markMailIsSent(@PathVariable("id") Long id);
+    void markMailIsSent(@PathVariable("id") Long appealId);
 }

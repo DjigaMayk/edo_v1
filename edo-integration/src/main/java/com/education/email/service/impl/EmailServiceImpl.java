@@ -41,13 +41,13 @@ public class EmailServiceImpl implements EmailService {
      * @param id - id Appeal
      */
     @Override
-    public AppealDto findByIdAppeal(Long id){
+    public AppealDto findByIdAppeal(Long id) {
         return clientAppeal.findById(id);
     }
 
     @Override
-    public void markMailIsSent(Long id) {
-        clientAppeal.markMailIsSent(id);
+    public void markMailIsSent(Long appealId) {
+        clientAppeal.markMailIsSent(appealId);
     }
 
     /**
@@ -67,8 +67,8 @@ public class EmailServiceImpl implements EmailService {
     /**
      * Метод для отправки email без attachment
      * @param toAddress - адрес получателя
-     * @param subject - тема письма
-     * @param message - текст письма
+     * @param subject   - тема письма
+     * @param message   - текст письма
      */
     @Override
     public void sendSimpleEmail(String toAddress, String subject, String message) {
@@ -82,8 +82,8 @@ public class EmailServiceImpl implements EmailService {
     /**
      * Метод для отправки email
      * @param toAddress - адрес получателя
-     * @param subject - тема письма
-     * @param message - текст письма
+     * @param subject   - тема письма
+     * @param message   - текст письма
      */
     @Override
     public void sendEmailWithAttachment(String toAddress, String subject, String message, String attachment)

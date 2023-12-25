@@ -54,4 +54,7 @@ public class ResolutionDto {
     @Schema(description = "Признак черновика резолюции")
     private Boolean isDraft;
 
+    @Schema(description = "Признак последовательности")
+    private int serialNumber;
+
 }

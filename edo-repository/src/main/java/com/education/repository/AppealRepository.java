@@ -71,7 +71,7 @@ public interface AppealRepository extends JpaRepository<Appeal, Long> {
                                @Param("appealStatus") String appealStatus);
 
     @Modifying
-    @Query(value = "UPDATE Appeal a SET a.isMailSent = true WHERE a.id = :id")
-    void markAsSent(@Param("id") Long id);
+    @Query(value = "UPDATE Appeal a SET a.isMailSent = true WHERE a.id = :appealId")
+    void markAsSent(@Param("appealId") Long appealId);
 }
 

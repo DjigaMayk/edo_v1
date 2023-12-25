@@ -110,14 +110,14 @@ public class EmailQueueListener {
 
     /**
      * Отправляет письмо автору обращения.
-     * @param id - ID обращения
+     * @param appealId - ID обращения
      */
-    private void sendEmailToAuthor(Long id) {
-        final AppealDto appealDto = emailService.findByIdAppeal(id);
+    private void sendEmailToAuthor(Long appealId) {
+        final AppealDto appealDto = emailService.findByIdAppeal(appealId);
         final String messageTemplate = "Добрый день, автор обращения!\n" +
-                "Ваше обращение с номером " + id + " было успешно отправлено.";
+                "Ваше обращение с номером: " + appealDto.getNumber() + " было успешно отправлено.";
         emailService.sendSimpleEmail(appealDto.getCreator().getWorkEmail(), "Уведомление об отправке обращения", messageTemplate);
-        appealDto.setMailSent(true);
+        emailService.markMailIsSent(appealId);
         log.log(Level.INFO, "Письмо автору обращения отправлено");
     }
 

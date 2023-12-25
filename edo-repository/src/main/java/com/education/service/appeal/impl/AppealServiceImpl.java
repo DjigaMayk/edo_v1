@@ -89,7 +89,7 @@ public class AppealServiceImpl implements AppealService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void markMailIsSent(Long id) {
-        appealRepository.markAsSent(id);
+    public void markMailIsSent(Long appealId) {
+        appealRepository.markAsSent(appealId);
     }
 }

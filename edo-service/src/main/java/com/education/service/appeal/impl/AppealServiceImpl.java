@@ -1,6 +1,6 @@
 package com.education.service.appeal.impl;
 
-import com.education.author_feign.service.AuthorService;
+import com.education.service.author.AuthorService;
 import com.education.feign.feign_appeal.AppealFeignService;
 import com.education.model.constant.RabbitConstant;
 import com.education.model.dto.AppealAbbreviatedDto;

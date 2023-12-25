@@ -2,7 +2,7 @@ package com.education.service.author.impl;
 
 import com.education.entity.Author;
 import com.education.model.dto.AuthorDto;
-import com.education.repository.author.AuthorRepository;
+import com.education.repository.AuthorRepository;
 import com.education.service.author.AuthorService;
 import com.education.util.Mapper.impl.AuthorMapper;
 import lombok.AllArgsConstructor;
@@ -22,10 +22,12 @@ public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
 
+    private final AuthorMapper mapper;
+
     /**
      * Конвертер ДТО в Энтити и наоборот
      */
-    private final AuthorMapper mapper;
+
 
     /**
      * Сохранение сущности
@@ -50,8 +52,8 @@ public class AuthorServiceImpl implements AuthorService {
      */
     @Override
     @Transactional(readOnly = true, rollbackFor=Exception.class)
-    public Author findById(Long id) {
-        return authorRepository.findById(id).get();
+    public AuthorDto findById(Long id) {
+        return mapper.toDto(authorRepository.findById(id).get());
     }
 
     /**
@@ -70,4 +72,17 @@ public class AuthorServiceImpl implements AuthorService {
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Метод, производящий поиск в таблице сущностей Author по введенным символам
+     * @param fio
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<AuthorDto> findAuthorByFIO(String fio) {
+        return authorRepository.findAuthorByFIO(fio).stream().map(mapper::toDto).toList();
+    }
+
+
 }

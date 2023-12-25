@@ -1,7 +1,7 @@
-package com.education.service.Address.impl;
+package com.education.service.address.impl;
 
 import com.education.model.dto.AddressDto;
-import com.education.service.Address.AddressService;
+import com.education.service.address.AddressService;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import com.netflix.discovery.shared.Application;

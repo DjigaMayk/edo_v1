@@ -150,5 +150,5 @@ public class Appeal extends BaseEntity {
      * Флаг отправки письма. Если true, то письмо было отправлено
      */
     @Column(name = "is_mail_sent")
-    private boolean isMailSent;
+    private Boolean isMailSent;
 }

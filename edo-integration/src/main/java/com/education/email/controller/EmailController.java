@@ -67,7 +67,6 @@ public class EmailController {
         try {
             final AppealDto appealDto = emailService.findByIdAppeal(appealId);
             emailService.sendEmailWithAttachment(appealDto.getCreator().getWorkEmail(), "Заголовок письма автора", "Example message for author", null);
-            appealDto.setMailSent(true);
             emailService.markMailIsSent(appealId);
             log.info("Message sent successfully to authors email {} with appealId {}", appealDto.getCreator().getWorkEmail(), appealId);
         } catch (MailException ex) {

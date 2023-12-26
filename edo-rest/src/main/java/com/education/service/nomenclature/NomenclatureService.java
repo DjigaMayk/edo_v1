@@ -4,7 +4,7 @@ import com.education.model.dto.NomenclatureDto;
 
 import java.util.List;
 
-public interface NomenclatureFeignService {
+public interface NomenclatureService {
 
     NomenclatureDto save(NomenclatureDto nomenclature);
 

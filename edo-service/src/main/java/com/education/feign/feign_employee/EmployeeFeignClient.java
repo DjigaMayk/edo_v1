@@ -1,4 +1,4 @@
-package com.education.client.feign.employee;
+package com.education.feign.feign_employee;
 
 import com.education.model.dto.EmployeeDto;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Интерфейс EmployeeFeignClient предоставляет методы для отправки запросов в edo-service
+ * Интерфейс EmployeeFeignClient предоставляет методы для отправки запросов в edo-repository
  * через FeignClient.
  */
-@FeignClient(name = "edo-service", path = "/api/service", qualifiers = "employeeFeignClient")
+@FeignClient(name = "edo-repository", path = "/api/repository", qualifiers = "employeeFeignClient")
 public interface EmployeeFeignClient {
 
     @GetMapping("/employee")
@@ -19,17 +19,16 @@ public interface EmployeeFeignClient {
                                          boolean notArchivedOnly);
 
     @PostMapping("/employee")
-    EmployeeDto saveEmployee(@RequestBody EmployeeDto employee);
+    EmployeeDto saveEmployee(@RequestBody EmployeeDto employeeDto);
 
     @GetMapping("/employee/{id}")
     EmployeeDto getEmployeeById(@PathVariable("id") Long id,
-                                @RequestParam(name = "notArchivedOnly", defaultValue = "true")
+                                @RequestParam(name = "notArchivedOnly")
                                 boolean notArchivedOnly);
 
     @DeleteMapping("/employee/{id}")
-    void moveEmployeeToArchive(@PathVariable("id") Long id);
+    void moveToArchiveEmployeeById(@PathVariable("id") Long id);
 
     @GetMapping("/employee/byFIO/")
     List<EmployeeDto> findAllByLastNameLikeOrderByLastName(@RequestParam("fio") String fio);
-
 }

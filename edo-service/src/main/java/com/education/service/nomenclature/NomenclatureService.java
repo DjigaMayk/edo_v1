@@ -12,7 +12,7 @@ import java.util.List;
  * @since 1.0
  */
 
-public interface NomenclatureFeignService {
+public interface NomenclatureService {
 
     /**
      * Сохраняет номенклатуру

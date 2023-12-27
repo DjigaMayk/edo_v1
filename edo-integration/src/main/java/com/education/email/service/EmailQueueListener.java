@@ -1,6 +1,7 @@
 package com.education.email.service;
 
 import com.education.model.constant.RabbitConstant;
+import com.education.model.dto.AppealDto;
 import com.education.model.dto.EmployeeDto;
 import com.education.model.records.ResolutionDtoAndAppealRecord;
 import com.netflix.appinfo.InstanceInfo;
@@ -90,7 +91,6 @@ public class EmailQueueListener {
 
     /**
      * Метод для рассылки оповещений по почте всем адресантам и подписантам из обращения
-     *
      * @param id - для поиска Employee и Appeal в БД
      */
     private void sendNotificationOnAppeal(Long id) {
@@ -106,6 +106,19 @@ public class EmailQueueListener {
             throw new RuntimeException(e);
         }
         log.log(Level.INFO, "Все письма о создании нового обращения отправлены");
+    }
+
+    /**
+     * Отправляет письмо автору обращения.
+     * @param appealId - ID обращения
+     */
+    private void sendEmailToAuthor(Long appealId) {
+        final AppealDto appealDto = emailService.findByIdAppeal(appealId);
+        final String messageTemplate = "Добрый день, автор обращения!\n" +
+                "Ваше обращение с номером: " + appealDto.getNumber() + " было успешно отправлено.";
+        emailService.sendSimpleEmail(appealDto.getCreator().getWorkEmail(), "Уведомление об отправке обращения", messageTemplate);
+        emailService.markMailIsSent(appealId);
+        log.log(Level.INFO, "Письмо автору обращения отправлено");
     }
 
     private void assembleAndSendEmail(List<EmployeeDto> employers, String template, String greeting, String id) {

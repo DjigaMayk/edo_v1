@@ -1,7 +1,10 @@
 package com.education.repository;
 
 import com.education.entity.Appeal;
-import org.springframework.data.jpa.repository.*;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -67,5 +70,8 @@ public interface AppealRepository extends JpaRepository<Appeal, Long> {
     void moveToNewOrRegistered(@Param("id") Long id,
                                @Param("appealStatus") String appealStatus);
 
+    @Modifying
+    @Query(value = "UPDATE Appeal a SET a.isMailSent = true WHERE a.id = :appealId")
+    void markAsSent(@Param("appealId") Long appealId);
 }
 

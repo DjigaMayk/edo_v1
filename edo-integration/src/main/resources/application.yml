@@ -11,8 +11,8 @@ spring:
   mail:
     host: app.debugmail.io
     port: 25
-    username: a5ae3681-2cee-4604-b9e1-1c31e8fdba67
-    password: d71639cd-4d78-4344-af83-ddeb90f46c6c
+    username: 693260b6-33db-4008-abf7-2f1d9b72a917
+    password: 13b8155b-97a6-4824-a89c-e7a77919ddae
     test-connection: true # Проверка подключения при старте приложения
     properties:
       mail:

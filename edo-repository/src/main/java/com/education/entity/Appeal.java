@@ -15,7 +15,9 @@ import java.util.List;
 
 
 /**
- * @author Alik Karibov.
+ * Класс сущности представляющий обращение.
+ * @author Alik Karibov (v1.0), Mustafa (v1.1)
+ * @version 1.1
  */
 @SuperBuilder
 @Entity
@@ -143,4 +145,10 @@ public class Appeal extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
+
+    /**
+     * Флаг отправки письма. Если true, то письмо было отправлено
+     */
+    @Column(name = "is_mail_sent")
+    private Boolean isMailSent;
 }

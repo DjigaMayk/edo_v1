@@ -27,4 +27,5 @@ public interface AppealService {
     void moveToUnderConsideration(Long resolutionId);
 
     void moveToNewOrRegistered(Long id, String appealStatus);
+    void markMailIsSent(Long appealId);
 }

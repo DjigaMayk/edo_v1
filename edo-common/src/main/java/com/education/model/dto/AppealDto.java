@@ -71,4 +71,6 @@ public class AppealDto {
     @Schema(description = "ID региона, связанного с обращением")
     private RegionDto region;
 
+    @Schema(description = "Флаг отправки письма. Если true, то письмо было отправлено")
+    private boolean isMailSent;
 }

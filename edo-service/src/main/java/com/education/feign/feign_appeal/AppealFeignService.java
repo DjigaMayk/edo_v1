@@ -43,4 +43,7 @@ public interface AppealFeignService {
 
     @PutMapping(value = "/toUnderConsideration/{id}")
     void moveToUnderConsideration(@PathVariable Long id);
+
+    @PutMapping("/toMessageSent/{id}")
+    void markMailIsSent(@PathVariable("id") Long id);
 }

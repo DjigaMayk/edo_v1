@@ -1,6 +1,6 @@
 package com.education.controller;
 
-import com.education.client.feign.nomenclature.NomenclatureFeignClient;
+import com.education.feign.feign_nomenclature.NomenclatureFeignClient;
 import com.education.model.dto.NomenclatureDto;
 
 import io.swagger.annotations.*;

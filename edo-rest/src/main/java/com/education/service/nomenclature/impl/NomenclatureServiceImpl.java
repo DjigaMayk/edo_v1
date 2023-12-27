@@ -1,31 +1,27 @@
 package com.education.service.nomenclature.impl;
 
-import com.education.client.feign.nomenclature.NomenclatureFeignClient;
+import com.education.feign.feign_nomenclature.NomenclatureFeignClient;
 import com.education.model.dto.NomenclatureDto;
-import com.education.service.nomenclature.NomenclatureFeignService;
+import com.education.service.nomenclature.NomenclatureService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Представляет реализацию операций над номенклатурой
- */
 @Service
-public class NomenclatureFeignServiceImpl implements NomenclatureFeignService {
+@Log4j2
+@RequiredArgsConstructor
+public class NomenclatureServiceImpl implements NomenclatureService {
 
     /**
      * Шаблон номера обращения
      */
     private static final String TEMPLATE = "%ЧИС%ГОД-%ЗНАЧ/2";
 
-    private final NomenclatureFeignClient nomenclatureFeignClient;
 
-    @Autowired
-    public NomenclatureFeignServiceImpl(NomenclatureFeignClient nomenclatureFeignClient) {
-        this.nomenclatureFeignClient = nomenclatureFeignClient;
-    }
+    private final NomenclatureFeignClient nomenclatureFeignClient;
 
     /**
      * Сохраняет номенклатуру
@@ -110,16 +106,16 @@ public class NomenclatureFeignServiceImpl implements NomenclatureFeignService {
      */
     @Override
     public String getNumberFromTemplate(NomenclatureDto nomenclatureDto) {
-        var template = findById(nomenclatureDto.getId());
-        var numberFromTemplate = template.getTemplate();
+        var nomenclature = findById(nomenclatureDto.getId());
+        var numberFromTemplate = nomenclature.getTemplate();
         if (numberFromTemplate == null) {
             numberFromTemplate = TEMPLATE;
         }
-        Long currentValue = template.getCurrentValue();
-        template.setCurrentValue(currentValue + 1);
-        nomenclatureFeignClient.saveNomenclature(template);
-        String year = String.format("%02d", template.getCreationDate().getYear() % 100);
-        String day = String.format("%02d", template.getCreationDate().getDayOfMonth());
+        Long currentValue = nomenclature.getCurrentValue();
+        nomenclature.setCurrentValue(currentValue + 1);
+        nomenclatureFeignClient.saveNomenclature(nomenclature);
+        String year = String.format("%02d", nomenclature.getCreationDate().getYear() % 100);
+        String day = String.format("%02d", nomenclature.getCreationDate().getDayOfMonth());
         return numberFromTemplate
 //  убирает больше двух знаков "%" подряд, оставляя один
                 .replaceAll("%{2,}", "%")

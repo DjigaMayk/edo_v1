@@ -1,4 +1,4 @@
-package com.education.client.feign.nomenclature;
+package com.education.feign.feign_nomenclature;
 
 import com.education.model.dto.NomenclatureDto;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -7,13 +7,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Интерфейс NomenclatureFeignClient предоставляет методы для отправки запросов в edo-repository
+ * Интерфейс NomenclatureFeignClient предоставляет методы для отправки запросов в edo-service
  * через FeignClient.
  */
-@FeignClient(name = "edo-repository", path = "/api/repository", qualifiers = "nomenclatureFeignClient")
+@FeignClient(name = "edo-service", path = "/api/service", qualifiers = "nomenclatureFeignClient")
 public interface NomenclatureFeignClient {
-
-
     @PostMapping("/nomenclature/")
     NomenclatureDto saveNomenclature(@RequestBody NomenclatureDto nomenclature);
 
@@ -34,4 +32,5 @@ public interface NomenclatureFeignClient {
 
     @GetMapping("/nomenclature/search/")
     List<NomenclatureDto> findByIndex(@RequestParam("index") String index);
+
 }

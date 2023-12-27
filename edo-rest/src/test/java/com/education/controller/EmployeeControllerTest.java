@@ -2,7 +2,7 @@ package com.education.controller;
 
 import com.education.EdoRestApplication;
 import com.education.model.dto.EmployeeDto;
-import com.education.service.employee.EmployeeFeignService;
+import com.education.service.employee.EmployeeService;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,7 +42,7 @@ class EmployeeControllerIntTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private EmployeeFeignService employeeService;
+    private EmployeeService employeeService;
 
     private final String BASE_URL = "/api/rest/employee";
 

@@ -1,18 +1,20 @@
 package com.education.service.employee.impl;
 
-import com.education.client.feign.employee.EmployeeFeignClient;
+import com.education.feign.feign_employee.EmployeeFeignClient;
 import com.education.model.dto.EmployeeDto;
-import com.education.service.employee.EmployeeFeignService;
-import lombok.RequiredArgsConstructor;
+import com.education.service.employee.EmployeeService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
-public class EmployeeFeignServiceImpl implements EmployeeFeignService {
+@AllArgsConstructor
+public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeFeignClient employeeFeignClient;
+
+    private static final int FIOLENGTH = 3;
 
     @Override
     public EmployeeDto findById(Long id, boolean notArchivedOnly) {
@@ -31,11 +33,12 @@ public class EmployeeFeignServiceImpl implements EmployeeFeignService {
 
     @Override
     public void moveToArchive(Long id) {
-        employeeFeignClient.moveEmployeeToArchive(id);
+        employeeFeignClient.moveToArchiveEmployeeById(id);
     }
 
     @Override
     public List<EmployeeDto> findAllByLastNameLikeOrderByLastName(String fio) {
-        return fio.length() < 3 ? null : employeeFeignClient.findAllByLastNameLikeOrderByLastName(fio);
+        return fio.length() < FIOLENGTH ? null : employeeFeignClient.findAllByLastNameLikeOrderByLastName(fio);
     }
+
 }

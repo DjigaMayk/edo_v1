@@ -10,7 +10,7 @@ import com.education.model.enumEntity.EnumAppealStatus;
 import com.education.model.records.AppealReadRecord;
 import com.education.model.util.exceptions.AppealNotValidException;
 import com.education.service.appeal.AppealService;
-import com.education.service.nomenclature.NomenclatureFeignService;
+import com.education.service.nomenclature.NomenclatureService;
 import com.education.service.question.QuestionService;
 import com.education.service.region.RegionService;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class AppealServiceImpl implements AppealService {
     private final RegionService regionService;
     private final AmqpTemplate amqpTemplate;
     private final AppealFeignService appealFeignService;
-    private final NomenclatureFeignService nomenclatureService;
+    private final NomenclatureService nomenclatureService;
 
     @Override
     public AppealDto save(AppealDto appealDto) {

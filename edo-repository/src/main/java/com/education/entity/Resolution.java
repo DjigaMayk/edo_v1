@@ -23,6 +23,13 @@ import java.util.List;
 public class Resolution extends BaseEntity {
 
     /**
+     * Родительская резолюция
+     */
+    @ManyToOne
+    @JoinColumn(name ="parent_resolution_id")
+    private Resolution parentResolution;
+
+    /**
      * Дата создания резолюции
      */
     @Column(name = "creation_date")

@@ -5,12 +5,16 @@ import com.education.model.dto.ResolutionDto;
 import com.education.service.appeal.AppealService;
 import com.education.model.enumEntity.EnumAppealStatus;
 import com.education.service.resolution.ResolutionService;
+import com.education.utils.sorterResolutions.SorterResolutions;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.BooleanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.education.utils.sorterResolutions.SorterResolutions.sortResolutions;
 
 @Service
 @RequiredArgsConstructor
@@ -97,6 +101,10 @@ public class ResolutionServiceImpl implements ResolutionService {
 
     @Override
     public List<ResolutionDto> findAllByAppealIdNotArchived(Long appealId) {
-        return resolutionFeignService.findAllByAppealIdNotArchived(appealId);
+        List<ResolutionDto> list = new ArrayList<ResolutionDto>();
+        list = resolutionFeignService.findAllByAppealIdNotArchived(appealId);
+        list = sortResolutions(list);
+        return list;
+
     }
 }

@@ -45,4 +45,7 @@ public class ApprovalSheetDto {
     @Schema(description = "Номер листа согласования")
     private String number;
 
+    @Schema(description = "Обращения к которому относиться данный Лист Согласования")
+    private AppealDto appeal;
+
 }

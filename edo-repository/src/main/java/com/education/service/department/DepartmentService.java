@@ -12,5 +12,5 @@ public interface DepartmentService {
     List<Department> findAllById(List<Long> ids);
     Optional<Department> findByIdNotArchived(Long id);
     List<Department> findAllByIdNotArchived(List<Long> ids);
-
+    Optional<Department> findByFullName(String fullName);
 }

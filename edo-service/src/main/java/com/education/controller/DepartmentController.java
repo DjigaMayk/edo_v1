@@ -104,4 +104,18 @@ public class DepartmentController {
         log.info("Move entity department with id: %s to archive");
         return new ResponseEntity<>(departmentFeignService.findById(id), HttpStatus.OK);
     }
+
+    @ApiOperation(value = "Получить department по fullName")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved"),
+            @ApiResponse(code = 404, message = "Not found - The address was not found")
+    })
+    @GetMapping("/")
+    public ResponseEntity<DepartmentDto> findByFullName(@RequestParam(value = "fullName") String fullName) {
+        DepartmentDto dto = departmentFeignService.findByFullName(fullName);
+        if (dto == null) {
+            log.warning("Did not receive department-dto");
+        }
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
 }

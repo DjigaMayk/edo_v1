@@ -72,4 +72,11 @@ public class ApprovalSheet extends BaseEntity {
     @Column(name = "number", nullable = false)
     private String number;
 
+    /**
+     * Обращения к которому относиться данный Лист Согласования
+     */
+    @ManyToOne
+    @JoinColumn(name = "appeal_id")
+    private Appeal appeal;
+
 }

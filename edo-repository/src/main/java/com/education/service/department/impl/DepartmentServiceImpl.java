@@ -70,10 +70,6 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     @Transactional(rollbackFor = Exception.class, readOnly = true)
     public Optional<Department> findByFullName(String fullName) {
-        if (fullName.matches("[а-яА-Я]")) {
-            return departmentRepository.findByFullName(fullName);
-        }
-        String translitDepartment = QuestionUtil.textTransformer(fullName);
-        return departmentRepository.findByFullName(translitDepartment);
+        return departmentRepository.findByFullName(fullName);
     }
 }

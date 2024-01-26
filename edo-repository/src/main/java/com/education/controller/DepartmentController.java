@@ -137,11 +137,10 @@ public class DepartmentController {
         var result = service.findByFullName(fullName);
         if (result.isEmpty()) {
             log.warning("Department — not found!");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             log.info("Department — found!");
+            return new ResponseEntity<>(mapper.toDto(result.get()), HttpStatus.OK);
         }
-        return (result.isEmpty())
-                ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                : new ResponseEntity<>(mapper.toDto(result.get()), HttpStatus.OK);
     }
 }

@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS approval_block
     approval_block_type varchar
 );
 
-comment on column approval_block.id is 'ID обращения';
+comment on column approval_block.id is 'ID Блока согласования';
 comment on column approval_block.sequence_number is 'Порядковый номер Блока согласования';
 comment on column approval_block.appeal_id is 'Лист согласования в блоке согласования';
 comment on column approval_block.approval_block_type is 'Тип блока согласования';

@@ -4,7 +4,6 @@ import com.education.model.enumEntity.EnumApprovalBlockType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.jpa.repository.EntityGraph;
 
 /**
  * Сущность: блок согласования.

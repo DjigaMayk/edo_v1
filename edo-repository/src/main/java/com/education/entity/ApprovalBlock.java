@@ -22,6 +22,11 @@ import org.springframework.data.jpa.repository.EntityGraph;
 public class ApprovalBlock extends BaseEntity {
 
     /**
+     * Порядковый номер Блока согласования
+     */
+    @Column(name = "sequence_number")
+    private Integer sequenceNumber;
+    /**
      * Лист согласования в блоке согласования
      */
     @OneToOne(fetch = FetchType.LAZY)

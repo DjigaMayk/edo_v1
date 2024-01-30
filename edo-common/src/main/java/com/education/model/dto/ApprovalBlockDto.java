@@ -16,7 +16,7 @@ import lombok.*;
 public class ApprovalBlockDto {
 
     @Schema(description = "Порядковый номер Блока согласования")
-    private ApprovalSheetDto sequenceNumber;
+    private Integer sequenceNumber;
 
     @Schema(description = "Лист согласования в блоке согласования")
     private ApprovalSheetDto approvalSheet;

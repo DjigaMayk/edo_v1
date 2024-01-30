@@ -126,4 +126,21 @@ public class DepartmentController {
             return new ResponseEntity<>(mapper.toDto(result), HttpStatus.CREATED);
         }
     }
+
+    @ApiOperation(value = "Получить department по fullName")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved"),
+            @ApiResponse(code = 404, message = "Not found - The address was not found")
+    })
+    @GetMapping("/")
+    public ResponseEntity<DepartmentDto> findAllByFullName(@RequestParam(value = "fullName") String fullName) {
+        var result = service.findByFullName(fullName);
+        if (result.isEmpty()) {
+            log.warning("Department — not found!");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            log.info("Department — found!");
+            return new ResponseEntity<>(mapper.toDto(result.get()), HttpStatus.OK);
+        }
+    }
 }

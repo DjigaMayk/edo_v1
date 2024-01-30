@@ -1,5 +1,6 @@
 package com.education.service.department.impl;
 
+import com.education.Utils.QuestionUtil;
 import com.education.entity.Department;
 import com.education.repository.DepartmentRepository;
 import com.education.service.address.AddressService;
@@ -7,6 +8,7 @@ import com.education.service.department.DepartmentService;
 import com.education.util.Mapper.impl.AddressMapper;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
     private final DepartmentRepository departmentRepository;
@@ -62,5 +65,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         List<Department> result = departmentRepository.findAllById(ids);
         result.removeIf(element -> element.getArchivedDate() != null);
         return result;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class, readOnly = true)
+    public Optional<Department> findByFullName(String fullName) {
+        return departmentRepository.findByFullName(fullName);
     }
 }

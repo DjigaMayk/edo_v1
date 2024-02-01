@@ -23,4 +23,6 @@ public interface ResolutionService {
     List<Resolution> findAllByAppealIdNotArchived(Long appealId);
 
     Boolean isDraft(@Param("id") Long id);
+
+    List<Resolution> findAllWithFilterArchived(String filter);
 }

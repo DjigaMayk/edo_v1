@@ -4,6 +4,7 @@ import com.education.feign.feign_resolution.ResolutionFeignClient;
 import com.education.model.dto.ResolutionDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,4 +26,17 @@ public class ResolutionServiceImpl implements ResolutionService {
 
     @Override
     public List<ResolutionDto> findAllByAppealIdNotArchived(Long appealId) {return resolutionFeignClient.findAllByAppealIdNotArchived(appealId); }
+
+    /**
+     * Метод для выгрузки всех резолюций с возможностью фильтра по признаку архивности.
+     *
+     * @param filter фильтр указывающий какая выборка Резолюций запрошена:
+     *               null или all - все резолюции
+     *               nonarchived - без архивных
+     *               archived - только архивные
+     */
+    @Override
+    public List<ResolutionDto> findAllWithFilterArchived(@Nullable String filter) {
+        return resolutionFeignClient.findAllWithFilterArchived(filter);
+    }
 }

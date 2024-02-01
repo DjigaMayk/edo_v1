@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.Level;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,11 +57,33 @@ public class ResolutionController {
     @GetMapping(value = "/allByAppealIdNotArchived/{appealId}")
     public ResponseEntity<List<ResolutionDto>> findAllByAppealIdNotArchived(@PathVariable Long appealId) {
         List<ResolutionDto> resolutionDto = service.findAllByAppealIdNotArchived(appealId);
-        if (resolutionDto == null && resolutionDto.isEmpty()) {
+        if (resolutionDto == null || resolutionDto.isEmpty()) {
             log.log(Level.WARN, "Сущности не найдены");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         log.log(Level.INFO, "Сущности найдены");
         return new ResponseEntity<>(resolutionDto, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Получить все резолюции включая архивные (?filter=all или запрос без параметра), " +
+            "или без них (?filter=nonarchived), или только архивные (?filter=archived)")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Резолюции найдены"),
+            @ApiResponse(code = 400, message = "Фильтр указан некорректно"),
+            @ApiResponse(code = 404, message = "Резолюции не найдены")
+    })
+    @GetMapping(value = "/allWithFilterArchived/")
+    public ResponseEntity<List<ResolutionDto>> findAllWithFilterArchived(
+            @RequestParam(value = "filter", required = false) @Nullable String filter
+    ) {
+        if (filter == null || filter.equals("all") || filter.equals("nonarchived") || filter.equals("archived")) {
+            List<ResolutionDto> resolutionsDto = service.findAllWithFilterArchived(filter);
+            if (resolutionsDto == null || resolutionsDto.isEmpty()) {
+                log.log(Level.WARN, "Сущности не найдены");
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            log.log(Level.INFO, "Сущности найдены");
+            return new ResponseEntity<>(resolutionsDto, HttpStatus.OK);
+        } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

@@ -1,6 +1,7 @@
 package com.education.service.resolution;
 
 import com.education.model.dto.ResolutionDto;
+import org.springframework.lang.Nullable;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface ResolutionService {
     List<ResolutionDto> findAllByIdNotArchived(Iterable<Long> ids);
 
     List<ResolutionDto> findAllByAppealIdNotArchived(Long appealId);
+
+    List<ResolutionDto> findAllWithFilterArchived(@Nullable String filter);
 }

@@ -2,10 +2,8 @@ package com.education.feign.feign_resolution;
 
 import com.education.model.dto.ResolutionDto;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.lang.Nullable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,4 +35,7 @@ public interface ResolutionFeignService {
 
     @GetMapping(value = "/isDraft/{id}")
     Boolean isDraft(@PathVariable("id") Long id);
+
+    @GetMapping(value = "/allWithFilterArchived/")
+    List<ResolutionDto> findAllWithFilterArchived(@RequestParam(value = "filter", required = false) @Nullable String filter);
 }

@@ -44,4 +44,16 @@ public interface ResolutionRepository extends JpaRepository<Resolution, Long> {
     @Query(nativeQuery = true,
             value = "SELECT is_draft from resolution where id = :id")
     Optional<Boolean> isDraft(@Param("id") Long id);
+
+    @Query("SELECT r FROM Resolution r")
+    @EntityGraph(attributePaths = {"creator", "signer", "executors", "curator", "question", "deadlines"})
+    List<Resolution> findAllResolution();
+
+    @Query("SELECT r FROM Resolution r where r.archivedDate IS NOT NULL")
+    @EntityGraph(attributePaths = {"creator", "signer", "executors", "curator", "question", "deadlines"})
+    List<Resolution> findAllResolutionNonArchived();
+
+    @Query("SELECT r FROM Resolution r where r.archivedDate IS NULL")
+    @EntityGraph(attributePaths = {"creator", "signer", "executors", "curator", "question", "deadlines"})
+    List<Resolution> findAllResolutionArchived();
 }

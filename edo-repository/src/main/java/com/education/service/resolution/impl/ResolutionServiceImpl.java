@@ -4,6 +4,7 @@ import com.education.entity.Resolution;
 import com.education.repository.ResolutionRepository;
 import com.education.service.resolution.ResolutionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,5 +71,25 @@ public class ResolutionServiceImpl implements ResolutionService {
     @Override
     public Boolean isDraft(Long id) {
         return resolutionRepository.isDraft(id).orElse(true);
+    }
+
+    /**
+     * Метод для выгрузки всех резолюций с возможностью фильтра по признаку архивности.
+     *
+     * @param filter фильтр указывающий какая выборка Резолюций запрошена:
+     *               null или all - все резолюции
+     *               nonarchived - без архивных
+     *               archived - только архивные
+     */
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
+    @Override
+    public List<Resolution> findAllWithFilterArchived(@Nullable String filter) {
+        if (filter == null || filter.equals("all")) {
+            return resolutionRepository.findAllResolution();
+        } else if (filter.equals("nonarchived")) {
+            return resolutionRepository.findAllResolutionNonArchived();
+        } else if (filter.equals("archived")) {
+            return resolutionRepository.findAllResolutionArchived();
+        } else return null;
     }
 }

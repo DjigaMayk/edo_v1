@@ -1,6 +1,7 @@
 package com.education.service.resolution.impl;
 
 import com.education.entity.Resolution;
+import com.education.repository.DeadlineRepository;
 import com.education.repository.ResolutionRepository;
 import com.education.service.resolution.ResolutionService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,7 +18,7 @@ import java.util.List;
 public class ResolutionServiceImpl implements ResolutionService {
 
     final ResolutionRepository resolutionRepository;
-
+    final DeadlineRepository deadlineRepository;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -84,12 +86,19 @@ public class ResolutionServiceImpl implements ResolutionService {
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     @Override
     public List<Resolution> findAllWithFilterArchived(@Nullable String filter) {
+        List<Resolution> resolutions = new ArrayList<>();
         if (filter == null || filter.equals("all")) {
-            return resolutionRepository.findAllResolution();
+            resolutions = resolutionRepository.findAllResolution();
         } else if (filter.equals("nonarchived")) {
-            return resolutionRepository.findAllResolutionNonArchived();
+            resolutions = resolutionRepository.findAllResolutionNonArchived();
         } else if (filter.equals("archived")) {
-            return resolutionRepository.findAllResolutionArchived();
-        } else return null;
+            resolutions = resolutionRepository.findAllResolutionArchived();
+        }
+        if (!resolutions.isEmpty()) {
+            ArrayList<Long> listId = new ArrayList<>();
+            resolutions.forEach(resolution -> listId.add(resolution.getId()));
+            resolutions = resolutionRepository.findAllWithDeadline(listId);
+        }
+        return resolutions;
     }
 }

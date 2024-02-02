@@ -46,14 +46,17 @@ public interface ResolutionRepository extends JpaRepository<Resolution, Long> {
     Optional<Boolean> isDraft(@Param("id") Long id);
 
     @Query("SELECT r FROM Resolution r")
-    @EntityGraph(attributePaths = {"creator", "signer", "executors", "curator", "question", "deadlines"})
+    @EntityGraph(attributePaths = {"creator", "signer", "executors", "curator", "question"})
     List<Resolution> findAllResolution();
 
-    @Query("SELECT r FROM Resolution r where r.archivedDate IS NOT NULL")
-    @EntityGraph(attributePaths = {"creator", "signer", "executors", "curator", "question", "deadlines"})
+    @Query("SELECT r FROM Resolution r WHERE r.archivedDate IS NULL")
+    @EntityGraph(attributePaths = {"creator", "signer", "executors", "curator", "question"})
     List<Resolution> findAllResolutionNonArchived();
 
-    @Query("SELECT r FROM Resolution r where r.archivedDate IS NULL")
-    @EntityGraph(attributePaths = {"creator", "signer", "executors", "curator", "question", "deadlines"})
+    @Query("SELECT r FROM Resolution r WHERE r.archivedDate IS NOT NULL")
+    @EntityGraph(attributePaths = {"creator", "signer", "executors", "curator", "question"})
     List<Resolution> findAllResolutionArchived();
+
+    @Query("SELECT DISTINCT r FROM Resolution r LEFT JOIN FETCH r.deadlines WHERE r.id in :ids")
+    List<Resolution> findAllWithDeadline(@Param("ids") Iterable<Long> ids);
 }

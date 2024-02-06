@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 
 @RestController
@@ -129,6 +130,22 @@ public class FilePoolController {
         }
         log.log(Level.INFO, "List of not archived FilePoolDto find");
         return new ResponseEntity<>(filePoolDto, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Получить список UUID тех файлов, которые находятся в архиве более 5 лет. ")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "UUID найдены"),
+            @ApiResponse(code = 404, message = "UUID не найдены")
+    })
+    @GetMapping("/listUuidFilesFiveYearsInArchive")
+    public ResponseEntity<List<UUID>> getListUuidFilesArchivedMoreFiveYearsAgo() {
+        List<UUID> listUuid = repository.getListUuidFilesArchivedMoreFiveYearsAgo();
+        if (listUuid == null || listUuid.isEmpty()) {
+            log.warning("Список UUID не найден");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        log.info("Список UUID найден (файлы в архиве более 5 лет)");
+        return new ResponseEntity<>(listUuid, HttpStatus.OK);
     }
 
 }

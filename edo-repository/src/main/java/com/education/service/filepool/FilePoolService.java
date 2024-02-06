@@ -5,6 +5,7 @@ import com.education.entity.FilePool;
 import com.education.model.dto.FilePoolDto;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface FilePoolService {
 
@@ -54,4 +55,9 @@ public interface FilePoolService {
      * @return List of FilePoolDto
      */
     List<FilePoolDto> findAllByIdNotArchived(Iterable<Long> list);
+
+    /**
+     * Предоставляет список UUID тех файлов, которые находятся в архиве более 5 лет.
+     */
+    List<UUID> getListUuidFilesArchivedMoreFiveYearsAgo();
 }

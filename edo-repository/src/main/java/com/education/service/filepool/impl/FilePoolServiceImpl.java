@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -47,7 +48,7 @@ public class FilePoolServiceImpl implements FilePoolService {
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     public FilePoolDto findById(Long id) {
         FilePool filePool = repository.findById(id).orElse(null);
-        return filePool != null ?  mapper.toDto(filePool) : null;
+        return filePool != null ? mapper.toDto(filePool) : null;
     }
 
     /**
@@ -107,5 +108,13 @@ public class FilePoolServiceImpl implements FilePoolService {
                 : null;
     }
 
+    /**
+     * Предоставляет список UUID тех файлов, которые находятся в архиве более 5 лет.
+     */
+    @Override
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
+    public List<UUID> getListUuidFilesArchivedMoreFiveYearsAgo() {
+        return repository.getListUuidFilesArchivedMoreFiveYearsAgo();
+    }
 
 }

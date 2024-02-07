@@ -31,6 +31,13 @@ public interface NomenclatureService {
      */
     void moveToArchive(Long id);
 
+
+    //////
+
+    void changeArchiveStatus(Long id, boolean archive);
+
+    /////
+
     /**
      * Предоставляет NomenclatureDto номенклатуры из БД по id
      *

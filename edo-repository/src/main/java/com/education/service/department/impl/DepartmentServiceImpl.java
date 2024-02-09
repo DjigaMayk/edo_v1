@@ -1,5 +1,6 @@
 package com.education.service.department.impl;
 
+import com.education.Utils.QuestionUtil;
 import com.education.entity.Department;
 import com.education.model.dto.DepartmentDto;
 import com.education.repository.DepartmentRepository;
@@ -70,5 +71,11 @@ public class DepartmentServiceImpl extends AbstractService<DepartmentRepository,
         List<Department> result = departmentRepository.findAllById(ids);
         result.removeIf(element -> element.getArchivedDate() != null);
         return result;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class, readOnly = true)
+    public Optional<Department> findByFullName(String fullName) {
+        return departmentRepository.findByFullName(fullName);
     }
 }

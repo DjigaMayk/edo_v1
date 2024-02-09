@@ -20,5 +20,5 @@ public interface DepartmentService extends BaseInterface<DepartmentDto> {
     Optional<Department> findByIdNotArchived(Long id);
 
     List<Department> findAllByIdNotArchived(List<Long> ids);
-
+    Optional<Department> findByFullName(String fullName);
 }

@@ -1,6 +1,7 @@
 package com.education.controller;
 
 import com.education.model.dto.DepartmentDto;
+import com.education.service.department.DepartmentService;
 import com.education.service.department.feign.DepartmentFeignService;
 import io.swagger.annotations.*;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ import java.util.List;
 public class DepartmentController {
 
     private final DepartmentFeignService departmentFeignService;
-
+    private final DepartmentService departmentService;
 
     @ApiOperation(value = "Получить department по id", notes = "Returns an department as per the id")
     @ApiResponses(value = {
@@ -103,5 +104,19 @@ public class DepartmentController {
         departmentFeignService.moveToArchive(id);
         log.info("Move entity department with id: %s to archive");
         return new ResponseEntity<>(departmentFeignService.findById(id), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Получить department по fullName")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved"),
+            @ApiResponse(code = 404, message = "Not found - The address was not found")
+    })
+    @GetMapping("/")
+    public ResponseEntity<DepartmentDto> findByFullName(@RequestParam(value = "fullName") String fullName) {
+        DepartmentDto dto =  departmentService.findByFullName(fullName);
+        if (dto == null) {
+            log.warning("Did not receive department-dto");
+        }
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 }

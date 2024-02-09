@@ -53,4 +53,10 @@ public interface DepartmentFeignService {
 
     @DeleteMapping("/api/repository/department/{id}")
     void delete(@PathVariable("id") Long id);
+
+    /**
+     * Получает запись объекта типа DepartmentDto с указанным полным именем.
+     */
+    @GetMapping("/api/repository/department/")
+    DepartmentDto findByFullName(@RequestParam(value = "fullName") String fullName);
 }

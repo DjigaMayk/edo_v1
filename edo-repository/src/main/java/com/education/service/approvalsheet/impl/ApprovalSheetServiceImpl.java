@@ -3,9 +3,9 @@ package com.education.service.approvalsheet.impl;
 import com.education.entity.ApprovalSheet;
 import com.education.model.dto.ApprovalSheetDto;
 import com.education.repository.ApprovalSheetRepository;
+import com.education.service.AbstractService;
 import com.education.service.approvalsheet.ApprovalSheetService;
 import com.education.util.Mapper.impl.ApprovalSheetMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,11 +17,16 @@ import java.util.Optional;
  */
 
 @Service
-@RequiredArgsConstructor
-public class ApprovalSheetServiceImpl implements ApprovalSheetService {
+public class ApprovalSheetServiceImpl extends AbstractService<ApprovalSheetRepository, ApprovalSheet, ApprovalSheetDto, ApprovalSheetMapper> implements ApprovalSheetService {
 
     private final ApprovalSheetRepository approvalSheetRepository;
     private final ApprovalSheetMapper mapper;
+
+    public ApprovalSheetServiceImpl(ApprovalSheetRepository repository, ApprovalSheetMapper approvalSheetMapper, ApprovalSheetRepository approvalSheetRepository, ApprovalSheetMapper mapper) {
+        super(repository, approvalSheetMapper);
+        this.approvalSheetRepository = approvalSheetRepository;
+        this.mapper = mapper;
+    }
 
     /**
      * Метод для сохранения листа согласования.

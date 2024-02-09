@@ -1,6 +1,7 @@
 package com.education.service.author;
 
 import com.education.model.dto.AuthorDto;
+import com.education.service.BaseInterface;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -10,10 +11,11 @@ import java.util.List;
  * Сервис
  * Модуль edo-service
  */
-public interface AuthorService {
-    ResponseEntity<AuthorDto> save(AuthorDto author);
-    ResponseEntity<String> delete(Long id);
-    AuthorDto findById(Long id);
+public interface AuthorService extends BaseInterface<AuthorDto> {
+
+    ResponseEntity<AuthorDto> saveAuthor(AuthorDto author);
+
     List<AuthorDto> findAllById(List<Long> id);
+
     List<AuthorDto> findAuthorByFIO(String fio);
 }

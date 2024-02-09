@@ -2,7 +2,7 @@ package com.education.service.nomenclature;
 
 import com.education.entity.Nomenclature;
 import com.education.model.dto.NomenclatureDto;
-import org.springframework.transaction.annotation.Transactional;
+import com.education.service.BaseInterface;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * @since 1.0
  */
 
-public interface NomenclatureService {
+public interface NomenclatureService extends BaseInterface<NomenclatureDto> {
 
     /**
      * Сохраняет номенклатуру в БД

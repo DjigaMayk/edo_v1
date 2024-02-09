@@ -3,10 +3,10 @@ package com.education.service.address.impl;
 import com.education.entity.Address;
 import com.education.model.dto.AddressDto;
 import com.education.repository.AddressRepository;
+import com.education.service.AbstractService;
 import com.education.service.address.AddressService;
 
 import com.education.util.Mapper.impl.AddressMapper;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,14 +17,18 @@ import java.util.Optional;
  * Service for entity Address
  */
 @Service
-@AllArgsConstructor
-public class AddressServiceImpl implements AddressService {
+public class AddressServiceImpl extends AbstractService<AddressRepository,Address, AddressDto, AddressMapper> implements AddressService {
     /**
      * Repository
      */
     private AddressRepository addressRepository;
 
     private AddressMapper mapper;
+
+    public AddressServiceImpl(AddressRepository repository, AddressMapper mapper) {
+        super(repository, mapper);
+    }
+
 
     /**
      * Save method

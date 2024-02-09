@@ -3,9 +3,9 @@ package com.education.service.question.impl;
 import com.education.entity.Question;
 import com.education.model.dto.QuestionDto;
 import com.education.repository.QuestionRepository;
+import com.education.service.AbstractService;
 import com.education.service.question.QuestionService;
 import com.education.util.Mapper.impl.QuestionMapper;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +20,7 @@ import java.util.Optional;
  * Сервис класс для бизнес-логики над Question
  */
 @Service
-@AllArgsConstructor
-public class QuestionServiceImpl implements QuestionService {
+public class QuestionServiceImpl extends AbstractService<QuestionRepository, Question, QuestionDto, QuestionMapper> implements QuestionService {
     /**
      * Репозиторий для работы с БД
      */
@@ -30,6 +29,12 @@ public class QuestionServiceImpl implements QuestionService {
      * Конвертер ДТО в Энтити и наоборот
      */
     private final QuestionMapper mapper;
+
+    public QuestionServiceImpl(QuestionRepository repository, QuestionMapper questionMapper, QuestionRepository questionRepository, QuestionMapper mapper) {
+        super(repository, questionMapper);
+        this.questionRepository = questionRepository;
+        this.mapper = mapper;
+    }
 
     /**
      * Метод для сохранения объекта Question в БД.

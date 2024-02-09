@@ -1,10 +1,12 @@
 package com.education.service.question;
 
 import com.education.model.dto.QuestionDto;
+import com.education.service.BaseInterface;
 
 import java.util.List;
 
-public interface QuestionService {
+public interface QuestionService extends BaseInterface<QuestionDto> {
+
     QuestionDto save(QuestionDto question);
 
     void moveToArchive(Long id);

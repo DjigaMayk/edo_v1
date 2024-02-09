@@ -1,12 +1,12 @@
 package com.education.service.filepool;
 
-
 import com.education.entity.FilePool;
 import com.education.model.dto.FilePoolDto;
+import com.education.service.BaseInterface;
 
 import java.util.List;
 
-public interface FilePoolService {
+public interface FilePoolService extends BaseInterface<FilePoolDto> {
 
     /**
      * Add in db method

@@ -1,5 +1,6 @@
 package com.education.service.appeal.impl;
 
+import com.education.service.AbstractService;
 import com.education.service.author.AuthorService;
 import com.education.feign.feign_appeal.AppealFeignService;
 import com.education.model.constant.RabbitConstant;
@@ -13,7 +14,6 @@ import com.education.service.appeal.AppealService;
 import com.education.service.nomenclature.NomenclatureService;
 import com.education.service.question.QuestionService;
 import com.education.service.region.RegionService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +27,8 @@ import static org.springframework.util.CollectionUtils.isEmpty;
 import static org.springframework.util.StringUtils.hasLength;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
-public class AppealServiceImpl implements AppealService {
+public class AppealServiceImpl extends AbstractService<AppealFeignService, AppealDto> implements AppealService {
 
     private final QuestionService questionService;
     private final AuthorService authorService;
@@ -38,6 +37,16 @@ public class AppealServiceImpl implements AppealService {
     private final AppealFeignService appealFeignService;
     private final NomenclatureService nomenclatureService;
 
+    public AppealServiceImpl(AppealFeignService appealFeignClient, QuestionService questionService, AuthorService authorService, RegionService regionService, AmqpTemplate amqpTemplate, AppealFeignService appealFeignService, NomenclatureService nomenclatureService) {
+        super(appealFeignClient);
+        this.questionService = questionService;
+        this.authorService = authorService;
+        this.regionService = regionService;
+        this.amqpTemplate = amqpTemplate;
+        this.appealFeignService = appealFeignService;
+        this.nomenclatureService = nomenclatureService;
+    }
+
     @Override
     public AppealDto save(AppealDto appealDto) {
         String validateResult = validateAppealDto(appealDto);
@@ -45,7 +54,7 @@ public class AppealServiceImpl implements AppealService {
             throw new AppealNotValidException(validateResult);
         }
         var savedAuthors = appealDto.getAuthors()
-                .stream().map(authorService::save)
+                .stream().map(authorService::saveAuthor)
                 .map(ResponseEntity::getBody)
                 .toList();
         var savedQuestions = appealDto.getQuestion()

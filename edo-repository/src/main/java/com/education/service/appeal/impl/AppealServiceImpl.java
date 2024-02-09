@@ -1,9 +1,11 @@
 package com.education.service.appeal.impl;
 
 import com.education.entity.Appeal;
+import com.education.model.dto.AppealDto;
 import com.education.repository.AppealRepository;
+import com.education.service.AbstractService;
 import com.education.service.appeal.AppealService;
-import lombok.RequiredArgsConstructor;
+import com.education.util.Mapper.impl.AppealMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,12 +15,15 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
-public class AppealServiceImpl implements AppealService {
+public class AppealServiceImpl extends AbstractService<AppealRepository, Appeal, AppealDto, AppealMapper> implements AppealService {
 
     final AppealRepository appealRepository;
 
+    public AppealServiceImpl(AppealRepository repository, AppealMapper appealMapper, AppealRepository appealRepository) {
+        super(repository, appealMapper);
+        this.appealRepository = appealRepository;
+    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override

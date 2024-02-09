@@ -29,7 +29,7 @@ public class AuthorController {
     @Operation(summary = "Поиск сущности по id")
     @GetMapping("/{id}")
     public ResponseEntity<AuthorDto> showById(@PathVariable("id") Long id) {
-        Optional<AuthorDto> authorDto = Optional.ofNullable(authorService.findById(id));
+        Optional<AuthorDto> authorDto = Optional.ofNullable(authorService.getById(id));
         if (authorDto.isEmpty()) {
             log.warn("Сущность не найдена");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -79,7 +79,19 @@ public class AuthorController {
         List<AuthorDto> dtos = authorService.findAuthorByFIO(decodedFio);
         if (!dtos.isEmpty()) {
             log.info("Результат поиска сущностей: {}", dtos);
-        }else {
+        } else {
+            log.warn("Результат поиска сущностей: {}", dtos);
+        }
+        return new ResponseEntity<>(dtos, !dtos.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+    }
+
+    @Operation(summary = "Поиск сущностей по значениям их id")
+    @GetMapping("/findAll")
+    public ResponseEntity<List<AuthorDto>> getAll() {
+        List<AuthorDto> dtos = authorService.findAll();
+        if (!dtos.isEmpty()) {
+            log.info("Результат поиска сущностей: {}", dtos);
+        } else {
             log.warn("Результат поиска сущностей: {}", dtos);
         }
         return new ResponseEntity<>(dtos, !dtos.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);

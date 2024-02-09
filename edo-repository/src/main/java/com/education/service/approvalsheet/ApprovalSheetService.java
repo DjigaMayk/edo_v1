@@ -1,6 +1,7 @@
 package com.education.service.approvalsheet;
 
 import com.education.model.dto.ApprovalSheetDto;
+import com.education.service.BaseInterface;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * @author Ivan Chursinov
  */
 
-public interface ApprovalSheetService {
+public interface ApprovalSheetService extends BaseInterface<ApprovalSheetDto> {
 
     ApprovalSheetDto save(ApprovalSheetDto approvalSheet);
 

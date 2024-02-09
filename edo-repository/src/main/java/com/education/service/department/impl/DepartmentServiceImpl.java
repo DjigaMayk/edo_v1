@@ -1,12 +1,14 @@
 package com.education.service.department.impl;
 
 import com.education.entity.Department;
+import com.education.model.dto.DepartmentDto;
 import com.education.repository.DepartmentRepository;
+import com.education.service.AbstractService;
 import com.education.service.address.AddressService;
 import com.education.service.department.DepartmentService;
 import com.education.util.Mapper.impl.AddressMapper;
+import com.education.util.Mapper.impl.DepartmentMapper;
 import jakarta.validation.constraints.NotNull;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,11 +16,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
-public class DepartmentServiceImpl implements DepartmentService {
+public class DepartmentServiceImpl extends AbstractService<DepartmentRepository, Department, DepartmentDto, DepartmentMapper> implements DepartmentService {
     private final DepartmentRepository departmentRepository;
     private final AddressService addressService;
     private final AddressMapper addressMapper;
+
+    public DepartmentServiceImpl(DepartmentRepository repository, DepartmentMapper departmentMapper, DepartmentRepository departmentRepository, AddressService addressService, AddressMapper addressMapper) {
+        super(repository, departmentMapper);
+        this.departmentRepository = departmentRepository;
+        this.addressService = addressService;
+        this.addressMapper = addressMapper;
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)

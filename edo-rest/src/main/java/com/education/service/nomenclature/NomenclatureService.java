@@ -1,10 +1,11 @@
 package com.education.service.nomenclature;
 
 import com.education.model.dto.NomenclatureDto;
+import com.education.service.BaseInterface;
 
 import java.util.List;
 
-public interface NomenclatureService {
+public interface NomenclatureService extends BaseInterface<NomenclatureDto> {
 
     NomenclatureDto save(NomenclatureDto nomenclature);
 

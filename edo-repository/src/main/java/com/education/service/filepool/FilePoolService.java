@@ -5,6 +5,7 @@ import com.education.entity.FilePool;
 import com.education.model.dto.FilePoolDto;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface FilePoolService {
@@ -60,4 +61,10 @@ public interface FilePoolService {
      * Предоставляет список UUID тех файлов, которые находятся в архиве более 5 лет.
      */
     List<UUID> getListUuidFilesArchivedMoreFiveYearsAgo();
+
+    /**
+     * Метод удаляет запись в БД по UUID. УДАЛЯЕТ ТОЛЬКО в БД!. Используется для удаления старых архивных файлов!
+     * Использовать метод только если файл удален из файлового хранилища.
+     */
+    Optional<UUID> deleteFileByUuid(UUID uuid);
 }

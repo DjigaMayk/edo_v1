@@ -43,5 +43,12 @@ public interface FilePoolRepository extends JpaRepository<FilePool, Long> {
      */
     @Query(value = "select storage_file_id from file_pool f where f.archived_date < now() - INTERVAL '5 years'", nativeQuery = true)
     List<UUID> getListUuidFilesArchivedMoreFiveYearsAgo();
+
+    /**
+     * Метод удаляет запись в БД по UUID. УДАЛЯЕТ ТОЛЬКО в БД!. Используется для удаления старых архивных файлов!
+     * Использовать метод только если файл удален из файлового хранилища.
+     */
+    @Query(value = "DELETE FROM file_pool f WHERE f.storage_file_id = ?1 RETURNING f.storage_file_id", nativeQuery = true)
+    Optional<UUID> deleteFileByUuid(@Param("uuid") UUID uuid);
 }
 

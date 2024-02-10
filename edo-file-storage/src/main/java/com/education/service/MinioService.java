@@ -8,7 +8,7 @@ public interface MinioService {
 
     InputStream getObject(String filename);
 
-    void deleteFileInBucketWithName(String bucketName, String fileName);
+    boolean deleteFileInBucketWithName(String bucketName, String fileName);
 
     void deleteFileWhoseRequestsMoreThanFiveYearsAgo();
 }

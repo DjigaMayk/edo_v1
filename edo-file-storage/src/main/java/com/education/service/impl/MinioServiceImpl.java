@@ -1,31 +1,31 @@
 package com.education.service.impl;
 
+import com.education.feign.feign_file_pool.FilePoolFeignClient;
 import com.education.service.MinioService;
 import io.minio.*;
-import io.minio.messages.Item;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.time.ZonedDateTime;
-import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
+@EnableRabbit
 public class MinioServiceImpl implements MinioService {
+
     private final MinioClient minioClient;
+    private final FilePoolFeignClient filePoolFeignClient;
 
     @Value("${minio.bucket}")
     private String bucketName;
-
-    @Autowired
-    public MinioServiceImpl(MinioClient minioClient) {
-        this.minioClient = minioClient;
-    }
 
     public UUID uploadFile(byte[] request) {
         UUID uuid = UUID.randomUUID();
@@ -59,7 +59,7 @@ public class MinioServiceImpl implements MinioService {
     }
 
     @Override
-    public void deleteFileInBucketWithName(String bucketName, String fileName) {
+    public boolean deleteFileInBucketWithName(String bucketName, String fileName) {
         log.info("Запрос на удаление объекта из MinIO. Баскет: " + bucketName + "; Имя объекта: " + fileName);
         RemoveObjectArgs removeObjectArgs = RemoveObjectArgs.builder()
                 .bucket(bucketName)
@@ -68,31 +68,25 @@ public class MinioServiceImpl implements MinioService {
         try {
             minioClient.removeObject(removeObjectArgs);
             log.info("Объект удален");
+            return true;
         } catch (Exception e) {
             log.error("Ошибка при удалении объекта из MinIO: ", e);
-            throw new RuntimeException(e);
+            return false;
         }
     }
 
     @Override
+    @RabbitListener(queues = "fileStorageQueue")
     public void deleteFileWhoseRequestsMoreThanFiveYearsAgo() {
-        ZonedDateTime fiveYearsAgo = ZonedDateTime.now().minusYears(5);
-        log.info("Начало процедуры проверки объектов из MinIO на старость (последний запрос был более 5 лет).");
-        ListObjectsArgs listObjectsArgs = ListObjectsArgs.builder()
-                .bucket(bucketName)
-                .build();
-        Iterable<Result<Item>> listObjects = minioClient.listObjects(listObjectsArgs);
-        Iterator<Result<Item>> iterator = listObjects.iterator();
-        while (iterator.hasNext()) {
-            try {
-                Item item = iterator.next().get();
-                log.info("Объект " + item.objectName() + ". Последний запрос к объекту: " + item.lastModified());
-                if (item.lastModified().isBefore(fiveYearsAgo)) {
-                    deleteFileInBucketWithName(bucketName, item.objectName());
+        log.info("Начало процедуры удаления файлов, которые заархивированы более 5 лет назад");
+        List<UUID> listUuid = filePoolFeignClient.getListUuidFilesArchivedMoreFiveYearsAgo();
+        if (listUuid != null && !listUuid.isEmpty()) {
+            log.info("Получен список UUID для удаления. Содержит " + listUuid.size() + " элементов.");
+            for (UUID uuid : listUuid) {
+                if (deleteFileInBucketWithName(bucketName, uuid.toString())) {
+                    log.info("Отправка команды на удаления записи про объект с UUID: [" + uuid + "] из БД");
+                    filePoolFeignClient.deleteByUuid(uuid);
                 }
-            } catch (Exception e) {
-                log.error("Ошибка при получении объекта из MinIO: ", e);
-                throw new RuntimeException(e);
             }
         }
     }

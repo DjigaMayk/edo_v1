@@ -87,13 +87,7 @@ public class ResolutionServiceImpl implements ResolutionService {
     @Override
     public List<Resolution> findAllWithFilterArchived(@Nullable String filter) {
         List<Resolution> resolutions = new ArrayList<>();
-        if (filter == null || filter.equals("all")) {
-            resolutions = resolutionRepository.findAllResolution();
-        } else if (filter.equals("nonarchived")) {
-            resolutions = resolutionRepository.findAllResolutionNonArchived();
-        } else if (filter.equals("archived")) {
-            resolutions = resolutionRepository.findAllResolutionArchived();
-        }
+        resolutions = resolutionRepository.findAllResolutionWithFilterArchived(filter);
         if (!resolutions.isEmpty()) {
             ArrayList<Long> listId = new ArrayList<>();
             resolutions.forEach(resolution -> listId.add(resolution.getId()));

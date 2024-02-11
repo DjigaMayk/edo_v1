@@ -3,6 +3,7 @@ package com.education.repository;
 import com.education.entity.Resolution;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -45,17 +46,14 @@ public interface ResolutionRepository extends JpaRepository<Resolution, Long> {
             value = "SELECT is_draft from resolution where id = :id")
     Optional<Boolean> isDraft(@Param("id") Long id);
 
-    @Query("SELECT r FROM Resolution r")
+    @Query("""
+            SELECT r FROM Resolution r WHERE CASE
+            WHEN :archived = 'archived' THEN (r.archivedDate IS NOT NULL)
+            WHEN :archived = 'nonarchived' THEN (r.archivedDate IS NULL)
+            ELSE true END
+            """)
     @EntityGraph(attributePaths = {"creator", "signer", "executors", "curator", "question"})
-    List<Resolution> findAllResolution();
-
-    @Query("SELECT r FROM Resolution r WHERE r.archivedDate IS NULL")
-    @EntityGraph(attributePaths = {"creator", "signer", "executors", "curator", "question"})
-    List<Resolution> findAllResolutionNonArchived();
-
-    @Query("SELECT r FROM Resolution r WHERE r.archivedDate IS NOT NULL")
-    @EntityGraph(attributePaths = {"creator", "signer", "executors", "curator", "question"})
-    List<Resolution> findAllResolutionArchived();
+    List<Resolution> findAllResolutionWithFilterArchived(@Param("archived") @Nullable String archived);
 
     @Query("SELECT DISTINCT r FROM Resolution r LEFT JOIN FETCH r.deadlines WHERE r.id in :ids")
     List<Resolution> findAllWithDeadline(@Param("ids") Iterable<Long> ids);

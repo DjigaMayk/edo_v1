@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -52,7 +54,7 @@ public class FilePoolServiceImpl extends AbstractService<FilePoolRepository, Fil
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     public FilePoolDto findById(Long id) {
         FilePool filePool = repository.findById(id).orElse(null);
-        return filePool != null ?  mapper.toDto(filePool) : null;
+        return filePool != null ? mapper.toDto(filePool) : null;
     }
 
     /**
@@ -112,5 +114,23 @@ public class FilePoolServiceImpl extends AbstractService<FilePoolRepository, Fil
                 : null;
     }
 
+    /**
+     * Предоставляет список UUID тех файлов, которые находятся в архиве более 5 лет.
+     */
+    @Override
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
+    public List<UUID> getListUuidFilesArchivedMoreFiveYearsAgo() {
+        return repository.getListUuidFilesArchivedMoreFiveYearsAgo();
+    }
+
+    /**
+     * Метод удаляет запись в БД по UUID. УДАЛЯЕТ ТОЛЬКО в БД!. Используется для удаления старых архивных файлов!
+     * Использовать метод только если файл удален из файлового хранилища.
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Optional<UUID> deleteFileByUuid(UUID uuid) {
+        return repository.deleteFileByUuid(uuid);
+    }
 
 }

@@ -3,9 +3,9 @@ package com.education.service.notification.impl;
 import com.education.entity.Notification;
 import com.education.model.dto.NotificationDto;
 import com.education.repository.NotificationRepository;
+import com.education.service.AbstractService;
 import com.education.service.notification.NotificationService;
 import com.education.util.Mapper.impl.NotificationMapper;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,24 +17,30 @@ import java.util.List;
  * Представляет реализацию операций над оповещением пользователя
  */
 @Service
-@AllArgsConstructor
-public class NotificationServiceImpl implements NotificationService {
+public class NotificationServiceImpl extends AbstractService<NotificationRepository, Notification, NotificationDto, NotificationMapper> implements NotificationService {
     /**
      * Репозиторий оповещений
      */
     private final NotificationRepository notificationRepository;
     private final NotificationMapper mapper;
 
+    public NotificationServiceImpl(NotificationRepository repository, NotificationMapper notificationMapper, NotificationRepository notificationRepository, NotificationMapper mapper) {
+        super(repository, notificationMapper);
+        this.notificationRepository = notificationRepository;
+        this.mapper = mapper;
+    }
+
 
     /**
      * Сохранение оповещений в БД
      *
      * @param notification
+     * @return
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void save(NotificationDto notification) {
-        notificationRepository.save(mapper.toEntity(notification));
+    public NotificationDto save(NotificationDto notification) {
+        return mapper.toDto(notificationRepository.save(mapper.toEntity(notification)));
     }
 
     /**

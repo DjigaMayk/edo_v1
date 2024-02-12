@@ -1,9 +1,11 @@
 package com.education.service.facsimile.impl;
 
 import com.education.entity.Facsimile;
+import com.education.model.dto.FacsimileDto;
 import com.education.repository.FacsimileRepository;
+import com.education.service.AbstractService;
 import com.education.service.facsimile.FacsimileService;
-import lombok.RequiredArgsConstructor;
+import com.education.util.Mapper.impl.FacsimileMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +18,17 @@ import java.util.Optional;
  * Class-service for Facsimile
  */
 @Service
-@RequiredArgsConstructor
-public class FacsimileServiceImpl implements FacsimileService {
+public class FacsimileServiceImpl extends AbstractService<FacsimileRepository, Facsimile, FacsimileDto, FacsimileMapper> implements FacsimileService {
 
     /**
      * Class-repository object for Facsimile
      */
     private final FacsimileRepository facsimileRepository;
+
+    public FacsimileServiceImpl(FacsimileRepository repository, FacsimileMapper facsimileMapper, FacsimileRepository facsimileRepository) {
+        super(repository, facsimileMapper);
+        this.facsimileRepository = facsimileRepository;
+    }
 
     /**
      * Method for saving facsimile in DB

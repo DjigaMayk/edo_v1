@@ -2,18 +2,18 @@ package com.education.service.region;
 
 import com.education.entity.Region;
 import com.education.model.dto.RegionDto;
-import org.apache.http.HttpStatus;
+import com.education.service.BaseInterface;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface RegionService {
+public interface RegionService extends BaseInterface<RegionDto> {
 
     RegionDto save(RegionDto region);
 
     Optional<Region> findById(long id);
 
-    List<Region> findAll();
+    List<RegionDto> findAll();
 
     void delete (long id);
 }

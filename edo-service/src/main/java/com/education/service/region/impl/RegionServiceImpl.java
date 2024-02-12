@@ -2,10 +2,10 @@ package com.education.service.region.impl;
 
 import com.education.feign.feign_region.RegionFeignService;
 import com.education.model.dto.RegionDto;
+import com.education.service.AbstractService;
 import com.education.service.region.RegionService;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
-import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -13,13 +13,18 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 @Log4j2
-public class RegionServiceImpl implements RegionService {
+public class RegionServiceImpl extends AbstractService<RegionFeignService, RegionDto> implements RegionService {
 
     private EurekaClient client;
 
     private final RegionFeignService regionFeignService;
+
+    public RegionServiceImpl(RegionFeignService regionFeignService, EurekaClient client, RegionFeignService regionFeignService1) {
+        super(regionFeignService);
+        this.client = client;
+        this.regionFeignService = regionFeignService1;
+    }
 
     /**
      * Метод для сохранения объекта region в БД.

@@ -1,9 +1,11 @@
 package com.education.service.employee.impl;
 
 import com.education.entity.Employee;
+import com.education.model.dto.EmployeeDto;
 import com.education.repository.EmployeeRepository;
+import com.education.service.AbstractService;
 import com.education.service.employee.EmployeeService;
-import lombok.AllArgsConstructor;
+import com.education.util.Mapper.impl.EmployeeMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,14 +17,18 @@ import java.util.List;
  * @author Степан Ритман
  * Сервис-класс для объекта Employee
  */
-@AllArgsConstructor
 @Service
-public class EmployeeServiceImpl implements EmployeeService {
+public class EmployeeServiceImpl extends AbstractService<EmployeeRepository, Employee, EmployeeDto, EmployeeMapper> implements EmployeeService {
 
     /**
      * Объект класса-репозитория для сущности Employee
      */
     private final EmployeeRepository employeeRepository;
+
+    public EmployeeServiceImpl(EmployeeRepository repository, EmployeeMapper employeeMapper, EmployeeRepository employeeRepository) {
+        super(repository, employeeMapper);
+        this.employeeRepository = employeeRepository;
+    }
 
     /**
      * Метод для сохранения сущности Employee в таблицу

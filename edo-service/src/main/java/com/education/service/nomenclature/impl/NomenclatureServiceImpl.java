@@ -2,6 +2,7 @@ package com.education.service.nomenclature.impl;
 
 import com.education.feign.feign_nomenclature.NomenclatureFeignClient;
 import com.education.model.dto.NomenclatureDto;
+import com.education.service.AbstractService;
 import com.education.service.nomenclature.NomenclatureService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import java.util.List;
  * Представляет реализацию операций над номенклатурой
  */
 @Service
-public class NomenclatureServiceImpl implements NomenclatureService {
+public class NomenclatureServiceImpl extends AbstractService<NomenclatureFeignClient, NomenclatureDto> implements NomenclatureService {
 
     /**
      * Шаблон номера обращения
@@ -24,6 +25,7 @@ public class NomenclatureServiceImpl implements NomenclatureService {
 
     @Autowired
     public NomenclatureServiceImpl(NomenclatureFeignClient nomenclatureFeignClient) {
+        super(nomenclatureFeignClient);
         this.nomenclatureFeignClient = nomenclatureFeignClient;
     }
 

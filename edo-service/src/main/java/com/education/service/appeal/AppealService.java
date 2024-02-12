@@ -3,10 +3,11 @@ package com.education.service.appeal;
 import com.education.model.dto.AppealAbbreviatedDto;
 import com.education.model.dto.AppealDto;
 import com.education.model.dto.QuestionDto;
+import com.education.service.BaseInterface;
 
 import java.util.List;
 
-public interface AppealService {
+public interface AppealService  extends BaseInterface<AppealDto> {
     AppealDto save(AppealDto appeal);
 
     void moveToArchive(Long id);

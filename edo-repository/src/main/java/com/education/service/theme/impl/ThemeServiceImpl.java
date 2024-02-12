@@ -3,9 +3,9 @@ package com.education.service.theme.impl;
 import com.education.entity.Theme;
 import com.education.model.dto.ThemeDto;
 import com.education.repository.ThemeRepository;
+import com.education.service.AbstractService;
 import com.education.service.theme.ThemeService;
 import com.education.util.Mapper.impl.ThemeMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +16,16 @@ import java.util.List;
  * Сервис для темы обращения
  */
 @Service
-@RequiredArgsConstructor
-public class ThemeServiceImpl implements ThemeService {
+public class ThemeServiceImpl extends AbstractService<ThemeRepository, Theme, ThemeDto, ThemeMapper> implements ThemeService {
 
     private final ThemeRepository themeRepository;
     private final ThemeMapper mapper;
+
+    public ThemeServiceImpl(ThemeRepository repository, ThemeMapper themeMapper, ThemeRepository themeRepository, ThemeMapper mapper) {
+        super(repository, themeMapper);
+        this.themeRepository = themeRepository;
+        this.mapper = mapper;
+    }
 
     /**
      * Получает ThemeDto и сохраняет тему

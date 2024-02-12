@@ -1,10 +1,11 @@
 package com.education.service.employee;
 
 import com.education.model.dto.EmployeeDto;
+import com.education.service.BaseInterface;
 
 import java.util.List;
 
-public interface EmployeeService {
+public interface EmployeeService extends BaseInterface<EmployeeDto> {
 
     EmployeeDto findById(Long id, boolean notArchivedOnly);
 

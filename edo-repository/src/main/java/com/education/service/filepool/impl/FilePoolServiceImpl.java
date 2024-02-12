@@ -3,9 +3,9 @@ package com.education.service.filepool.impl;
 import com.education.entity.FilePool;
 import com.education.model.dto.FilePoolDto;
 import com.education.repository.FilePoolRepository;
+import com.education.service.AbstractService;
 import com.education.service.filepool.FilePoolService;
 import com.education.util.Mapper.impl.FilePoolMapper;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,8 +16,7 @@ import java.util.stream.Collectors;
  * Service for entity FilePool
  */
 @Service
-@AllArgsConstructor
-public class FilePoolServiceImpl implements FilePoolService {
+public class FilePoolServiceImpl extends AbstractService<FilePoolRepository, FilePool, FilePoolDto, FilePoolMapper> implements FilePoolService {
 
     /**
      * Repository
@@ -25,6 +24,12 @@ public class FilePoolServiceImpl implements FilePoolService {
     private final FilePoolRepository repository;
 
     private final FilePoolMapper mapper;
+
+    public FilePoolServiceImpl(FilePoolRepository repository, FilePoolMapper filePoolMapper, FilePoolRepository repository1, FilePoolMapper mapper) {
+        super(repository, filePoolMapper);
+        this.repository = repository1;
+        this.mapper = mapper;
+    }
 
     /**
      * Add in db method

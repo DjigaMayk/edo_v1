@@ -1,20 +1,25 @@
 package com.education.service.resolution.impl;
 
 import com.education.entity.Resolution;
+import com.education.model.dto.ResolutionDto;
 import com.education.repository.ResolutionRepository;
+import com.education.service.AbstractService;
 import com.education.service.resolution.ResolutionService;
-import lombok.RequiredArgsConstructor;
+import com.education.util.Mapper.impl.ResolutionMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
-public class ResolutionServiceImpl implements ResolutionService {
+public class ResolutionServiceImpl extends AbstractService<ResolutionRepository, Resolution, ResolutionDto, ResolutionMapper> implements ResolutionService {
 
     final ResolutionRepository resolutionRepository;
+
+    public ResolutionServiceImpl(ResolutionRepository repository, ResolutionMapper resolutionMapper, ResolutionRepository resolutionRepository) {
+        super(repository, resolutionMapper);
+        this.resolutionRepository = resolutionRepository;
+    }
 
 
     @Transactional(rollbackFor = Exception.class)

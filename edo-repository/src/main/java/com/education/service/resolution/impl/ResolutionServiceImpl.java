@@ -90,7 +90,8 @@ public class ResolutionServiceImpl implements ResolutionService {
         resolutions = resolutionRepository.findAllResolutionWithFilterArchived(filter);
         if (!resolutions.isEmpty()) {
             ArrayList<Long> listId = new ArrayList<>();
-            resolutions.forEach(resolution -> listId.add(resolution.getId()));
+            resolutions.stream()
+                    .forEach(resolution -> listId.add(resolution.getId()));
             resolutions = resolutionRepository.findAllWithDeadline(listId);
         }
         return resolutions;

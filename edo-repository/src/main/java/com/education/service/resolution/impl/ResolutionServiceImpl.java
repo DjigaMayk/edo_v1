@@ -1,5 +1,6 @@
 package com.education.service.resolution.impl;
 
+import com.education.entity.BaseEntity;
 import com.education.entity.Resolution;
 import com.education.repository.DeadlineRepository;
 import com.education.repository.ResolutionRepository;
@@ -8,10 +9,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -86,14 +92,12 @@ public class ResolutionServiceImpl implements ResolutionService {
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     @Override
     public List<Resolution> findAllWithFilterArchived(@Nullable String filter) {
-        List<Resolution> resolutions = new ArrayList<>();
-        resolutions = resolutionRepository.findAllResolutionWithFilterArchived(filter);
-        if (!resolutions.isEmpty()) {
-            ArrayList<Long> listId = new ArrayList<>();
-            resolutions.stream()
-                    .forEach(resolution -> listId.add(resolution.getId()));
-            resolutions = resolutionRepository.findAllWithDeadline(listId);
-        }
-        return resolutions;
+        return Stream.ofNullable(resolutionRepository.findAllResolutionWithFilterArchived(filter))
+                .map(r -> r.stream()
+                        .map(BaseEntity::getId)
+                        .toList())
+                .map(resolutionRepository::findAllWithDeadline)
+                .findAny()
+                .orElse(new ArrayList<>());
     }
 }

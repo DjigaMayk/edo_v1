@@ -7,6 +7,7 @@ import com.education.service.appeal.AppealService;
 import com.education.model.enumEntity.EnumAppealStatus;
 import com.education.service.resolution.ResolutionService;
 import org.apache.commons.lang.BooleanUtils;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -110,5 +111,18 @@ public class ResolutionServiceImpl extends AbstractService<ResolutionFeignServic
         list = sortResolutions(list);
         return list;
 
+    }
+
+    /**
+     * Метод для выгрузки всех резолюций с возможностью фильтра по признаку архивности.
+     *
+     * @param filter фильтр указывающий какая выборка Резолюций запрошена:
+     *               null или all - все резолюции
+     *               nonarchived - без архивных
+     *               archived - только архивные
+     */
+    @Override
+    public List<ResolutionDto> findAllWithFilterArchived(@Nullable String filter) {
+        return resolutionFeignService.findAllWithFilterArchived(filter);
     }
 }

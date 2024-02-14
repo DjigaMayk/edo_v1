@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.Level;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import com.education.entity.Resolution;
 
@@ -89,7 +90,7 @@ public class ResolutionController {
     @GetMapping(value = "/allById/{ids}")
     public ResponseEntity<List<ResolutionDto>> findAllByIdResolution(@PathVariable List<Long> ids) {
         List<Resolution> resolution = resolutionService.findAllById(ids);
-        if (resolution == null && resolution.isEmpty()) {
+        if (resolution == null || resolution.isEmpty()) {
             log.log(Level.WARN, "Сущности не найдены");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -121,7 +122,7 @@ public class ResolutionController {
     @GetMapping(value = "/allNotArchived/{ids}")
     public ResponseEntity<List<ResolutionDto>> findAllByIdNotArchivedResolution(@PathVariable List<Long> ids) {
         List<Resolution> resolution = resolutionService.findAllByIdNotArchived(ids);
-        if (resolution == null && resolution.isEmpty()) {
+        if (resolution == null || resolution.isEmpty()) {
             log.log(Level.WARN, "Сущности не найдены");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -137,7 +138,7 @@ public class ResolutionController {
     @GetMapping(value = "/allByAppealIdNotArchived/{appealId}")
     public ResponseEntity<List<ResolutionDto>> findAllByAppealIdNotArchived(@PathVariable Long appealId) {
         List<Resolution> resolution = resolutionService.findAllByAppealIdNotArchived(appealId);
-        if (resolution == null && resolution.isEmpty()) {
+        if (resolution == null || resolution.isEmpty()) {
             log.log(Level.WARN, "Сущности не найдены");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -155,5 +156,23 @@ public class ResolutionController {
         Boolean isDraft = resolutionService.isDraft(id);
         log.log(Level.INFO, "Статус получен");
         return new ResponseEntity<>(isDraft, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Получить все резолюции включая архивные, или без них, или только архивные")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Резолюции найдены"),
+            @ApiResponse(code = 404, message = "Резолюции не найдены")
+    })
+    @GetMapping(value = "/allWithFilterArchived/")
+    public ResponseEntity<List<ResolutionDto>> findAllWithFilterArchived(
+            @RequestParam(value = "filter", required = false) @Nullable String filter
+    ) {
+        List<Resolution> resolutions = resolutionService.findAllWithFilterArchived(filter);
+        if (resolutions == null || resolutions.isEmpty()) {
+            log.log(Level.WARN, "Резолюции не найдены");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        log.log(Level.INFO, "Резолюции найдены");
+        return new ResponseEntity<>(mapper.toDto(resolutions), HttpStatus.OK);
     }
 }

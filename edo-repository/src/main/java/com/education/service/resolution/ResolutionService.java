@@ -26,4 +26,6 @@ public interface ResolutionService extends BaseInterface<ResolutionDto> {
     List<Resolution> findAllByAppealIdNotArchived(Long appealId);
 
     Boolean isDraft(@Param("id") Long id);
+
+    List<Resolution> findAllWithFilterArchived(String filter);
 }

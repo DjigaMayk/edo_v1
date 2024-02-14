@@ -2,6 +2,7 @@ package com.education.service.resolution;
 
 import com.education.model.dto.ResolutionDto;
 import com.education.service.BaseInterface;
+import org.springframework.lang.Nullable;
 
 import java.util.List;
 
@@ -22,4 +23,6 @@ public interface ResolutionService extends BaseInterface<ResolutionDto> {
     List<ResolutionDto> findAllByIdNotArchived(Iterable<Long> ids);
 
     List<ResolutionDto> findAllByAppealIdNotArchived(Long appealId);
+
+    List<ResolutionDto> findAllWithFilterArchived(@Nullable String filter);
 }

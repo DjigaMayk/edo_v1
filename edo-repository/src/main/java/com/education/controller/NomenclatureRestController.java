@@ -121,7 +121,7 @@ public class NomenclatureRestController {
     @PatchMapping("/nomenclature/{id}/archive")
     public ResponseEntity<Void> changeArchiveStatus(@PathVariable("id") Long id, @RequestParam boolean archive) {
         nomenclatureService.changeArchiveStatus(id, archive);
-        log.log(Level.INFO, "Nomenclature {0} archive status: id = {1}", new Object[]{archive ? "moved to" : "removed from", id});
+        log.log(Level.INFO, "Nomenclature {0} archive status: id = {1}", archive ? "moved to" : "removed from");
         return ResponseEntity.ok().build();
     }
 

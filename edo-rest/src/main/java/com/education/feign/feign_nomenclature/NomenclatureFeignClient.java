@@ -30,6 +30,9 @@ public interface NomenclatureFeignClient {
     @PatchMapping("/nomenclature/archived/{id}")
     void moveToArchiveNomenclature(@PathVariable("id") Long id);
 
+    @PatchMapping("/nomenclature/archived/{id}")
+    void changeArchiveStatusNomenclature(@PathVariable("id") Long id, @RequestParam boolean archive);
+
     @GetMapping("/nomenclature/search/")
     List<NomenclatureDto> findByIndex(@RequestParam("index") String index);
 

@@ -1,11 +1,12 @@
 package com.education.service.appeal;
 
-
 import com.education.entity.Appeal;
+import com.education.model.dto.AppealDto;
+import com.education.service.BaseInterface;
 
 import java.util.List;
 
-public interface AppealService {
+public interface AppealService extends BaseInterface<AppealDto> {
     Appeal save(Appeal appeal);
 
     void moveToArchive(Long id);
@@ -27,5 +28,6 @@ public interface AppealService {
     void moveToUnderConsideration(Long resolutionId);
 
     void moveToNewOrRegistered(Long id, String appealStatus);
+
     void markMailIsSent(Long appealId);
 }

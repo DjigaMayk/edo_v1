@@ -1,5 +1,6 @@
 package com.education.feign.feign_appeal;
 
+import com.education.feign.AbstractFeign;
 import com.education.model.dto.AppealAbbreviatedDto;
 import com.education.model.dto.AppealDto;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @FeignClient(name = "edo-repository", path = "/api/repository/appeal")
-public interface AppealFeignService {
+public interface AppealFeignService  extends AbstractFeign<AppealDto> {
 
     @PostMapping
     AppealDto save(AppealDto appeal);

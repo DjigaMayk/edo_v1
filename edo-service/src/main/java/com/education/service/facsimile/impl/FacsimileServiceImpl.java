@@ -7,12 +7,12 @@ import com.education.model.dto.EmployeeDto;
 import com.education.model.dto.FacsimileDto;
 import com.education.model.dto.FilePoolDto;
 import com.education.model.enumEntity.EnumFileType;
+import com.education.service.AbstractService;
 import com.education.service.facsimile.FacsimileService;
 import com.education.service.file_pool.FilePoolService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
@@ -30,9 +30,8 @@ import java.io.InputStream;
  * Class-service for Facsimile
  */
 @Service
-@RequiredArgsConstructor
 @Log
-public class FacsimileServiceImpl implements FacsimileService {
+public class FacsimileServiceImpl extends AbstractService<FacsimileFeignService, FacsimileDto> implements FacsimileService {
     /**
      * Service and client for saving facsimile in storage
      */
@@ -45,6 +44,13 @@ public class FacsimileServiceImpl implements FacsimileService {
      * Client for sending and receiving requests
      */
     private final FacsimileFeignService feignClient;
+
+    public FacsimileServiceImpl(FacsimileFeignService facsimileFeignService, FilePoolService filePoolService, FileRestTemplateClient fileRestTemplateClient, FacsimileFeignService feignClient) {
+        super(facsimileFeignService);
+        this.filePoolService = filePoolService;
+        this.fileRestTemplateClient = fileRestTemplateClient;
+        this.feignClient = feignClient;
+    }
 
 
     /**

@@ -2,10 +2,10 @@ package com.education.service.resolution.impl;
 
 import com.education.feign.feign_resolution.ResolutionFeignService;
 import com.education.model.dto.ResolutionDto;
+import com.education.service.AbstractService;
 import com.education.service.appeal.AppealService;
 import com.education.model.enumEntity.EnumAppealStatus;
 import com.education.service.resolution.ResolutionService;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.BooleanUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -17,11 +17,16 @@ import java.util.List;
 import static com.education.utils.sorterResolutions.SorterResolutions.sortResolutions;
 
 @Service
-@RequiredArgsConstructor
-public class ResolutionServiceImpl implements ResolutionService {
+public class ResolutionServiceImpl extends AbstractService<ResolutionFeignService, ResolutionDto> implements ResolutionService {
 
     private final ResolutionFeignService resolutionFeignService;
     private final AppealService appealService;
+
+    public ResolutionServiceImpl(ResolutionFeignService resolutionFeignService, ResolutionFeignService resolutionFeignService1, AppealService appealService) {
+        super(resolutionFeignService);
+        this.resolutionFeignService = resolutionFeignService1;
+        this.appealService = appealService;
+    }
 
     /**
      * Метод для сохранения резолюции

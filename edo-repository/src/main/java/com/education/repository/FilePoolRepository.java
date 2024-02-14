@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface FilePoolRepository extends JpaRepository<FilePool, Long> {
@@ -36,5 +37,18 @@ public interface FilePoolRepository extends JpaRepository<FilePool, Long> {
     @Modifying
     @Query(value = "UPDATE file_pool SET archived_date = CASE WHEN :archived = true THEN CURRENT_TIMESTAMP END WHERE id = :id", nativeQuery = true)
     void moveToArchive(@Param("id") Long id, @Param("archived") boolean isArchived);
+
+    /**
+     * Метод предоставляет список UUID тех файлов, которые находятся в архиве более 5 лет.
+     */
+    @Query(value = "select storage_file_id from file_pool f where f.archived_date < now() - INTERVAL '5 years'", nativeQuery = true)
+    List<UUID> getListUuidFilesArchivedMoreFiveYearsAgo();
+
+    /**
+     * Метод удаляет запись в БД по UUID. УДАЛЯЕТ ТОЛЬКО в БД!. Используется для удаления старых архивных файлов!
+     * Использовать метод только если файл удален из файлового хранилища.
+     */
+    @Query(value = "DELETE FROM file_pool f WHERE f.storage_file_id = ?1 RETURNING f.storage_file_id", nativeQuery = true)
+    Optional<UUID> deleteFileByUuid(@Param("uuid") UUID uuid);
 }
 

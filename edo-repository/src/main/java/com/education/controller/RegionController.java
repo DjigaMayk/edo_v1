@@ -60,7 +60,7 @@ public class RegionController {
     public ResponseEntity<List<Region>> findAll() {
         regionService.findAll();
         log.log(Level.INFO, "Получение всех регионов");
-        return new ResponseEntity<>(regionService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.toEntity(regionService.findAll()), HttpStatus.OK);
     }
 
     @ApiResponses(value = {
@@ -78,6 +78,5 @@ public class RegionController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
 }
 

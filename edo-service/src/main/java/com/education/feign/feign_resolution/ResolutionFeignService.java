@@ -1,5 +1,6 @@
 package com.education.feign.feign_resolution;
 
+import com.education.feign.AbstractFeign;
 import com.education.model.dto.ResolutionDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.lang.Nullable;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @FeignClient(name = "edo-repository", path = "/api/repository/resolution")
-public interface ResolutionFeignService {
+public interface ResolutionFeignService extends AbstractFeign<ResolutionDto> {
     @PostMapping
     ResolutionDto save(ResolutionDto resolution);
 

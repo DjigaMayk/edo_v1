@@ -1,5 +1,6 @@
 package com.education.feign.feign_employee;
 
+import com.education.feign.AbstractFeign;
 import com.education.model.dto.EmployeeDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,7 @@ import java.util.List;
  * через FeignClient.
  */
 @FeignClient(name = "edo-service", path = "/api/service", qualifiers = "employeeFeignClient")
-public interface EmployeeFeignClient {
+public interface EmployeeFeignClient extends AbstractFeign<EmployeeDto> {
 
     @GetMapping("/employee")
     List<EmployeeDto> getAllEmployeeById(@RequestParam("ids") List<Long> ids,

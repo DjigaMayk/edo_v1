@@ -2,29 +2,28 @@ package com.education.service.resolution.impl;
 
 import com.education.entity.BaseEntity;
 import com.education.entity.Resolution;
-import com.education.repository.DeadlineRepository;
+import com.education.model.dto.ResolutionDto;
 import com.education.repository.ResolutionRepository;
+import com.education.service.AbstractService;
 import com.education.service.resolution.ResolutionService;
-import lombok.RequiredArgsConstructor;
+import com.education.util.Mapper.impl.ResolutionMapper;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
-
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-@RequiredArgsConstructor
-public class ResolutionServiceImpl implements ResolutionService {
+public class ResolutionServiceImpl extends AbstractService<ResolutionRepository, Resolution, ResolutionDto, ResolutionMapper> implements ResolutionService {
 
     final ResolutionRepository resolutionRepository;
-    final DeadlineRepository deadlineRepository;
+
+    public ResolutionServiceImpl(ResolutionRepository repository, ResolutionMapper resolutionMapper, ResolutionRepository resolutionRepository) {
+        super(repository, resolutionMapper);
+        this.resolutionRepository = resolutionRepository;
+    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override

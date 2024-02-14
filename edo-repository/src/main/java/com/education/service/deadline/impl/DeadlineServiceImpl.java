@@ -3,9 +3,9 @@ package com.education.service.deadline.impl;
 import com.education.entity.Deadline;
 import com.education.model.dto.DeadlineDto;
 import com.education.repository.DeadlineRepository;
+import com.education.service.AbstractService;
 import com.education.service.deadline.DeadlineService;
 import com.education.util.Mapper.impl.DeadlineMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,11 +13,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
-public class DeadlineServiceImpl implements DeadlineService {
+public class DeadlineServiceImpl extends AbstractService<DeadlineRepository, Deadline, DeadlineDto, DeadlineMapper> implements DeadlineService {
 
     private final DeadlineRepository deadlineRepository;
     private final DeadlineMapper mapper;
+
+    public DeadlineServiceImpl(DeadlineRepository repository, DeadlineMapper deadlineMapper, DeadlineRepository deadlineRepository, DeadlineMapper mapper) {
+        super(repository, deadlineMapper);
+        this.deadlineRepository = deadlineRepository;
+        this.mapper = mapper;
+    }
 
     /**
      * Сохранение нового дедлайна
@@ -68,7 +73,7 @@ public class DeadlineServiceImpl implements DeadlineService {
 
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     @Override
-    public List<DeadlineDto> findAllById(List <Long> ids) {
+    public List<DeadlineDto> findAllById(List<Long> ids) {
         List<Deadline> deadlines = deadlineRepository.findAllById(ids);
         return deadlines.isEmpty() ? null : mapper.toDto(deadlines);
     }

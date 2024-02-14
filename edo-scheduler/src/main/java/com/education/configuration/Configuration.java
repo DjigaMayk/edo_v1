@@ -10,6 +10,7 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
@@ -60,12 +61,23 @@ public class Configuration {
     }
 
     @Bean
-    Binding binding(Queue queue, DirectExchange exchange) {
+    Binding binding(@Qualifier("employeeQueue") Queue queue, DirectExchange exchange) {
         return BindingBuilder
                 .bind(queue)
                 .to(exchange)
                 .with(ROUTING_KEY_SCHEDULER);
     }
 
+    @Bean
+    Queue fileStorageQueue() {
+        return new Queue(FILE_STORAGE_QUEUE, false);
+    }
 
+    @Bean
+    Binding bindingFileStorage(@Qualifier("fileStorageQueue") Queue queue, DirectExchange exchange) {
+        return BindingBuilder
+                .bind(queue)
+                .to(exchange)
+                .with(ROUTING_KEY_SCHEDULER_FILE_STORAGE_CLEAR);
+    }
 }

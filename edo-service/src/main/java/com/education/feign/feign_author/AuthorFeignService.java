@@ -1,5 +1,6 @@
 package com.education.feign.feign_author;
 
+import com.education.feign.AbstractFeign;
 import com.education.model.dto.AuthorDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -12,8 +13,7 @@ import java.util.List;
  * над сущностью 'Author'.
  */
 @FeignClient(name = "edo-repository", path = "/api/repository/author")
-public interface AuthorFeignService {
-
+public interface AuthorFeignService extends AbstractFeign<AuthorDto> {
 
     @GetMapping("/{id}")
     AuthorDto showById(@PathVariable("id") Long id);

@@ -1,5 +1,6 @@
 package com.education.feign.feign_facsimile;
 
+import com.education.feign.AbstractFeign;
 import com.education.model.dto.FacsimileDto;
 import com.education.model.dto.FilePoolDto;
 import jakarta.ws.rs.core.MediaType;
@@ -16,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
  * FeignClient for Facsimile
  */
 @FeignClient(name = "edo-service", path = "/api/service/facsimile")
-public interface FacsimileFeignClient {
+public interface FacsimileFeignClient extends AbstractFeign<FacsimileDto> {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA)
     FilePoolDto saveFacsimile(@RequestPart("facsimile") MultipartFile multipartFile);

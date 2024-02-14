@@ -2,7 +2,7 @@ package com.education.service.Resolution;
 
 import com.education.feign.feign_resolution.ResolutionFeignClient;
 import com.education.model.dto.ResolutionDto;
-import lombok.RequiredArgsConstructor;
+import com.education.service.AbstractService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -11,10 +11,14 @@ import java.util.List;
 
 @Log4j2
 @Service
-@RequiredArgsConstructor
-public class ResolutionServiceImpl implements ResolutionService {
+public class ResolutionServiceImpl extends AbstractService<ResolutionFeignClient, ResolutionDto> implements ResolutionService {
 
     private final ResolutionFeignClient resolutionFeignClient;
+
+    public ResolutionServiceImpl(ResolutionFeignClient resolutionFeignClient, ResolutionFeignClient resolutionFeignClient1) {
+        super(resolutionFeignClient);
+        this.resolutionFeignClient = resolutionFeignClient1;
+    }
 
     @Override
     public ResolutionDto save(ResolutionDto resolutionDto) {

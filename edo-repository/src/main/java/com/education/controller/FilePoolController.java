@@ -14,16 +14,12 @@ import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.logging.Level;
 
 @RestController
@@ -129,6 +125,42 @@ public class FilePoolController {
         }
         log.log(Level.INFO, "List of not archived FilePoolDto find");
         return new ResponseEntity<>(filePoolDto, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Получить список UUID тех файлов, которые находятся в архиве более 5 лет. ")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "UUID найдены"),
+            @ApiResponse(code = 404, message = "UUID не найдены")
+    })
+    @GetMapping("/listUuidFilesFiveYearsInArchive")
+    public ResponseEntity<List<UUID>> getListUuidFilesArchivedMoreFiveYearsAgo() {
+        List<UUID> listUuid = repository.getListUuidFilesArchivedMoreFiveYearsAgo();
+        if (listUuid == null || listUuid.isEmpty()) {
+            log.warning("Список UUID не найден");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        log.info("Список UUID найден (файлы в архиве более 5 лет)");
+        return new ResponseEntity<>(listUuid, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Удалить сущность FilePool по UUID из БД! Удаление только из БД! " +
+            "Не использовать для комплексного удаления!")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "FilePool с указанным UUID найден и удален"),
+            @ApiResponse(code = 404, message = "FilePool с указанным UUID не найден")
+    })
+    @DeleteMapping("/deleteByUuid")
+    public ResponseEntity<Optional<UUID>> deleteByUuid(@RequestBody UUID uuid) {
+        log.info("Получен запрос на уделние сущности FilePool с UUID: " + uuid);
+        if (uuid != null) {
+            Optional<UUID> optionalUuid = repository.deleteFileByUuid(uuid);
+            if (optionalUuid.isPresent()) {
+                log.info("FilePool с UUID: " + uuid + " -> удален");
+                return new ResponseEntity<>(optionalUuid, HttpStatus.OK);
+            }
+        }
+        log.warning("FilePool с UUID: " + uuid + " -> не найден");
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }

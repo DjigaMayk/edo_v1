@@ -2,10 +2,11 @@ package com.education.service.Resolution;
 
 import com.education.model.dto.ResolutionDto;
 import org.springframework.lang.Nullable;
+import com.education.service.BaseInterface;
 
 import java.util.List;
 
-public interface ResolutionService {
+public interface ResolutionService extends BaseInterface<ResolutionDto> {
 
     ResolutionDto save(ResolutionDto resolutionDto);
 

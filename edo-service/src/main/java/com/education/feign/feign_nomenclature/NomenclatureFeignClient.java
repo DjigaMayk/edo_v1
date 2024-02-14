@@ -1,5 +1,6 @@
 package com.education.feign.feign_nomenclature;
 
+import com.education.feign.AbstractFeign;
 import com.education.model.dto.NomenclatureDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +12,7 @@ import java.util.List;
  * через FeignClient.
  */
 @FeignClient(name = "edo-repository", path = "/api/repository", qualifiers = "nomenclatureFeignClient")
-public interface NomenclatureFeignClient {
-
+public interface NomenclatureFeignClient extends AbstractFeign<NomenclatureDto> {
 
     @PostMapping("/nomenclature/")
     NomenclatureDto saveNomenclature(@RequestBody NomenclatureDto nomenclature);

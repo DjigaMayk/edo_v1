@@ -2,8 +2,8 @@ package com.education.service.nomenclature.impl;
 
 import com.education.feign.feign_nomenclature.NomenclatureFeignClient;
 import com.education.model.dto.NomenclatureDto;
+import com.education.service.AbstractService;
 import com.education.service.nomenclature.NomenclatureService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -12,16 +12,19 @@ import java.util.List;
 
 @Service
 @Log4j2
-@RequiredArgsConstructor
-public class NomenclatureServiceImpl implements NomenclatureService {
+public class NomenclatureServiceImpl extends AbstractService<NomenclatureFeignClient, NomenclatureDto> implements NomenclatureService {
 
     /**
      * Шаблон номера обращения
      */
     private static final String TEMPLATE = "%ЧИС%ГОД-%ЗНАЧ/2";
 
-
     private final NomenclatureFeignClient nomenclatureFeignClient;
+
+    public NomenclatureServiceImpl(NomenclatureFeignClient nomenclatureFeignClient, NomenclatureFeignClient nomenclatureFeignClient1) {
+        super(nomenclatureFeignClient);
+        this.nomenclatureFeignClient = nomenclatureFeignClient1;
+    }
 
     /**
      * Сохраняет номенклатуру

@@ -3,9 +3,9 @@ package com.education.service.nomenclature.impl;
 import com.education.entity.Nomenclature;
 import com.education.model.dto.NomenclatureDto;
 import com.education.repository.NomenclatureRepository;
+import com.education.service.AbstractService;
 import com.education.service.nomenclature.NomenclatureService;
 import com.education.util.Mapper.impl.NomenclatureMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +19,7 @@ import java.util.List;
  * @since 1.0
  */
 @Service
-@RequiredArgsConstructor
-public class NomenclatureServiceImpl implements NomenclatureService {
+public class NomenclatureServiceImpl extends AbstractService<NomenclatureRepository, Nomenclature, NomenclatureDto, NomenclatureMapper> implements NomenclatureService {
 
     /**
      * Репозиторий для связи с БД
@@ -28,6 +27,12 @@ public class NomenclatureServiceImpl implements NomenclatureService {
     private final NomenclatureRepository nomenclatureRepository;
 
     private final NomenclatureMapper mapper;
+
+    public NomenclatureServiceImpl(NomenclatureRepository repository, NomenclatureMapper nomenclatureMapper, NomenclatureRepository nomenclatureRepository, NomenclatureMapper mapper) {
+        super(repository, nomenclatureMapper);
+        this.nomenclatureRepository = nomenclatureRepository;
+        this.mapper = mapper;
+    }
 
     /**
      * Сохраняет номенклатуру в БД

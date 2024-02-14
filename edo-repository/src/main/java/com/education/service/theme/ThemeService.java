@@ -1,13 +1,14 @@
 package com.education.service.theme;
 
-
 import com.education.model.dto.ThemeDto;
+import com.education.service.BaseInterface;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public interface ThemeService {
+public interface ThemeService extends BaseInterface<ThemeDto> {
+
     ThemeDto save(ThemeDto themeDto);
 
     Integer moveToArchive(Long id);

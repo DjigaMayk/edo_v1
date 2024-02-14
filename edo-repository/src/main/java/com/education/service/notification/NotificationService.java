@@ -2,6 +2,7 @@ package com.education.service.notification;
 
 import com.education.entity.Notification;
 import com.education.model.dto.NotificationDto;
+import com.education.service.BaseInterface;
 
 import java.util.List;
 
@@ -10,14 +11,15 @@ import java.util.List;
  *
  * Представляет список операций над оповещением пользователя
  */
-public interface NotificationService {
+public interface NotificationService extends BaseInterface<NotificationDto> {
 
     /**
      * Сохранение оповещения в БД
      *
      * @param notification
+     * @return
      */
-    void save(NotificationDto notification);
+    NotificationDto save(NotificationDto notification);
 
     /**
      * Сохранение оповещений в БД

@@ -3,10 +3,10 @@ package com.education.service.appeal;
 import com.education.feign.feign_appeal.AppealFeignClient;
 import com.education.model.dto.AppealAbbreviatedDto;
 import com.education.model.dto.AppealDto;
+import com.education.service.AbstractService;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import feign.FeignException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.http.HttpHost;
 import org.springframework.stereotype.Service;
@@ -19,8 +19,7 @@ import static com.education.model.enumEntity.EnumAppealStatus.NEW;
 
 @Log4j2
 @Service
-@RequiredArgsConstructor
-public class CreatingAppealServiceImpl implements CreatingAppealService {
+public class CreatingAppealServiceImpl extends AbstractService<AppealFeignClient, AppealDto> implements CreatingAppealService {
 
     private final RestTemplate TEMPLATE;
     private final EurekaClient EUREKA_CLIENT;
@@ -29,6 +28,13 @@ public class CreatingAppealServiceImpl implements CreatingAppealService {
     private final String BASE_URL = "/api/service/appeal";
 
     private final String SERVICE_NAME = "edo-service";
+
+    public CreatingAppealServiceImpl(AppealFeignClient appealFeignClient, RestTemplate template, EurekaClient eurekaClient, AppealFeignClient appealFeignClient1) {
+        super(appealFeignClient);
+        TEMPLATE = template;
+        EUREKA_CLIENT = eurekaClient;
+        this.appealFeignClient = appealFeignClient1;
+    }
 
     private InstanceInfo getInstance() {
         List<InstanceInfo> instances = EUREKA_CLIENT.getApplication(SERVICE_NAME).getInstances();

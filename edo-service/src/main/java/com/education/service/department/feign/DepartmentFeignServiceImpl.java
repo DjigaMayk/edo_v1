@@ -1,5 +1,6 @@
 package com.education.service.department.feign;
 
+import com.education.Utils.QuestionUtil;
 import com.education.model.dto.DepartmentDto;
 import com.education.service.department.DepartmentService;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +51,15 @@ public class DepartmentFeignServiceImpl implements DepartmentService {
     @Override
     public List<DepartmentDto> findAllByIdNotArchived(List<Long> ids) {
         return departmentFeignService.findAllByIdNotArchived(ids);
+    }
+
+    @Override
+    public DepartmentDto findByFullName(String fullName) {
+        if (fullName.matches("[а-яА-Я]")) {
+            return departmentFeignService.findByFullName(fullName);
+        }
+        String translitDepartment = QuestionUtil.textTransformer(fullName);
+        return departmentFeignService.findByFullName(translitDepartment);
     }
 
 }

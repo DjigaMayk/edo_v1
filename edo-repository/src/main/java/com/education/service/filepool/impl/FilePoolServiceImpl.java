@@ -3,21 +3,22 @@ package com.education.service.filepool.impl;
 import com.education.entity.FilePool;
 import com.education.model.dto.FilePoolDto;
 import com.education.repository.FilePoolRepository;
+import com.education.service.AbstractService;
 import com.education.service.filepool.FilePoolService;
 import com.education.util.Mapper.impl.FilePoolMapper;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
  * Service for entity FilePool
  */
 @Service
-@AllArgsConstructor
-public class FilePoolServiceImpl implements FilePoolService {
+public class FilePoolServiceImpl extends AbstractService<FilePoolRepository, FilePool, FilePoolDto, FilePoolMapper> implements FilePoolService {
 
     /**
      * Repository
@@ -25,6 +26,12 @@ public class FilePoolServiceImpl implements FilePoolService {
     private final FilePoolRepository repository;
 
     private final FilePoolMapper mapper;
+
+    public FilePoolServiceImpl(FilePoolRepository repository, FilePoolMapper filePoolMapper, FilePoolRepository repository1, FilePoolMapper mapper) {
+        super(repository, filePoolMapper);
+        this.repository = repository1;
+        this.mapper = mapper;
+    }
 
     /**
      * Add in db method
@@ -47,7 +54,7 @@ public class FilePoolServiceImpl implements FilePoolService {
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     public FilePoolDto findById(Long id) {
         FilePool filePool = repository.findById(id).orElse(null);
-        return filePool != null ?  mapper.toDto(filePool) : null;
+        return filePool != null ? mapper.toDto(filePool) : null;
     }
 
     /**
@@ -107,5 +114,23 @@ public class FilePoolServiceImpl implements FilePoolService {
                 : null;
     }
 
+    /**
+     * Предоставляет список UUID тех файлов, которые находятся в архиве более 5 лет.
+     */
+    @Override
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
+    public List<UUID> getListUuidFilesArchivedMoreFiveYearsAgo() {
+        return repository.getListUuidFilesArchivedMoreFiveYearsAgo();
+    }
+
+    /**
+     * Метод удаляет запись в БД по UUID. УДАЛЯЕТ ТОЛЬКО в БД!. Используется для удаления старых архивных файлов!
+     * Использовать метод только если файл удален из файлового хранилища.
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Optional<UUID> deleteFileByUuid(UUID uuid) {
+        return repository.deleteFileByUuid(uuid);
+    }
 
 }

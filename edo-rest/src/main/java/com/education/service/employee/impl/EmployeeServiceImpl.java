@@ -2,17 +2,21 @@ package com.education.service.employee.impl;
 
 import com.education.feign.feign_employee.EmployeeFeignClient;
 import com.education.model.dto.EmployeeDto;
+import com.education.service.AbstractService;
 import com.education.service.employee.EmployeeService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
-public class EmployeeServiceImpl implements EmployeeService {
+public class EmployeeServiceImpl extends AbstractService<EmployeeFeignClient, EmployeeDto> implements EmployeeService {
 
     private final EmployeeFeignClient employeeFeignClient;
+
+    public EmployeeServiceImpl(EmployeeFeignClient employeeFeignClient, EmployeeFeignClient employeeFeignClient1) {
+        super(employeeFeignClient);
+        this.employeeFeignClient = employeeFeignClient1;
+    }
 
     @Override
     public EmployeeDto findById(Long id, boolean notArchivedOnly) {

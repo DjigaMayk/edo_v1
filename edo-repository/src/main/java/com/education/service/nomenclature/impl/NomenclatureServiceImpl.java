@@ -57,6 +57,18 @@ public class NomenclatureServiceImpl extends AbstractService<NomenclatureReposit
     }
 
     /**
+     * Меняет признак архивности номенклатуры
+     * @param id Long
+     * @param archive boolean
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void changeArchiveStatus(Long id, boolean archive) {
+            nomenclatureRepository.changeArchiveStatus(id, archive);
+    }
+
+
+    /**
      * Предоставляет NomenclatureDto номенклатуры из БД по id
      * @param id Long
      * @return NomenclatureDto

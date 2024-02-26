@@ -48,6 +48,19 @@ public interface NomenclatureRepository extends JpaRepository<Nomenclature, Long
     void moveToArchive(@Param("id") Long id);
 
     /**
+     * Метод по флагу с фронта переводит номенклатуру в архив, присваивая значение даты архивации,
+     * или возвращает из архива
+     *
+     * @param id Long
+     * @param archive boolean
+     */
+    @Modifying
+    @Query(value = "UPDATE nomenclature SET archived_date = CASE WHEN :archive = true THEN current_timestamp " +
+            "ELSE NULL END WHERE id = :id", nativeQuery = true)
+    void changeArchiveStatus(@Param("id") Long id, @Param("archive") boolean archive);
+
+
+    /**
      * Метод динамического поиска номенклатур
      */
     @Query(value = "SELECT n FROM Nomenclature n " +

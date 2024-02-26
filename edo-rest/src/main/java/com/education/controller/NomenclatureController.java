@@ -116,6 +116,18 @@ public class NomenclatureController {
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation(value = "Поменять признак архивности номенклатуры")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved")
+    })
+    @PatchMapping("/nomenclature/{id}/archive")
+    public ResponseEntity<Void> changeArchiveStatus(@PathVariable("id") Long id, @RequestParam boolean archive) {
+        nomenclatureFeignClient.changeArchiveStatusNomenclature(id, archive);
+        log.log(Level.INFO, "Nomenclature {0}, archive status: id = {1}", new Object[]{archive ?
+                "moved to" : "removed from", id});
+        return ResponseEntity.ok().build();
+    }
+
 
     @ApiOperation(value = "Получить список номенклатур из БД " +
             "по первым двум символам символам (?index=**")

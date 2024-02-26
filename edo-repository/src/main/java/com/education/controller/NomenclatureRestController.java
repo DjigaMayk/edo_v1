@@ -114,6 +114,18 @@ public class NomenclatureRestController {
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation(value = "Поменять признак архивности")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved")
+    })
+    @PatchMapping("/nomenclature/{id}/archive")
+    public ResponseEntity<Void> changeArchiveStatus(@PathVariable("id") Long id, @RequestParam boolean archive) {
+        nomenclatureService.changeArchiveStatus(id, archive);
+        log.log(Level.INFO, "Nomenclature {0} archive status: id = {1}", archive ? "moved to" : "removed from");
+        return ResponseEntity.ok().build();
+    }
+
+
     @ApiOperation(value = "Получить список номенклатур из БД " +
             "по первым двум символам символам (?index=**")
     @ApiResponses(value = {

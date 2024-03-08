@@ -38,7 +38,7 @@ public class EmployeeScheduler {
              return;
          }
 
-        ResponseEntity<String> response = restTemplate.getForEntity("http://xn--d1ab2a.space/mock/employees", String.class);
+        ResponseEntity<String> response = restTemplate.getForEntity("http://24730c250e-a0ca-46dc-8e12-73a70c446a8b.ru/mock/employees", String.class);
 
         if (response.getStatusCode() == HttpStatus.OK) {
             String jsonData = response.getBody();

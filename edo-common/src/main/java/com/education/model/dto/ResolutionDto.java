@@ -57,4 +57,7 @@ public class ResolutionDto {
     @Schema(description = "Признак последовательности")
     private int serialNumber;
 
+    @Schema(description = "Отчёты, относящиеся к резолюции")
+    private List<ReportDto> reports;
+
 }

@@ -128,4 +128,11 @@ public class Employee extends BaseEntity {
     @OneToMany
     @JoinColumn(name = "employee_id")
     private List<Notification> notification;
+
+    /**
+     * Отчёты пользователя по резолюциям
+     */
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
+    private List<Report> reports;
+
 }

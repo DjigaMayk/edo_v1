@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", uses = DeadlineMapper.class)
+@Mapper(componentModel = "spring", uses = {DeadlineMapper.class, ReportMapper.class})
 public interface ResolutionMapper extends Mappable<Resolution, ResolutionDto> {
 
 	//создано для ухода от бесконечного цикла при маппинге

@@ -105,4 +105,10 @@ public class Resolution extends BaseEntity {
     @Column(name = "is_draft")
     private Boolean isDraft;
 
+    /**
+     * Отчёты, относящиеся к резолюции
+     */
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "resolution", orphanRemoval = true)
+    private List<Report> reports;
+
 }

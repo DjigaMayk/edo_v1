@@ -25,7 +25,8 @@ import java.util.stream.Collectors;
                 NomenclatureMapper.class,
                 QuestionMapper.class,
                 FilePoolMapper.class,
-                AuthorMapper.class},
+                AuthorMapper.class,
+				ReportMapper.class},
         builder = @Builder(disableBuilder = true))
 public interface AppealMapper extends Mappable<Appeal, AppealDto> {
 

@@ -84,4 +84,6 @@ UPDATE theme
 SET parent_id = (SELECT theme.id FROM theme where code = '3')
 where code in ('3.4');
 
-
+-- Заполнение таблицы report тестовыми данными
+INSERT INTO report (creation_date, creator_id, resolution_id, comment, is_resolution_completed)
+VALUES (now(), 1, 1, 'test', TRUE);

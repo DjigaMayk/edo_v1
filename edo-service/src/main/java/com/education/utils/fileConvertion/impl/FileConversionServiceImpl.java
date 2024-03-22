@@ -2,6 +2,7 @@ package com.education.utils.fileConvertion.impl;
 
 import com.education.utils.fileConvertion.FileConversionService;
 import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
@@ -93,12 +94,17 @@ public class FileConversionServiceImpl implements FileConversionService {
                                                  String key) throws IOException {
         var pdfWriter = new PdfWriter(os);
         var pdfDocument = new PdfDocument(pdfWriter);
-        var document = new Document(pdfDocument);
         var data = ImageDataFactory.create(buffIs.readAllBytes());
+        var width = data.getWidth();
+        var height = data.getHeight();
+        var document = new Document(pdfDocument, new PageSize(width, height));
         var image = new Image(data);
+        document.setMargins(0, 0, 0, 0);
+        image.scaleAbsolute(width, height);
         document.add(image);
         int pageCountValue = document.getPdfDocument().getNumberOfPages();
         document.close();
         return Map.of(pageCountKey, pageCountValue, key, os.toByteArray());
     }
+
 }

@@ -14,7 +14,7 @@ spring:
               - openid
         provider:
           keycloak:
-            issuer-uri: http://xn--d1ab2a.space/auth/realms/edo-project-realm
+            issuer-uri: http://24730c250e-a0ca-46dc-8e12-73a70c446a8b.ru/auth/realms/edo-project-realm
             user-name-attribute: preferred_username
       resourceserver:
         jwt:

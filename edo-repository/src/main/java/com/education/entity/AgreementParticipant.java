@@ -1,5 +1,6 @@
 package com.education.entity;
 
+import com.education.model.enumEntity.EnumParticipantType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -16,9 +17,6 @@ import java.time.ZonedDateTime;
 @ToString
 public class AgreementParticipant {
 
-    public enum ParticipantType {
-        INITIATOR, PARTICIPANT, SIGNATORY
-    }
     /**
      * Идентификатор
      */
@@ -31,7 +29,7 @@ public class AgreementParticipant {
      */
     @Column(name = "participant_type", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
-    private ParticipantType participantType;
+    private EnumParticipantType participantType;
 
     /**
      * Дата создания

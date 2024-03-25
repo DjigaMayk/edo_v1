@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS agreement_participant (
-    id SERIAL NOT NULL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     participant_type VARCHAR(20) NOT NULL,
     creation_date TIMESTAMP WITH TIME ZONE NOT NULL,
     due_date TIMESTAMP WITH TIME ZONE,

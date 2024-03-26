@@ -6,7 +6,7 @@ import com.education.util.Mapper.Mappable;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {NotificationMapper.class, ReportMapper.class})
+@Mapper(componentModel = "spring", uses = NotificationMapper.class)
 public interface EmployeeMapper extends Mappable<Employee, EmployeeDto> {
     @Override
     @Mapping(target = "notification", ignore = true)

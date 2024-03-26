@@ -47,29 +47,4 @@ public class ReportServiceImpl extends AbstractService<ReportFeignClient, Report
         return reportFeignClient.findAllByIsResolutionCompletedTrue();
     }
 
-    @Override
-    public ReportDto getById(Long id) {
-        return reportFeignClient.getById(id);
-    }
-
-    @Override
-    public List<ReportDto> findAll() {
-        return reportFeignClient.findAll();
-    }
-
-    @Override
-    public ReportDto save(ReportDto reportDto) {
-        return reportFeignClient.save(reportDto);
-    }
-
-    @Override
-    public ReportDto update(ReportDto reportDto) {
-        return reportFeignClient.update(reportDto);
-    }
-
-    @Override
-    public void delete(Long id) {
-        reportFeignClient.delete(id);
-    }
-
 }

@@ -129,7 +129,7 @@ public class ReportController {
     @PutMapping("/update")
     public ResponseEntity<ReportDto> updateReport(@RequestBody ReportDto reportDto) {
         ReportDto oldReportDto = reportService.getById(reportDto.getId());
-        ReportDto newReportDto = reportService.update(reportDto);
+        ReportDto newReportDto = reportService.save(reportDto);
         if (newReportDto == null || oldReportDto == newReportDto) {
             log.log(Level.WARN, "Отчёт не был обновлён");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -73,7 +73,4 @@ public class EmployeeDto {
     @Schema(description = "Типы оповещения, которые выбрали пользователи")
     private List<NotificationDto> notification;
 
-    @Schema(description = "Отчёты пользователя")
-    private List<ReportDto> reports;
-
 }

@@ -64,41 +64,4 @@ public class ReportServiceImpl extends AbstractService<ReportRepository, Report,
         return reports.isEmpty() ? null : reportMapper.toDto(reports);
     }
 
-    @Override
-    @Transactional(readOnly = true, rollbackFor = Exception.class)
-    public ReportDto getById(Long id) {
-        Optional<Report> report = reportRepository.findById(id);
-        return report.map(reportMapper::toDto).orElse(null);
-    }
-
-    @Override
-    @Transactional(readOnly = true, rollbackFor = Exception.class)
-    public List<ReportDto> findAll() {
-        List<Report> reports = reportRepository.findAll();
-        return reports.isEmpty() ? null : reportMapper.toDto(reports);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public ReportDto save(ReportDto reportDto) {
-        Report report = reportMapper.toEntity(reportDto);
-        if (report.getCreationDate() == null) {
-            report.setCreationDate(ZonedDateTime.now());
-        }
-        return reportMapper.toDto(reportRepository.save(report));
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public ReportDto update(ReportDto reportDto) {
-        Report report = reportMapper.toEntity(reportDto);
-        return reportMapper.toDto(reportRepository.save(report));
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void delete(Long id) {
-        reportRepository.deleteById(id);
-    }
-
 }

@@ -1,11 +1,11 @@
 CREATE TABLE IF NOT EXISTS report
 (
     id                      bigserial PRIMARY KEY,
-    creation_date           timestamptz,
+    creation_date           timestamptz                       NOT NULL,
     creator_id              bigint REFERENCES employee (id),
-    resolution_id           bigint REFERENCES resolution (id),
+    resolution_id           bigint REFERENCES resolution (id) NOT NULL,
     comment                 varchar(255),
-    is_resolution_completed boolean
+    is_resolution_completed boolean                           NOT NULL
 );
 
 comment on column report.id is 'id отчёта';

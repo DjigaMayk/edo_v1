@@ -20,48 +20,67 @@ import java.util.Optional;
 @Service
 public class ReportServiceImpl extends AbstractService<ReportRepository, Report, ReportDto, ReportMapper> implements ReportService {
 
-    private final ReportRepository reportRepository;
-    private final ReportMapper reportMapper;
-
-    public ReportServiceImpl(ReportRepository reportRepository, ReportMapper reportMapper) {
-        super(reportRepository, reportMapper);
-        this.reportRepository = reportRepository;
-        this.reportMapper = reportMapper;
+    public ReportServiceImpl(ReportRepository repository, ReportMapper reportMapper) {
+        super(repository, reportMapper);
     }
 
     @Override
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     public List<ReportDto> findAllByCreationDateEquals(LocalDate date) {
-        List<Report> reports = reportRepository.findAllByCreationDateEquals(date);
-        return reports.isEmpty() ? null : reportMapper.toDto(reports);
+        List<Report> reports = repository.findAllByCreationDateEquals(date);
+        return reports.isEmpty() ? null : mapper.toDto(reports);
     }
 
     @Override
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     public List<ReportDto> findAllByCreatorId(Long id) {
-        List<Report> reports = reportRepository.findAllByCreatorId(id);
-        return reports.isEmpty() ? null : reportMapper.toDto(reports);
+        List<Report> reports = repository.findAllByCreatorId(id);
+        return reports.isEmpty() ? null : mapper.toDto(reports);
     }
 
     @Override
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     public List<ReportDto> findAllByResolutionId(Long id) {
-        List<Report> reports = reportRepository.findAllByResolutionId(id);
-        return reports.isEmpty() ? null : reportMapper.toDto(reports);
+        List<Report> reports = repository.findAllByResolutionId(id);
+        return reports.isEmpty() ? null : mapper.toDto(reports);
     }
 
     @Override
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     public List<ReportDto> findAllByIsResolutionCompletedFalse() {
-        List<Report> reports = reportRepository.findAllByIsResolutionCompletedFalse();
-        return reports.isEmpty() ? null : reportMapper.toDto(reports);
+        List<Report> reports = repository.findAllByIsResolutionCompletedFalse();
+        return reports.isEmpty() ? null : mapper.toDto(reports);
     }
 
     @Override
     @Transactional(readOnly = true, rollbackFor = Exception.class)
     public List<ReportDto> findAllByIsResolutionCompletedTrue() {
-        List<Report> reports = reportRepository.findAllByIsResolutionCompletedTrue();
-        return reports.isEmpty() ? null : reportMapper.toDto(reports);
+        List<Report> reports = repository.findAllByIsResolutionCompletedTrue();
+        return reports.isEmpty() ? null : mapper.toDto(reports);
+    }
+
+    @Override
+    public ReportDto getById(Long id) {
+        Optional<Report> report = repository.findById(id);
+        return report.map(mapper::toDto).orElse(null);
+    }
+
+    @Override
+    public ReportDto save(ReportDto reportDto) {
+        Report report = mapper.toEntity(reportDto);
+        if (report.getCreationDate() == null) {
+            report.setCreationDate(ZonedDateTime.now());
+        }
+        return mapper.toDto(repository.save(report));
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ReportDto update(Long id, ReportDto reportDto) {
+        Report report = mapper.toEntity(reportDto);
+        report.setId(id);
+        report.setCreationDate(getById(id).getCreationDate());
+        return mapper.toDto(repository.save(report));
     }
 
 }

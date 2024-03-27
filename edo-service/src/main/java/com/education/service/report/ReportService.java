@@ -21,4 +21,6 @@ public interface ReportService extends BaseInterface<ReportDto> {
 
     List<ReportDto> findAllByIsResolutionCompletedTrue();
 
+    ReportDto update(Long id, ReportDto reportDto);
+
 }

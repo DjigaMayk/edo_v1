@@ -15,38 +15,22 @@ import java.util.List;
 @FeignClient(name = "edo-repository", path = "/api/repository/report")
 public interface ReportFeignClient extends AbstractFeign<ReportDto> {
 
-    @GetMapping("/allByCreationDateEquals/{date}")
+    @GetMapping("/findAllByCreationDateEquals/{date}")
     List<ReportDto> findAllByCreationDateEquals(@PathVariable(value = "date") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate date);
 
-    @GetMapping("/allByCreatorId/{id}")
+    @GetMapping("/findAllByCreatorId/{id}")
     List<ReportDto> findAllByCreatorId(@PathVariable("id") Long creatorId);
 
-    @GetMapping("/allByResolutionId/{id}")
+    @GetMapping("/findAllByResolutionId/{id}")
     List<ReportDto> findAllByResolutionId(@PathVariable("id") Long resolutionId);
 
-    @GetMapping("/allByIsResolutionCompletedFalse")
+    @GetMapping("/findAllByIsResolutionCompletedFalse")
     List<ReportDto> findAllByIsResolutionCompletedFalse();
 
-    @GetMapping("/allByIsResolutionCompletedTrue")
+    @GetMapping("/findAllByIsResolutionCompletedTrue")
     List<ReportDto> findAllByIsResolutionCompletedTrue();
 
-    @Override
-    @GetMapping("/{id}")
-    ReportDto getById(@PathVariable(value = "id") Long id);
-
-    @Override
-    @GetMapping("/all")
-    List<ReportDto> findAll();
-
-    @Override
-    @PostMapping("/save")
-    ReportDto save(@RequestBody ReportDto reportDto);
-
-    @PutMapping("/update")
-    ReportDto update(@RequestBody ReportDto reportDto);
-
-    @Override
-    @DeleteMapping("/delete/{id}")
-    void delete(@PathVariable(value = "id") Long id);
+    @PutMapping("/{id}")
+    ReportDto update(@PathVariable Long id, @RequestBody ReportDto reportDto);
 
 }

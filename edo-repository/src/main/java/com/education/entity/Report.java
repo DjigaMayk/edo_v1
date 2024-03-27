@@ -24,7 +24,7 @@ public class Report extends BaseEntity {
     /**
      * Дата создания отчёта
      */
-    @Column(name = "creation_date")
+    @Column(name = "creation_date", nullable = false)
     private ZonedDateTime creationDate;
 
     /**
@@ -38,7 +38,7 @@ public class Report extends BaseEntity {
      * Резолюция, к которой относится отчёт
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "resolution_id")
+    @JoinColumn(name = "resolution_id", nullable = false)
     private Resolution resolution;
 
     /**
@@ -50,7 +50,7 @@ public class Report extends BaseEntity {
     /**
      * Флаг, показывающий, была ли выполнена резолюция
      */
-    @Column(name = "is_resolution_completed")
+    @Column(name = "is_resolution_completed", nullable = false)
     private Boolean isResolutionCompleted;
 
 }

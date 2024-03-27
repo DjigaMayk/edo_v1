@@ -30,10 +30,10 @@ public class ReportController {
     private final ReportService reportService;
 
     @Operation(summary = "Получение всех отчётов за указанную дату")
-    @GetMapping("/allByCreationDateEquals/{date}")
+    @GetMapping("/findAllByCreationDateEquals/{date}")
     public ResponseEntity<List<ReportDto>> getAllByCreationDateEquals(@PathVariable(value = "date") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate date) {
         List<ReportDto> reports = reportService.findAllByCreationDateEquals(date);
-        if (reports.isEmpty()) {
+        if (reports == null || reports.isEmpty()) {
             log.log(Level.WARN, "За {} отчёты не найдены", date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -42,10 +42,10 @@ public class ReportController {
     }
 
     @Operation(summary = "Получение всех отчётов по id работника")
-    @GetMapping("/allByCreatorId/{id}")
+    @GetMapping("/findAllByCreatorId/{id}")
     public ResponseEntity<List<ReportDto>> getAllByCreatorId(@PathVariable("id") Long creatorId) {
         List<ReportDto> reports = reportService.findAllByCreatorId(creatorId);
-        if (reports.isEmpty()) {
+        if (reports == null || reports.isEmpty()) {
             log.log(Level.WARN, "Отчёты с id работника = {} не найдены", creatorId);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -54,10 +54,10 @@ public class ReportController {
     }
 
     @Operation(summary = "Получение всех отчётов по id резолюции")
-    @GetMapping("/allByResolutionId/{id}")
+    @GetMapping("/findAllByResolutionId/{id}")
     public ResponseEntity<List<ReportDto>> getAllByResolutionId(@PathVariable("id") Long resolutionId) {
         List<ReportDto> reports = reportService.findAllByResolutionId(resolutionId);
-        if (reports.isEmpty()) {
+        if (reports == null || reports.isEmpty()) {
             log.log(Level.WARN, "Отчёты с id резолюции = {} не найдены", resolutionId);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -66,10 +66,10 @@ public class ReportController {
     }
 
     @Operation(summary = "Получение всех отчётов с невыполненным заданием")
-    @GetMapping("/allByIsResolutionCompletedFalse")
+    @GetMapping("/findAllByIsResolutionCompletedFalse")
     public ResponseEntity<List<ReportDto>> getAllByIsResolutionCompletedFalse() {
         List<ReportDto> reports = reportService.findAllByIsResolutionCompletedFalse();
-        if (reports.isEmpty()) {
+        if (reports == null || reports.isEmpty()) {
             log.log(Level.WARN, "Отчёты с невыполненным заданием не найдены");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -78,10 +78,10 @@ public class ReportController {
     }
 
     @Operation(summary = "Получение всех отчётов с выполненным заданием")
-    @GetMapping("/allByIsResolutionCompletedTrue")
+    @GetMapping("/findAllByIsResolutionCompletedTrue")
     public ResponseEntity<List<ReportDto>> getAllByIsResolutionCompletedTrue() {
         List<ReportDto> reports = reportService.findAllByIsResolutionCompletedTrue();
-        if (reports.isEmpty()) {
+        if (reports == null || reports.isEmpty()) {
             log.log(Level.WARN, "Отчёты с выполненным заданием не найдены");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -102,10 +102,10 @@ public class ReportController {
     }
 
     @Operation(summary = "Получение всех отчётов")
-    @GetMapping("/all")
+    @GetMapping("/findAll")
     public ResponseEntity<List<ReportDto>> getAll() {
         List<ReportDto> reports = reportService.findAll();
-        if (reports.isEmpty()) {
+        if (reports == null || reports.isEmpty()) {
             log.log(Level.WARN, "Отчёты не найдены");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -114,7 +114,7 @@ public class ReportController {
     }
 
     @Operation(summary = "Сохранение отчёта в БД")
-    @PostMapping("/save")
+    @PostMapping("")
     public ResponseEntity<ReportDto> saveReport(@RequestBody ReportDto reportDto) {
         ReportDto newReportDto = reportService.save(reportDto);
         if (newReportDto == null) {
@@ -126,22 +126,30 @@ public class ReportController {
     }
 
     @Operation(summary = "Обновление отчёта в БД")
-    @PutMapping("/update")
-    public ResponseEntity<ReportDto> updateReport(@RequestBody ReportDto reportDto) {
-        ReportDto oldReportDto = reportService.getById(reportDto.getId());
-        ReportDto newReportDto = reportService.save(reportDto);
-        if (newReportDto == null || oldReportDto == newReportDto) {
-            log.log(Level.WARN, "Отчёт не был обновлён");
+    @PutMapping("/{id}")
+    public ResponseEntity<ReportDto> updateReport(@PathVariable(value = "id") Long id,
+                                                  @RequestBody ReportDto reportDto) {
+        if (reportService.getById(id) == null) {
+            log.log(Level.WARN, "Отчёт c id = {} не существует", id);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        log.log(Level.INFO, "Отчёт был успешно обновлён");
+        ReportDto newReportDto = reportService.update(id, reportDto);
+        if (newReportDto == null) {
+            log.log(Level.WARN, "Отчёт с id = {} не был обновлён", id);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        log.log(Level.INFO, "Отчёт с id = {} был успешно обновлён", id);
         return new ResponseEntity<>(newReportDto, HttpStatus.OK);
     }
 
     @Operation(summary = "Удаление отчёта из БД")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReport(@PathVariable(value = "id") Long id) {
-        log.log(Level.INFO, "Отчёт с id = {} удалён", id);
+        if (reportService.getById(id) == null) {
+            log.log(Level.WARN, "Отчёт c id = {} не существует", id);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        log.log(Level.INFO, "Отчёт с id = {} был успешно удалён", id);
         reportService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

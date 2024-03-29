@@ -52,7 +52,7 @@ public class AgreementParticipant {
     /**
      * Дата завершения
      */
-    @Column(name = "completion_date", nullable = false)
+    @Column(name = "completion_date")
     private ZonedDateTime completionDate;
 
     /**
@@ -60,12 +60,6 @@ public class AgreementParticipant {
      */
     @Column(name = "approval_order", nullable = false)
     private int approvalOrder;
-
-    /**
-     * Порядок отображения
-     */
-    @Column(name = "display_order", nullable = false)
-    private int displayOrder;
 
     /**
      * Связь с объектом Employee

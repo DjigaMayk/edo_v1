@@ -14,5 +14,5 @@ public enum EnumParticipantType {
 
     SIGNATORY("Подписант");
 
-    private final String participantType;
+    private String participantType;
 }

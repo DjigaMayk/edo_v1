@@ -6,7 +6,6 @@ CREATE TABLE IF NOT EXISTS agreement_participant (
     receipt_date TIMESTAMP WITH TIME ZONE,
     completion_date TIMESTAMP WITH TIME ZONE,
     approval_order INT NOT NULL,
-    display_order INT NOT NULL,
     employee_id BIGINT,
     FOREIGN KEY (employee_id) REFERENCES employee(id)
 );

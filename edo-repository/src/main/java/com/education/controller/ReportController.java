@@ -8,13 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 import org.apache.logging.log4j.Level;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -28,18 +25,6 @@ import java.util.List;
 public class ReportController {
 
     private final ReportService reportService;
-
-    @Operation(summary = "Получение всех отчётов за указанную дату")
-    @GetMapping("/findAllByCreationDateEquals/{date}")
-    public ResponseEntity<List<ReportDto>> getAllByCreationDateEquals(@PathVariable(value = "date") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate date) {
-        List<ReportDto> reports = reportService.findAllByCreationDateEquals(date);
-        if (reports == null || reports.isEmpty()) {
-            log.log(Level.WARN, "За {} отчёты не найдены", date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        log.log(Level.INFO, "За {} найдено {} отчётов", date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")), reports.size());
-        return new ResponseEntity<>(reports, HttpStatus.OK);
-    }
 
     @Operation(summary = "Получение всех отчётов по id работника")
     @GetMapping("/findAllByCreatorId/{id}")

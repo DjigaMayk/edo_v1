@@ -9,7 +9,6 @@ import com.education.util.Mapper.impl.ReportMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -22,13 +21,6 @@ public class ReportServiceImpl extends AbstractService<ReportRepository, Report,
 
     public ReportServiceImpl(ReportRepository repository, ReportMapper reportMapper) {
         super(repository, reportMapper);
-    }
-
-    @Override
-    @Transactional(readOnly = true, rollbackFor = Exception.class)
-    public List<ReportDto> findAllByCreationDateEquals(LocalDate date) {
-        List<Report> reports = repository.findAllByCreationDateEquals(date);
-        return reports.isEmpty() ? null : mapper.toDto(reports);
     }
 
     @Override

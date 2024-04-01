@@ -6,7 +6,6 @@ import com.education.service.AbstractService;
 import com.education.service.report.ReportService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -17,11 +16,6 @@ public class ReportServiceImpl extends AbstractService<ReportFeignClient, Report
 
     public ReportServiceImpl(ReportFeignClient reportFeignClient) {
         super(reportFeignClient);
-    }
-
-    @Override
-    public List<ReportDto> findAllByCreationDateEquals(LocalDate date) {
-        return feignClient.findAllByCreationDateEquals(date);
     }
 
     @Override

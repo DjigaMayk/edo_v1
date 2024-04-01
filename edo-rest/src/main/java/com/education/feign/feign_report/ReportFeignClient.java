@@ -3,10 +3,8 @@ package com.education.feign.feign_report;
 import com.education.feign.AbstractFeign;
 import com.education.model.dto.ReportDto;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -14,9 +12,6 @@ import java.util.List;
  */
 @FeignClient(name = "edo-service", path = "/api/service/report")
 public interface ReportFeignClient extends AbstractFeign<ReportDto> {
-
-    @GetMapping("/findAllByCreationDateEquals/{date}")
-    List<ReportDto> findAllByCreationDateEquals(@PathVariable(value = "date") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate date);
 
     @GetMapping("/findAllByCreatorId/{id}")
     List<ReportDto> findAllByCreatorId(@PathVariable("id") Long creatorId);

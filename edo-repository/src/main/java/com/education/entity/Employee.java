@@ -128,4 +128,5 @@ public class Employee extends BaseEntity {
     @OneToMany
     @JoinColumn(name = "employee_id")
     private List<Notification> notification;
+
 }
